@@ -1,6 +1,6 @@
 .include "macros.inc"
 
-.section .sbss2, "wa" # 803CD300 - 803CD30E
+.section .sbss2, "", @nobits # 803CD300 - 803CD30E
 .global lbl_803CD300
 lbl_803CD300:
 	.skip 0x8

@@ -663,4 +663,4 @@ lbl_803CB6FC:
 	.skip 0x28
 .global lbl_803CB724
 lbl_803CB724:
-	.skip 0x47C
+	.skip 0x10

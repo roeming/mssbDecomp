@@ -1488,4 +1488,4 @@ lbl_803CC3F8:
 	.skip 0x4
 .global lbl_803CC3FC
 lbl_803CC3FC:
-	.skip 0xF04
+	.skip 0x4
