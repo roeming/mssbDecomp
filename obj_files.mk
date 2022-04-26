@@ -36,3 +36,6 @@ SDATA2_O_FILES :=\
 
 SBSS2_O_FILES :=\
     $(BUILD_DIR)/asm/sbss2.o
+
+FILE_O_FILES :=\
+    $(BUILD_DIR)/asm/file.o

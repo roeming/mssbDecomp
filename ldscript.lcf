@@ -4,16 +4,16 @@ SECTIONS
 {
     .init BIND(0x80003100) : { *(.init) }
     .text BIND(0x80008E00) : { *(.text) }
-    .extab BIND(0x80005600) : { *(.extab) }
-    .extabindex BIND(0x80006C60) : { *(.extabindex) }
+    ._extab BIND(0x80005600) : { *(.extab_) }
+    .exidx_ BIND(0x80006C60) : { *(.exidx_) }
     .ctors BIND(0x800E6340) : { *(.ctors) }
     .dtors BIND(0x800E6360) : { *(.dtors) }
-    .rodata BIND(0x800E6380) : { *(.rodata) }
-    .data BIND(0x800E63A0) : { *(.data) }
-    .file BIND(0x803CC400) : { *(.file) }
-    .sdata BIND(0x800E8300) : { *(.sdata) }
+    .file_ BIND(0x800E6380) : { *(.file_) }
+    .rodata BIND(0x800E63A0) : { *(.rodata) }
+    .data BIND(0x800E8300) : { *(.data) }
+    .sdata BIND(0x803CB740) : { *(.sdata) }
     .sbss BIND(0x803CBBA0) : { *(.sbss) }
-    .sdata2 BIND(0x803CB740) : { *(.sdata2) }
+    .sdata2 BIND(0x803CC400) : { *(.sdata2) }
     .sbss2 BIND(0x803CD300) : { *(.sbss2) }
     .bss BIND(0x801181A0) : { *(.bss) }
 }
