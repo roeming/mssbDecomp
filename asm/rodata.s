@@ -2,6 +2,8 @@
 
 .section .rodata, "wa"  # 0x800E63A0 - 0x800E8300
 	# ROM: 0xE33A0
+.global lbl_800E63A0
+lbl_800E63A0:
 	.asciz "snd/my_snd_h/mario_01_h.adp"
 	.asciz "snd/my_snd_h/koopa_h.adp"
 	.balign 4

@@ -1,7 +1,9 @@
 .include "macros.inc"
 
-.section _exidx, "wa"  # 0x80006C60 - 0x80008E00
+.section ._exidx, "wa"  # 0x80006C60 - 0x80008E00
 	# ROM: 0xE11A0
+.global extabidxstart
+extabidxstart:
 	.4byte 0x80008E08  ;# ptr
 	.4byte 0x000001C8
 	.4byte 0x80005600  ;# ptr
