@@ -1,19 +1,17 @@
-_SDA_BASE_ = 0x803D3740;
-_SDA2_BASE_ = 0x803D4400;
 SECTIONS
 {
-    .init BIND(0x80003100) : { *(.init) }
-    .text BIND(0x80008E00) : { *(.text) }
-    extab_ BIND(0x80005600) : { *(extab_) }
-    extabindex_ BIND(0x80006C60) : { *(extabindex_) }
-    .ctors BIND(0x800E6340) : { *(.ctors) }
-    .dtors BIND(0x800E6360) : { *(.dtors) }
-    .file_ BIND(0x800E6380) : { *(.file_) }
-    .rodata BIND(0x800E63A0) : { *(.rodata) }
-    .data BIND(0x800E8300) : { *(.data) }
-    .sdata BIND(0x803CB740) : { *(.sdata) }
-    .sbss BIND(0x803CBBA0) : { *(.sbss) }
-    .sdata2 BIND(0x803CC400) : { *(.sdata2) }
-    .sbss2 BIND(0x803CD300) : { *(.sbss2) }
-    .bss BIND(0x801181A0) : { *(.bss) }
+    .init : { *(.init) }
+    .text : { *(.text) }
+    extab_  : { *(extab_) }
+    extabindex_  : { *(extabindex_) }
+    .ctors : { *(.ctors) }
+    .dtors  : { *(.dtors) }
+    .file_ : { *(.file_) }
+    .rodata  : { *(.rodata) }
+    .data : { *(.data) }
+    .sdata  : { *(.sdata) }
+    .sbss : { *(.sbss) }
+    .sdata2 : { *(.sdata2) }
+    .sbss2  : { *(.sbss2) }
+    .bss  : { *(.bss) }
 }
