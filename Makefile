@@ -9,7 +9,7 @@ endif
 VERBOSE ?= 0
 
 # If MAPGENFLAG set to 1, tells LDFLAGS to generate a mapfile, which makes linking take several minutes.
-MAPGENFLAG ?= 0
+MAPGENFLAG ?= 1
 
 ifeq ($(VERBOSE),0)
   QUIET := @
