@@ -16,6 +16,9 @@ CTORS_O_FILES :=\
 DTORS_O_FILES :=\
 	$(BUILD_DIR)/asm/dtors.o
 
+FILE_O_FILES :=\
+    $(BUILD_DIR)/asm/file.o
+
 RODATA_O_FILES :=\
 	$(BUILD_DIR)/asm/rodata.o
 
@@ -36,6 +39,3 @@ SDATA2_O_FILES :=\
 
 SBSS2_O_FILES :=\
     $(BUILD_DIR)/asm/sbss2.o
-
-FILE_O_FILES :=\
-    $(BUILD_DIR)/asm/file.o

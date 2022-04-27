@@ -1,6 +1,8 @@
 .include "macros.inc"
 
-.section _extab, "wa"  # 0x80005600 - 0x80006C60
+.section ._extab, "wa"  # 0x80005600 - 0x80006C60
+.global extabstart
+extabstart:
 	# ROM: 0xDFB40
 	.4byte 0x10080000
 	.4byte 0

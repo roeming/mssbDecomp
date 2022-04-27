@@ -26,3 +26,9 @@ GROUP: {
 	__ArenaLo = (_db_stack_addr + 0x1f) & ~0x1f;
 	__ArenaHi = 0x81700000;
 }
+
+FORCEFILES {
+	extab.o
+	extabindex.o
+	file.o
+}
