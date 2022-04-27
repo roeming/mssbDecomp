@@ -4,9 +4,9 @@
 .global lbl_800E6360
 lbl_800E6360:
 	# ROM: 0xE3360
-	.4byte 0x80097928  ;# ptr
+	.4byte func_80097928  ;# ptr
 	.4byte 0x80098054  ;# ptr
-	.4byte 0x80097928  ;# ptr
+	.4byte func_80097928  ;# ptr
 	.4byte 0
 	.4byte 0
 	.4byte 0

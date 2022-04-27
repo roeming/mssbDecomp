@@ -337,7 +337,7 @@ lbl_800E8754:
 .global lbl_800E87B4
 lbl_800E87B4:
 	# ROM: 0xE57B4
-	.4byte 0x800E63A0  ;# ptr
+	.4byte lbl_800E63A0  ;# ptr
 	.4byte 0x01070000
 	.4byte 0
 	.4byte 0x01070000
@@ -16097,7 +16097,7 @@ lbl_800F79B8:
 .global lbl_800F7A40
 lbl_800F7A40:
 	# ROM: 0xF4A40
-	.4byte 0x8023DD80  ;# ptr
+	.4byte lbl_8023DD80  ;# ptr
 	.4byte 0
 	.4byte 0x01C00280
 	.4byte 0x00000101
@@ -20676,9 +20676,9 @@ lbl_800FBE64:
 	.4byte 0x8004C5F8  ;# ptr
 	.4byte 0x80062C60  ;# ptr
 	.4byte 0x80062E6C  ;# ptr
-	.4byte 0x8004C19C  ;# ptr
+	.4byte func_8004C19C  ;# ptr
 	.4byte 0x8006C444  ;# ptr
-	.4byte 0x8006C3F8  ;# ptr
+	.4byte func_8006C3F8  ;# ptr
 	.4byte 0x8004ACF4  ;# ptr
 	.4byte 0x8004AC00  ;# ptr
 
@@ -37968,7 +37968,7 @@ lbl_8010D1A8:
 	.4byte 0x803CB968
 	.4byte 0x803CB96C
 	.4byte 0x803CB974
-	.4byte 0x8010D1A8  ;# ptr
+	.4byte lbl_8010D1A8  ;# ptr
 	.4byte 0x803CB97C
 	.4byte 0x803CB984
 	.4byte 0x8010D1B4  ;# ptr

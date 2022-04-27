@@ -34,3 +34,4 @@ Debug/
 .vs/
 
 ctx.c
+tools/findlabels.py
