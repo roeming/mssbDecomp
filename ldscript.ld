@@ -1,33 +1,44 @@
+OUTPUT_FORMAT("elf32-powerpc")
+OUTPUT_ARCH(powerpc:common)
 ENTRY(__start)
-_SDA_BASE_ = 0x803D3740;
-_SDA2_BASE_ = 0x803D4400;
 PHDRS
 {
-    text0 PT_LOAD;
-    text1 PT_LOAD;
-    data0 PT_LOAD;
-    data1 PT_LOAD;
-    data2 PT_LOAD;
-    data3 PT_LOAD;
-    data4 PT_LOAD;
-    data5 PT_LOAD;
-    data6 PT_LOAD;
-    data7 PT_LOAD;
-    data8 PT_LOAD;
-    bss PT_LOAD;
+  init PT_LOAD ;
+  extab PT_LOAD ;
+  extabindex PT_LOAD ;
+  text PT_LOAD ;
+  ctors PT_LOAD ;
+  dtors PT_LOAD ;
+  comments PT_LOAD ;
+  rodata PT_LOAD ;
+  data PT_LOAD ;
+  bss PT_LOAD ;
+  sdata PT_LOAD ;
+  sbss PT_LOAD ;
+  sdata2 PT_LOAD ;
+  sbss2 PT_LOAD ;
 }
+. = 0x80003100 ;
 SECTIONS
 {
-    .text0 0x80003100 : { *(.text0) } : text0
-    .text1 0x80008E00 : { *(.text1) } : text1
-    .data0 0x80005600 : { *(.data0) } : data0
-    .data1 0x80006C60 : { *(.data1) } : data1
-    .data2 0x800E6340 : { *(.data2) } : data2
-    .data3 0x800E6360 : { *(.data3) } : data3
-    .data4 0x800E6380 : { *(.data4) } : data4
-    .data5 0x800E63A0 : { *(.data5) } : data5
-    .data6 0x800E8300 : { *(.data6) } : data6
-    .data7 0x803CB740 : { *(.data7) } : data7
-    .data8 0x803CC400 : { *(.data8) } : data8
-    .bss 0x801181A0 (NOLOAD) : { *(.bss) } : bss
+  .init ALIGN (0x20) : { *(.init) }  :init
+  extab ALIGN (0x20) : { *(extab) } :extab
+  extabindex ALIGN (0x20) : { *(extabindex) } :extabindex
+  .text ALIGN (0x20) : { *(.text) } :text
+  .ctors ALIGN (0x20) : { *(.ctors) } :ctors
+  .dtors ALIGN (0x20) : { *(.dtors) } :dtors
+  .comments ALIGN (0x20) : { KEEP(*(.comment)) } :comments
+  .rodata ALIGN (0x20) : { *(.rodata) } :rodata
+  .data ALIGN (0x20) : { *(.data) } :data
+  .bss ALIGN (0x20) : { *(.bss) } :bss
+  .sdata ALIGN (0x20) : { *(.sdata) } :sdata
+  .sbss ALIGN (0x20) : { *(.sbss) } :sbss
+  .sdata2 ALIGN (0x20) : { *(.sdata2) } :sdata2
+  .sbss2 ALIGN (0x20) : { *(.sbss2) _f_sbss2 = . ; } :sbss2
 }
+_stack_addr = (_f_sbss2 + SIZEOF (.sbss2) + 65536 + 0x7) & ~0x7 ;
+_stack_end = _f_sbss2 + SIZEOF (.sbss2) ;
+_db_stack_addr = (_stack_addr + 0x2000) ;
+_db_stack_end = _stack_addr ;
+__ArenaLo = (_db_stack_addr + 0x1f) & ~0x1f ;
+__ArenaHI = 0x8170000 ;

@@ -27,6 +27,7 @@ include/*.s
 
 build/
 tools/mwcc_compiler/
+GC/
 decomp/
 errors.txt
 output.asm
@@ -35,3 +36,5 @@ Debug/
 
 ctx.c
 tools/findlabels.py
+build.ninja
+out/main.dol

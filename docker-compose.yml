@@ -1,0 +1,17 @@
+services:
+  configure:
+    command: ["python3", "configure.py"]
+    volumes:
+      - type: bind
+        source: .
+        target: /build
+    build:
+      context: '.'
+  ninja:
+    command: "ninja"
+    volumes:
+      - type: bind
+        source: .
+        target: /build
+    build:
+      context: '.'

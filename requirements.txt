@@ -1,0 +1,8 @@
+-r ./tools/ppcdis/requirements.txt
+
+cxxfilt
+python-Levenshtein
+requests
+watchdog
+ninja_syntax
+prettytable
