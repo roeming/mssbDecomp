@@ -496,7 +496,7 @@ class GenAsmSource(Source):
         self.start = start
         self.end = end
         self.ctx = ctx
-        src_path = f"$builddir/asm/{section}_{start:x}_{end:x}.s"
+        src_path = f"$builddir/asm/section_{section}_{start:x}_{end:x}.s"
         super().__init__(False, src_path, src_path + ".o")
 
     def build(self):
@@ -575,14 +575,9 @@ class CSource(Source):
 
     def build(self):
         n.build(
-            self.iconv_path,
-            rule="iconv",
-            inputs=self.src_path
-        )
-        n.build(
             self.o_path,
             rule = "cc",
-            inputs = self.iconv_path,
+            inputs = self.src_path,
             implicit = [inc.path for inc in self.gen_includes],
             variables = {
                 "cflags" : self.cflags

@@ -203,7 +203,7 @@ TOOLS = "tools"
 CODEWARRIOR = os.path.join("GC","2.7")
 CC = os.path.join(CODEWARRIOR, "mwcceppc.exe")
 if platform != "win32":
-    CC = f"wine {CC}"
+    CC = f"wibo {CC}"
 
 # DevkitPPC
 DEVKITPPC = os.environ.get("DEVKITPPC")
@@ -291,8 +291,7 @@ DOL_SDATA2_SIZE = 4
 REL_SDATA2_SIZE = 0
 
 CFLAGS = [
-    "-enc SJIS",
-    "-lang c99",
+    "-lang c",
     "-W all",
     "-fp fmadd",
     "-Cpp_exceptions off",
@@ -300,8 +299,7 @@ CFLAGS = [
     "-use_lmw_stmw on",
     "-str pool",
     "-rostr",
-    "-sym dwarf-2",
-    "-ipa file"
+    "-sym on",
 ]
 BASE_DOL_CFLAGS = CFLAGS + [
     "-inline all",

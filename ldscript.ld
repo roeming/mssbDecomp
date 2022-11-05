@@ -27,7 +27,7 @@ SECTIONS
   .text ALIGN (0x20) : { *(.text) } :text
   .ctors ALIGN (0x20) : { *(.ctors) } :ctors
   .dtors ALIGN (0x20) : { *(.dtors) } :dtors
-  .comments ALIGN (0x20) : { KEEP(*(.comment)) } :comments
+  .comments ALIGN (0x20) : { KEEP(*(.comments)) } :comments
   .rodata ALIGN (0x20) : { *(.rodata) } :rodata
   .data ALIGN (0x20) : { *(.data) } :data
   .bss ALIGN (0x20) : { *(.bss) } :bss
