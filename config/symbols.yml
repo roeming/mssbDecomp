@@ -59,11 +59,14 @@ global:
   0x80070bf0: SetInterruptMask
   0x80070ec8: __OSMaskInterrupts
   0x80070f50: __OSUnmaskInterrupts
+
+  # os/OSLink.c
   0x8007136c: OSNotifyLink
   0x80071370: OSNotifyUnlink
   0x80071910: OSLink
   0x80071b6c: OSUnlink
   0x80071d40: __OSModuleInit
+
   0x80071d58: OSInitMessageQueue
   0x80071db8: OSSendMessage
   0x80071e80: OSReceiveMessage
@@ -343,3 +346,11 @@ global:
   # 0x803cbfa0: min_wait
   # 0x803cbfa8: max_wait
   # 0x803cbfb0: buffer
+src/os/OSLink.c:
+  #.text
+  0x80071374: Relocate
+  0x80071630: Link
+  0x80071934: Undo
+  #.data
+  0x8010cb10: OSLinkError
+  0x8010cb38: OSUnlinkError
