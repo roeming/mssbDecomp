@@ -1,11 +1,13 @@
 ### Devkitpro
 FROM devkitpro/devkitppc as devkit 
 
-FROM --platform=linux/amd64 ubuntu:22.04 as tools
+FROM --platform=linux/amd64 ubuntu:22.04 as base
+
+FROM base as tools
 RUN apt update && apt install -y wget
 
 ### Wibo
-FROM --platform=linux/amd64 ubuntu:22.04 as wibo
+FROM base as wibo
 RUN dpkg --add-architecture i386 && \
     apt update && \
     apt install -y \
@@ -49,24 +51,25 @@ COPY requirements.txt .
 COPY tools/ppcdis/requirements.txt tools/ppcdis/requirements.txt
 RUN --mount=type=cache,target=/root/.cache pip install --user -r requirements.txt
 
-
 ### Main
-FROM wine
+FROM base
 
 # Set up tools
 RUN apt update && \
     apt install -y python3 pip ninja-build
 
 # Wibo runtime deps
-RUN apt update && \
+RUN dpkg --add-architecture i386 && \
+    apt update && \
     apt install -y --no-install-recommends \
       libstdc++6:i386
 
 # Wibo
 COPY --from=wibo /wibo /wibo
+ENV PATH=/wibo/build/:${PATH}
 
 # Bring in Wine mono
-COPY --from=winemono /opt/wine/mono /opt/wine/mono
+#COPY --from=winemono /opt/wine/mono /opt/wine/mono
 
 # Set up devkitpro
 COPY --from=devkit /opt/devkitpro /opt/devkitpro
