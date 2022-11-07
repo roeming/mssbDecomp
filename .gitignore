@@ -38,3 +38,4 @@ ctx.c
 tools/findlabels.py
 build.ninja
 out/main.dol
+__pycache__/
