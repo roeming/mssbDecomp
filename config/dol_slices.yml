@@ -4,3 +4,6 @@
 
 # Paths relative to src/
 
+os/ai.c:
+  .text: [0x8007eee4, 0x8007ef28]
+  #.sbss: [0x803cbf78, 0x803cbfb8] 
