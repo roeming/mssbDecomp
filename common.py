@@ -200,7 +200,7 @@ SYMBOLS = f"{PYTHON} {PPCDIS}/symbols.py"
 
 # Codewarrior
 TOOLS = "tools"
-CODEWARRIOR = os.path.join("GC","2.7")
+CODEWARRIOR = os.path.join("%GC_COMPILERS%","2.7")
 CC = os.path.join(CODEWARRIOR, "mwcceppc.exe")
 if platform != "win32":
     CC = f"wibo {CC}"
