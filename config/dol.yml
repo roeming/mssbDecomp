@@ -16,7 +16,7 @@ section_defs:
   - name: .dtors
     balign: 0
     attr: a
-  - name: .comment
+  - name: .comments
     attr: a
   - name: .rodata
   - name: .data
