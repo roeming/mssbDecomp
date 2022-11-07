@@ -12,8 +12,30 @@ global:
   0x8000540c: memset
   0x80009180: main
   0x800096dc: get_file_entrynums
+  # PPCArch.o
+  0x8006d024: PPCMfmsr
+  0x8006d02c: PPCMtmsr
+  0x8006d034: PPCMfhid0
+  0x8006d03c: PPCMthid0
+  0x8006d044: PPCMfl2cr
+  0x8006d04c: PPCMtl2cr
+  0x8006d054: PPCMtdec
+  0x8006d05c: PPCSync
   0x8006d064: PPCHalt
+  0x8006d078: PPCMtmmcr0
+  0x8006d080: PPCMtmmcr1
+  0x8006d088: PPCMtpmc1
+  0x8006d090: PPCMtpmc2
+  0x8006d098: PPCMtpmc3
+  0x8006d0a0: PPCMtpmc4
+  0x8006d0a8: PPCMffpscr
   0x8006d0c8: PPCMtfpscr
+  0x8006d0f0: PPCMfhid2
+  0x8006d0f8: PPCMthid2
+  0x8006d100: PPCMtwpar
+  0x8006d108: PPCDisableSpeculation
+  0x8006d130: PPCSetFpNonIEEEMode
+
   0x8006d2c4: OSInit
   0x8006db70: __OSPSInit
   0x8006dbc4: __OSGetDIConfig
@@ -21,6 +43,7 @@ global:
   0x8006e360: DLInsert
   0x8006e5c0: __OSInitAudioSystem
   0x8006e77c: __OSStopAudioSystem
+  # OSCache.o
   0x8006e854: DCEnable
   0x8006e868: DCInvalidateRange
   0x8006e894: DCFlushRange
@@ -32,10 +55,12 @@ global:
   0x8006e990: ICEnable
   0x8006e9a4: __LCEnable
   0x8006ea70: LCEnable
+  0x8006eaa8: LCDisable
   0x8006ead0: LCLoadBlocks
   0x8006eaf4: LCStoreBlocks
   0x8006eb18: LCLoadData
   0x8006ebc4: LCStoreData
+  0x8006ec70: LCQueueWait
   0x8006ec84: L2GlobalInvalidate
   0x8006ee7c: __OSCacheInit
   0x8006ef70: __OSLoadFPUContext
@@ -302,6 +327,7 @@ global:
   0x800acfd0: alloc
   0x800df594: do_src1
   0x800df72c: do_src2
+
   0x81201164: DCInvalidateRange
   0x81202f38: PPCMtfpscr
   0x81206b8c: Decode
