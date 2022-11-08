@@ -1,6 +1,6 @@
 #ifndef __SDK_OS_OSMODULE_H__
 #define __SDK_OS_OSMODULE_H__
-#include "common.h"
+#include "types.h"
 typedef struct OSModuleHeader   OSModuleHeader;
 typedef u32                     OSModuleID;
 typedef struct OSModuleQueue    OSModuleQueue;
