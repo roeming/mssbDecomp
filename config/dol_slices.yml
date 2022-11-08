@@ -3,6 +3,9 @@
 #########################################################
 
 # Paths relative to src/
+os/OSLink.c:
+  .text: [0x8007136C, 0x80071d58]
+  .data: [0x8010cb10, 0x8010cb60]
 
 os/ai.c:
   .text: [0x8007eee4, 0x8007ef28]
