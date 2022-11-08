@@ -3,13 +3,22 @@ global:
   #0x800848c4: __CARDRead
   #0x80084a04: __CARDRead
   #0x800a7544: DVDConvertPathToEntrynum
+
+  ### .init
+  #__start.o
   0x80003100: __check_pad3
+  0x80003140: __set_debug_bba
+  0x8000314c: __get_debug_bba
   0x80003154: __start
   0x800032b0: __init_registers
   0x80003340: __init_data
   0x80003400: __init_hardware
   0x80003424: __flush_cache
   0x8000540c: memset
+  0x8000543c: memset_impl
+  0x800054f4: memcpy
+
+  ### .text
   0x80009180: main
   0x800096dc: get_file_entrynums
   # PPCArch.o
@@ -35,6 +44,7 @@ global:
   0x8006d100: PPCMtwpar
   0x8006d108: PPCDisableSpeculation
   0x8006d130: PPCSetFpNonIEEEMode
+  0x8006d138: __OS_FPTRInit
 
   0x8006d2c4: OSInit
   0x8006db70: __OSPSInit
@@ -100,6 +110,7 @@ global:
   0x80072234: __OSUnlockAllMutex
   0x800722a4: __OSReboot
   0x800724c4: KillThreads
+  0x80072574: OSResetSystem
   0x8007252c: __OSDoHotReset
   0x80072b98: WriteSram
   0x80072cb0: __OSInitSram
@@ -195,18 +206,6 @@ global:
   0x8007f564: __AIDHandler     
   0x8007f610: __AICallbackStackSwitch     
   0x8007f668: __AI_SRC_INIT
- # ai.c sbss
-  0x803cbf78: __AIS_Callback
-  0x803cbf7c: __AID_Callback
-  0x803cbf80: __CallbackStack
-  0x803cbf84: __OldStack
-  0x803cbf88: __AI_init_flag
-  0x803cbf8c: __AID_Active
-  0x803cbf90: bound_32KHz
-  0x803cbf98: bound_48KHz
-  0x803cbfa0: min_wait
-  0x803cbfa8: max_wait
-  0x803cbfb0: buffer
 
   0x8007f890: ARGetDMAStatus
   0x8007f8cc: ARStartDMA
@@ -289,6 +288,8 @@ global:
   0x80091478: DSInsertListObject
   0x8009150c: Strcmp
   0x80091570: DSInsertBranchBelow
+  0x800960d8: InitMetroTRK_BBA
+  0x800981e8: exit
   0x8009a8fc: tolower
   0x800a2b5c: SetExiInterruptMask
   0x800a2c50: EXIImm
@@ -330,6 +331,23 @@ global:
   0x800acfd0: alloc
   0x800df594: do_src1
   0x800df72c: do_src2
+
+  ### .sbss
+  # __start.o
+  0x803cbe10: Debug_BBA
+
+ # ai.c
+  0x803cbf78: __AIS_Callback
+  0x803cbf7c: __AID_Callback
+  0x803cbf80: __CallbackStack
+  0x803cbf84: __OldStack
+  0x803cbf88: __AI_init_flag
+  0x803cbf8c: __AID_Active
+  0x803cbf90: bound_32KHz
+  0x803cbf98: bound_48KHz
+  0x803cbfa0: min_wait
+  0x803cbfa8: max_wait
+  0x803cbfb0: buffer
 
   0x81201164: DCInvalidateRange
   0x81202f38: PPCMtfpscr
