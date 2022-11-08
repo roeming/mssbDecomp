@@ -1,5 +1,5 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __TYPES_H__
+#define __TYPES_H__
 typedef int BOOL;
 typedef signed char         s8;
 typedef signed short        s16;
@@ -24,4 +24,4 @@ typedef double              f64;
 typedef volatile f32        vf32;
 typedef volatile f64        vf64;
 
-#endif // __COMMON_H__
+#endif // __TYPES_H__

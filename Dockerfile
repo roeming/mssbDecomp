@@ -78,6 +78,7 @@ ENV DEVKITPPC=/opt/devkitpro/devkitPPC
 ## Python deps
 COPY --from=python /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
+ENV GC_COMPILERS=GC
 
 WORKDIR build
 
