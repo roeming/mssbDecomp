@@ -76,8 +76,10 @@ global:
   0x8006ef70: __OSLoadFPUContext
   0x8006f094: __OSSaveFPUContext
   0x8006f1c4: OSSetCurrentContext
+  0x8006f220: OSGetCurrentContext
   0x8006f22c: OSSaveContext
   0x8006f2ac: OSLoadContext
+  0x8006f384: OSGetStackPointer
   0x8006f38c: OSClearContext
   0x8006f3b0: OSInitContext
   0x8006f46c: OSDumpContext
@@ -90,6 +92,7 @@ global:
   0x800700c8: __OSGetExecParams
   0x800707ec: GetFontCode
   0x80070b00: OSDisableInterrupts
+  0x80070b14: OSEnableInterrupts
   0x80070b28: OSRestoreInterrupts
   0x80070bf0: SetInterruptMask
   0x80070ec8: __OSMaskInterrupts
@@ -108,7 +111,9 @@ global:
   0x80072104: RealMode
   0x8007211c: __OSInitMemoryProtection
   0x80072234: __OSUnlockAllMutex
+  # OSReboot.o
   0x800722a4: __OSReboot
+  # OSReset.o
   0x800724c4: KillThreads
   0x80072574: OSResetSystem
   0x8007252c: __OSDoHotReset
@@ -124,13 +129,33 @@ global:
   0x800734f4: OSSetWirelessID
   0x800735a0: OSGetGbsMode
   0x80073610: OSSetGbsMode
+  # OSSemaphore.o
   0x800736c8: OSInitSemaphore
   0x80073720: OSWaitSemaphore
   0x80073790: OSSignalSemaphore
   0x80073810: __OSInitSystemCall
+  # OSThread.o
+  0x80073874: DefaultSwitchThreadCallback
+  0x80073878: __OSThreadInit
   0x800739d0: OSInitThreadQueue
+  0x800739e0: OSGetCurrentThread
+  0x800739ec: OSIsThreadSuspended
+  0x80073a08: OSDisableScheduler
+  0x80073a48: OSEnableScheduler
+  0x80073a88: UnsetRun
   0x80073af0: __OSGetEffectivePriority
+  0x80073b2c: SetEffectivePriority
+  0x80073cec: SelectThread
+  0x80073f14: __OSReschedule
+  0x80073f44: OSCreateThread
+  0x8007412c: OSExitThread
+  0x80074210: OSCancelThread
+  0x800743cc: OSResumeThread
+  0x80074654: OSSuspendThread
+  0x800747c4: OSSleepThread
+  0x800748b0: OSWakeupThread
   0x800749b4: OSClearStack
+
   0x80074a60: OSGetTime
   0x80074a80: __OSGetSystemTime
   0x80074ae4: GetDates
