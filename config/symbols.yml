@@ -12,6 +12,7 @@ global:
   0x8000540c: memset
   0x80009180: main
   0x800096dc: get_file_entrynums
+  0x8006dbd8: OSRegisterVersion
   # PPCArch.o
   0x8006d024: PPCMfmsr
   0x8006d02c: PPCMtmsr
@@ -81,6 +82,7 @@ global:
   0x800707ec: GetFontCode
   0x80070b00: OSDisableInterrupts
   0x80070b28: OSRestoreInterrupts
+  0x80070b4c: __OSSetInterruptHandler
   0x80070bf0: SetInterruptMask
   0x80070ec8: __OSMaskInterrupts
   0x80070f50: __OSUnmaskInterrupts
@@ -195,7 +197,7 @@ global:
   0x8007f564: __AIDHandler     
   0x8007f610: __AICallbackStackSwitch     
   0x8007f668: __AI_SRC_INIT
- # ai.c sbss
+#  # ai.c sbss
   0x803cbf78: __AIS_Callback
   0x803cbf7c: __AID_Callback
   0x803cbf80: __CallbackStack
@@ -203,11 +205,18 @@ global:
   0x803cbf88: __AI_init_flag
   0x803cbf8c: __AID_Active
   0x803cbf90: bound_32KHz
+  0x803cbf94: bound_32KHz.b
   0x803cbf98: bound_48KHz
+  0x803cbf9c: bound_48KHz.b
   0x803cbfa0: min_wait
+  0x803cbfa4: min_wait.b
   0x803cbfa8: max_wait
+  0x803cbfac: max_wait.b
   0x803cbfb0: buffer
-
+  0x803cbfb4: buffer.b
+# #.sdata
+  0x803cb9e0: AI_SDK_BuildVer
+  
   0x8007f890: ARGetDMAStatus
   0x8007f8cc: ARStartDMA
   0x80081830: DSPReadMailFromDSP
@@ -335,43 +344,50 @@ global:
   0x81202f38: PPCMtfpscr
   0x81206b8c: Decode
 
-#src/os/ai.c:
- #.text
-#   0x8007eee4: AIRegisterDMACallback     
-#   0x8007ef28: AIInitDMA     
-#   0x8007efb0: AIStartDMA     
-#   0x8007efc8: AIStopDMA     
-#   0x8007efe0: AIGetDMAStartAddr     
-#   0x8007effc: AIRegisterStreamCallback     
-#   0x8007f040: AIGetStreamSampleCount     
-#   0x8007f058: AIResetStreamSampleCount     
-#   0x8007f064: AISetStreamPlayState     
-#   0x8007f13c: AIGetStreamPlayState     
-#   0x8007f14c: AISetDSPSampleRate     
-#   0x8007f22c: AIGetDSPSampleRate     
-#   0x8007f240: __AI_set_stream_sample_rate     
-#   0x8007f314: AIGetStreamSampleRate     
-#   0x8007f324: AISetStreamVolLeft     
-#   0x8007f340: AIGetStreamVolLeft     
-#   0x8007f350: AISetStreamVolRight     
-#   0x8007f36c: AIGetStreamVolRight     
-#   0x8007f37c: AIInit     
-#   0x8007f4e8: __AISHandler     
-#   0x8007f564: __AIDHandler     
-#   0x8007f610: __AICallbackStackSwitch     
-#   0x8007f668: __AI_SRC_INIT
- #.sbss
-  # 0x803cbf78: __AIS_Callback
-  # 0x803cbf7c: __AID_Callback
-  # 0x803cbf80: __CallbackStack
-  # 0x803cbf84: __OldStack
-  # 0x803cbf88: __AI_init_flag
-  # 0x803cbf8c: __AID_Active
-  # 0x803cbf90: bound_32KHz
-  # 0x803cbf98: bound_48KHz
-  # 0x803cbfa0: min_wait
-  # 0x803cbfa8: max_wait
-  # 0x803cbfb0: buffer
+# src/os/ai.c:
+  # 0x8007eee4: AIRegisterDMACallback     
+  # 0x8007ef28: AIInitDMA     
+  # 0x8007efb0: AIStartDMA     
+  # 0x8007efc8: AIStopDMA     
+  # 0x8007efe0: AIGetDMAStartAddr     
+  # 0x8007effc: AIRegisterStreamCallback     
+  # 0x8007f040: AIGetStreamSampleCount     
+  # 0x8007f058: AIResetStreamSampleCount     
+  # 0x8007f064: AISetStreamPlayState     
+  # 0x8007f13c: AIGetStreamPlayState     
+  # 0x8007f14c: AISetDSPSampleRate     
+  # 0x8007f22c: AIGetDSPSampleRate     
+  # 0x8007f240: __AI_set_stream_sample_rate     
+  # 0x8007f314: AIGetStreamSampleRate     
+  # 0x8007f324: AISetStreamVolLeft     
+  # 0x8007f340: AIGetStreamVolLeft     
+  # 0x8007f350: AISetStreamVolRight     
+  # 0x8007f36c: AIGetStreamVolRight     
+  # 0x8007f37c: AIInit     
+  # 0x8007f4e8: __AISHandler     
+  # 0x8007f564: __AIDHandler     
+  # 0x8007f610: __AICallbackStackSwitch     
+  # 0x8007f668: __AI_SRC_INIT
+#  # ai.c sbss
+#   0x803cbf78: __AIS_Callback
+#   0x803cbf7c: __AID_Callback
+#   0x803cbf80: __CallbackStack
+#   0x803cbf84: __OldStack
+#   0x803cbf88: __AI_init_flag
+#   0x803cbf8c: __AID_Active
+#   0x803cbf90: bound_32KHz
+#   0x803cbf94: bound_32KHz_b
+#   0x803cbf98: bound_48KHz
+#   0x803cbf9c: bound_48KHz_b
+#   0x803cbfa0: min_wait
+#   0x803cbfa4: min_wait_b
+#   0x803cbfa8: max_wait
+#   0x803cbfac: max_wait_b
+#   0x803cbfb0: buffer
+#   0x803cbfb4: buffer_b
+# #.sdata
+#   0x803cb9e0: AI_SDK_BuildVer
+
 src/os/OSLink.c:
   #.text
   0x80071374: Relocate

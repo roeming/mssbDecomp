@@ -7,6 +7,7 @@ os/OSLink.c:
   .text: [0x8007136C, 0x80071d58]
   .data: [0x8010cb10, 0x8010cb60]
 
-os/ai.c:
-  .text: [0x8007eee4, 0x8007ef28]
-  #.sbss: [0x803cbf78, 0x803cbfb8] 
+# os/ai.c:
+#   .text: [0x8007eee4, 0x8007ef28]
+  # .sbss: [0x803cbf78, 0x803cbfb8]
+  # .sdata: [0x803cb9e0, 0x803cb9e8]
