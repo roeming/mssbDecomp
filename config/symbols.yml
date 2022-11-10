@@ -1,15 +1,23 @@
 global:
-  #0x8007791c: DVDConvertPathToEntrynum
   #0x800848c4: __CARDRead
   #0x80084a04: __CARDRead
   #0x800a7544: DVDConvertPathToEntrynum
+
+  ### .init
+  #__start.o
   0x80003100: __check_pad3
+  0x80003140: __set_debug_bba
+  0x8000314c: __get_debug_bba
   0x80003154: __start
   0x800032b0: __init_registers
   0x80003340: __init_data
   0x80003400: __init_hardware
   0x80003424: __flush_cache
   0x8000540c: memset
+  0x8000543c: memset_impl
+  0x800054f4: memcpy
+
+  ### .text
   0x80009180: main
   0x800096dc: get_file_entrynums
   0x8006dbd8: OSRegisterVersion
@@ -36,6 +44,7 @@ global:
   0x8006d100: PPCMtwpar
   0x8006d108: PPCDisableSpeculation
   0x8006d130: PPCSetFpNonIEEEMode
+  0x8006d138: __OS_FPTRInit
 
   0x8006d2c4: OSInit
   0x8006db70: __OSPSInit
@@ -67,8 +76,10 @@ global:
   0x8006ef70: __OSLoadFPUContext
   0x8006f094: __OSSaveFPUContext
   0x8006f1c4: OSSetCurrentContext
+  0x8006f220: OSGetCurrentContext
   0x8006f22c: OSSaveContext
   0x8006f2ac: OSLoadContext
+  0x8006f384: OSGetStackPointer
   0x8006f38c: OSClearContext
   0x8006f3b0: OSInitContext
   0x8006f46c: OSDumpContext
@@ -81,6 +92,7 @@ global:
   0x800700c8: __OSGetExecParams
   0x800707ec: GetFontCode
   0x80070b00: OSDisableInterrupts
+  0x80070b14: OSEnableInterrupts
   0x80070b28: OSRestoreInterrupts
   0x80070b4c: __OSSetInterruptHandler
   0x80070bf0: SetInterruptMask
@@ -100,8 +112,11 @@ global:
   0x80072104: RealMode
   0x8007211c: __OSInitMemoryProtection
   0x80072234: __OSUnlockAllMutex
+  # OSReboot.o
   0x800722a4: __OSReboot
+  # OSReset.o
   0x800724c4: KillThreads
+  0x80072574: OSResetSystem
   0x8007252c: __OSDoHotReset
   0x80072b98: WriteSram
   0x80072cb0: __OSInitSram
@@ -115,13 +130,33 @@ global:
   0x800734f4: OSSetWirelessID
   0x800735a0: OSGetGbsMode
   0x80073610: OSSetGbsMode
+  # OSSemaphore.o
   0x800736c8: OSInitSemaphore
   0x80073720: OSWaitSemaphore
   0x80073790: OSSignalSemaphore
   0x80073810: __OSInitSystemCall
+  # OSThread.o
+  0x80073874: DefaultSwitchThreadCallback
+  0x80073878: __OSThreadInit
   0x800739d0: OSInitThreadQueue
+  0x800739e0: OSGetCurrentThread
+  0x800739ec: OSIsThreadSuspended
+  0x80073a08: OSDisableScheduler
+  0x80073a48: OSEnableScheduler
+  0x80073a88: UnsetRun
   0x80073af0: __OSGetEffectivePriority
+  0x80073b2c: SetEffectivePriority
+  0x80073cec: SelectThread
+  0x80073f14: __OSReschedule
+  0x80073f44: OSCreateThread
+  0x8007412c: OSExitThread
+  0x80074210: OSCancelThread
+  0x800743cc: OSResumeThread
+  0x80074654: OSSuspendThread
+  0x800747c4: OSSleepThread
+  0x800748b0: OSWakeupThread
   0x800749b4: OSClearStack
+
   0x80074a60: OSGetTime
   0x80074a80: __OSGetSystemTime
   0x80074ae4: GetDates
@@ -148,15 +183,27 @@ global:
   0x800764d8: PSQUATMultiply
   0x80076a1c: PSMTXReorder
   0x800778ac: __DVDLowTestAlarm
+
+  # dvdfs.o
+  0x800778e4: __DVDFSInit
+  0x8007791c: DVDConvertPathToEntrynum
   0x80077c10: DVDFastOpen
   0x80077c84: DVDOpen
+  0x80077d4c: DVDClose
   0x80077d70: entryToPath
   0x80077ed0: DVDGetCurrentDir
-  0x80077f94: DVDReadAsync
-  0x80078084: DVDRead
+  0x80077f94: DVDReadAsyncPrio
+  0x80078054: cbForReadAsync
+  0x80078084: DVDReadPrio
+  0x8007819c: cbForReadSync
+  0x800781c0: DVDPrepareStreamAsync
+  0x800782ac: cbForPrepareStreamAsync
+
   0x80078578: stateTimeout
   0x80079ec8: DVDReadAbsAsyncPrio
+  0x8007a148: DVDPrepareStreamAbsAsync
   0x8007a610: DVDGetCommandBlockStatus
+  0x8007a9e4: DVDCancel
   0x8007acd0: __DVDTestAlarm
   0x8007ad40: __DVDPushWaitingQueue
   0x8007ada8: __DVDPopWaitingQueue
@@ -298,6 +345,8 @@ global:
   0x80091478: DSInsertListObject
   0x8009150c: Strcmp
   0x80091570: DSInsertBranchBelow
+  0x800960d8: InitMetroTRK_BBA
+  0x800981e8: exit
   0x8009a8fc: tolower
   0x800a2b5c: SetExiInterruptMask
   0x800a2c50: EXIImm
@@ -334,11 +383,31 @@ global:
   0x800a6654: decompress
   0x800a673c: read_bits
   0x800a70dc: load_disc_helper
+  0x800a77a0: decompression_thread_function
   0x800a7a80: CB_ReadAsync_aaaa.dat
   0x800acf34: alloc2
   0x800acfd0: alloc
   0x800df594: do_src1
   0x800df72c: do_src2
+
+  ### .sbss
+  # __start.o
+  0x803cbe10: Debug_BBA
+
+ # ai.c
+  0x803cbf78: __AIS_Callback
+  0x803cbf7c: __AID_Callback
+  0x803cbf80: __CallbackStack
+  0x803cbf84: __OldStack
+  0x803cbf88: __AI_init_flag
+  0x803cbf8c: __AID_Active
+  0x803cbf90: bound_32KHz
+  0x803cbf98: bound_48KHz
+  0x803cbfa0: min_wait
+  0x803cbfa8: max_wait
+  0x803cbfb0: buffer
+
+  0x803c7010: decompression_thread_ptr
 
   0x81201164: DCInvalidateRange
   0x81202f38: PPCMtfpscr
