@@ -1,5 +1,4 @@
 global:
-  #0x8007791c: DVDConvertPathToEntrynum
   #0x800848c4: __CARDRead
   #0x80084a04: __CARDRead
   #0x800a7544: DVDConvertPathToEntrynum
@@ -182,15 +181,27 @@ global:
   0x800764d8: PSQUATMultiply
   0x80076a1c: PSMTXReorder
   0x800778ac: __DVDLowTestAlarm
+
+  # dvdfs.o
+  0x800778e4: __DVDFSInit
+  0x8007791c: DVDConvertPathToEntrynum
   0x80077c10: DVDFastOpen
   0x80077c84: DVDOpen
+  0x80077d4c: DVDClose
   0x80077d70: entryToPath
   0x80077ed0: DVDGetCurrentDir
-  0x80077f94: DVDReadAsync
-  0x80078084: DVDRead
+  0x80077f94: DVDReadAsyncPrio
+  0x80078054: cbForReadAsync
+  0x80078084: DVDReadPrio
+  0x8007819c: cbForReadSync
+  0x800781c0: DVDPrepareStreamAsync
+  0x800782ac: cbForPrepareStreamAsync
+
   0x80078578: stateTimeout
   0x80079ec8: DVDReadAbsAsyncPrio
+  0x8007a148: DVDPrepareStreamAbsAsync
   0x8007a610: DVDGetCommandBlockStatus
+  0x8007a9e4: DVDCancel
   0x8007acd0: __DVDTestAlarm
   0x8007ad40: __DVDPushWaitingQueue
   0x8007ada8: __DVDPopWaitingQueue
@@ -351,6 +362,7 @@ global:
   0x800a6654: decompress
   0x800a673c: read_bits
   0x800a70dc: load_disc_helper
+  0x800a77a0: decompression_thread_function
   0x800a7a80: CB_ReadAsync_aaaa.dat
   0x800acf34: alloc2
   0x800acfd0: alloc
@@ -373,6 +385,8 @@ global:
   0x803cbfa0: min_wait
   0x803cbfa8: max_wait
   0x803cbfb0: buffer
+
+  0x803c7010: decompression_thread_ptr
 
   0x81201164: DCInvalidateRange
   0x81202f38: PPCMtfpscr
