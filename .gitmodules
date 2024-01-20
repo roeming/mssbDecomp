@@ -1,6 +1,0 @@
-[submodule "tools/ppcdis"]
-	path = tools/ppcdis
-	url = https://github.com/SeekyCt/ppcdis
-[submodule "tools/wibo"]
-	path = tools/wibo
-	url = https://github.com/decompals/wibo

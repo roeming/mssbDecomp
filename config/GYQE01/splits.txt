@@ -1,0 +1,42 @@
+Sections:
+	.init       type:code
+	extab       type:rodata
+	extabindex  type:rodata
+	.text       type:code
+	.ctors      type:rodata
+	.dtors      type:rodata
+	.data6      type:data
+	.rodata     type:rodata
+	.data       type:data
+	.bss        type:bss
+	.sdata      type:data
+	.sbss       type:bss
+	.sdata2     type:rodata
+	.sbss2      type:bss
+
+Dolphin/mtx/mtx.c:
+	.text       start:0x80075004 end:0x80075870
+	.sdata      start:0x803CB938 end:0x803CB940
+	.sdata2     start:0x803CC940 end:0x803CC958
+
+Dolphin/mtx/mtxvec.c:
+	.text       start:0x80075870 end:0x800759A4
+
+Dolphin/mtx/mtx44.c:
+	.text       start:0x800759A4 end:0x80076188
+	.sdata2     start:0x803CC958 end:0x803CC968
+
+Dolphin/mtx/mtx44vec.c:
+	.text       start:0x80076188 end:0x800762F0
+
+Dolphin/mtx/vec.c:
+	.text       start:0x800762F0 end:0x800764B4
+	.sdata2     start:0x803CC968 end:0x803CC970
+
+Dolphin/mtx/quat.c:
+	.text       start:0x800764B4 end:0x80076A1C
+	.rodata     start:0x800E6A00 end:0x800E6A10
+	.sdata2     start:0x803CC970 end:0x803CC998
+
+Dolphin/mtx/psmtx.c:
+	.text       start:0x80076A1C end:0x80076A68
