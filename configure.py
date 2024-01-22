@@ -254,6 +254,19 @@ config.libs = [
         ],
         flags=cflags_base + ["-fp_contract off"]
     ),
+    DolphinLib(
+        "db",
+        [
+            Object(Matching, "Dolphin/db/db.c")
+        ]
+    ), 
+    DolphinLib(
+        "__ppc_eabi_init",
+        [
+            Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp")
+        ]
+    ),
+
 ]
 
 if args.mode == "configure":

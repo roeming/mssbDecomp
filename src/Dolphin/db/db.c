@@ -27,11 +27,12 @@ void DBIsDebuggerPresent(void)
  * @note Address: 0x800DABEC
  * @note Size: 0x48
  */
+char rep[] = "DBExceptionDestination\n";
 static void __DBExceptionDestinationAux(void)
 {
 	u8 dummy[8];
 	OSContext* ctx = (void*)(0x80000000 + *(u32*)0xC0); // WTF??
-	OSReport("DBExceptionDestination\n");
+	OSReport(rep);
 	OSDumpContext(ctx);
 	PPCHalt();
 }

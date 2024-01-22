@@ -4,10 +4,6 @@
 void C_QUATAdd(void)
 {
     // UNUSED
-}
-
-void PSQUATAdd(register const Quaternion *a, register const Quaternion *b, register Quaternion *sum)
-{
     // I hate this, but I don't know another way to get the sdata2 to match
     register f32 sdataReordering;
     register f64 sdataReordering64;
@@ -16,6 +12,15 @@ void PSQUATAdd(register const Quaternion *a, register const Quaternion *b, regis
     sdataReordering64 = 0.5;
     sdataReordering64 = 3.;
     sdataReordering = 1.f;
+#ifdef __MWERKS__ // clang-format off
+    asm {
+        nop
+    }
+#endif // clang-format on
+}
+
+void PSQUATAdd(register const Quaternion *a, register const Quaternion *b, register Quaternion *sum)
+{
 #ifdef __MWERKS__ // clang-format off
     asm {
         psq_l   f0, 0x0(a), 0, 0

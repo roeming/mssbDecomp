@@ -14,6 +14,15 @@ Sections:
 	.sdata2     type:rodata
 	.sbss2      type:bss
 
+Dolphin/os/__ppc_eabi_init.cpp:
+	.init       start:0x80003400 end:0x80003458
+	.text       start:0x80074E84 end:0x80074F18
+
+Dolphin/db/db.c:
+	.text       start:0x80074F18 end:0x80075004
+	.data       start:0x8010CC20 end:0x8010CC38
+	.sbss       start:0x803CBE18 end:0x803CBE20
+
 Dolphin/mtx/mtx.c:
 	.text       start:0x80075004 end:0x80075870
 	.sdata      start:0x803CB938 end:0x803CB940

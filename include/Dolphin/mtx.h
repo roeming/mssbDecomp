@@ -97,6 +97,7 @@ void C_QUATSlerp(const Quaternion *, const Quaternion *, Quaternion *, f32);
 ////////////////////////////////////////////
 
 void PSMTXReorder(const Mtx34 src, Mtx43 dst);
+void C_QUATAdd(void);
 
 ////////////// MATRIX INLINES //////////////
 static inline void MTXSetPosition(Mtx mtx, const Vec* pos)

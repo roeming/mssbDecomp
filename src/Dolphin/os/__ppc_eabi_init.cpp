@@ -82,7 +82,7 @@ void __fini_cpp()
  * @note Address: 0x800F3028
  * @note Size: 0x20
  */
-void _ExitProcess() { PPCHalt(); }
+void abort() { PPCHalt(); }
 #ifdef __cplusplus
 }
 #endif
