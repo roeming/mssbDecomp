@@ -82,6 +82,11 @@ void OSInitThreadQueue(OSThreadQueue* threadQueue) { threadQueue->head = threadQ
  */
 OSThread* OSGetCurrentThread() { return __OSCurrentThread; }
 
+BOOL OSIsThreadSuspended(OSThread* r)
+{
+	return r->suspend > 0 ? TRUE : FALSE;
+}
+
 /**
  * @note Address: N/A
  * @note Size: 0x5C

@@ -187,6 +187,14 @@ u16 OSGetWirelessID(s32 channel);
 void OSSetGbsMode(u16 mode);
 u16 OSGetGbsMode();
 
+// OSSemaphore funcs
+typedef struct {
+	s32 num;
+	OSThreadQueue queue;
+} OSSemaphore;
+
+void OSInitSemaphore(OSSemaphore *a, BOOL b);
+
 // RTC defines.
 #define RTC_CMD_READ  0x20000000
 #define RTC_CMD_WRITE 0xA0000000

@@ -14,6 +14,22 @@ Sections:
 	.sdata2     type:rodata
 	.sbss2      type:bss
 
+Dolphin/os/OSSemaphore.c:
+	.text       start:0x800736C8 end:0x800737F0
+
+Dolphin/os/OSSync.c:
+	.text       start:0x800737F0 end:0x80073874
+
+Dolphin/os/OSThread.c:
+	.text       start:0x80073874 end:0x80074A60
+	.bss        start:0x802E5318 end:0x802E5D10
+	.sdata      start:0x803CB930 end:0x803CB934
+	.sbss       start:0x803CBE00 end:0x803CBE0C
+
+Dolphin/os/OSTime.c:
+	.text       start:0x80074A60 end:0x80074E84
+	.data       start:0x8010CBC0 end:0x8010CC20
+
 Dolphin/os/__ppc_eabi_init.cpp:
 	.init       start:0x80003400 end:0x80003458
 	.text       start:0x80074E84 end:0x80074F18

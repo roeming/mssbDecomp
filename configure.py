@@ -261,9 +261,13 @@ config.libs = [
         ]
     ), 
     DolphinLib(
-        "__ppc_eabi_init",
+        "OS",
         [
-            Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp")
+            Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp"),
+            Object(Matching, "Dolphin/os/OSTime.c"),
+            Object(Matching, "Dolphin/os/OSThread.c"),
+            Object(Matching, "Dolphin/os/OSSync.c"),
+            Object(NonMatching, "Dolphin/os/OSSemaphore.c"),
         ]
     ),
 
