@@ -56,6 +56,18 @@ void PSMTXMultVecArraySR(const Mtx, f32*, f32*, f32*);
 
 ////////////////////////////////////////////
 
+//////////////  VEC FUNCTIONS //////////////
+void PSVECAdd(const Vec *, const Vec *, Vec *);
+void PSVECSubtract(const Vec *, const Vec *, Vec *);
+void PSVECScale(const Vec *, float, Vec *);
+void PSVECNormalize(const Vec*, Vec*);
+f32 PSVECMag(const Vec *);
+f32 PSVECDotProduct(const Vec *, const Vec *);
+void PSVECCrossProduct(const Vec *, const Vec *, Vec *);
+f32 PSVECSquareDistance(const Vec *, const Vec *);
+f32 PSVECDistance(const Vec *, const Vec *);
+////////////////////////////////////////////
+
 ///////////  MATRIX44 FUNCTIONS ////////////
 void PSMTX44Identity(Mtx44 mtx);
 void PSMTX44Copy(const Mtx44 src, Mtx44 dest);
@@ -71,6 +83,17 @@ u32 C_MTX44Inverse(const Mtx44 src, Mtx44 dst);
 void C_MTXLookAt(Mtx, const Vec*, const Vec*, const Vec*);
 void C_MTXLightPerspective(Mtx mtx, f32 fovY, f32 aspect, f32 scaleS, f32 scaleT, f32 transS, f32 transT);
 void C_MTXLightOrtho(Mtx mtx, f32 t, f32 b, f32 l, f32 r, f32 scaleS, f32 scaleT, f32 transS, f32 transT);
+////////////////////////////////////////////
+
+////////////// QUAT  FUNCTIONS /////////////
+void PSQUATAdd(const Quaternion *, const Quaternion *, Quaternion *);
+void PSQUATMultiply(const Quaternion *, const Quaternion *,  Quaternion *);
+void PSQUATScale(const Quaternion *, const f32, Quaternion *);
+f32 PSQUATDotProduct(const Quaternion *, const Quaternion *);
+void PSQUATNormalize(const Quaternion *, Quaternion *);
+void C_QUATRotAxisRad(Quaternion *, const Vec *, f32);
+void C_QUATMtx(Quaternion *, const Mtx);
+void C_QUATSlerp(const Quaternion *, const Quaternion *, Quaternion *, f32);
 ////////////////////////////////////////////
 
 void PSMTXReorder(const Mtx34 src, Mtx43 dst);

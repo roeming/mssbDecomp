@@ -131,10 +131,9 @@ void C_MTX44Copy(void)
  * @note Address: 0x800EAE70
  * @note Size: 0x44
  */
-ASM void PSMTX44Copy(const register Mtx44 src, register Mtx44 dest)
-{
 #ifdef __MWERKS__ // clang-format off
-	nofralloc;
+asm void PSMTX44Copy(const register Mtx44 src, register Mtx44 dest)
+{
 	psq_l fp1, 0(src), 0, 0;
 	psq_st fp1, 0(dest), 0, 0;
 	psq_l fp1, 8(src), 0, 0;
@@ -151,9 +150,8 @@ ASM void PSMTX44Copy(const register Mtx44 src, register Mtx44 dest)
 	psq_st fp1, 0x30(dest), 0, 0;
 	psq_l fp1, 0x38(src), 0, 0;
 	psq_st fp1, 0x38(dest), 0, 0;
-	blr;
-#endif // clang-format on
 }
+#endif // clang-format on
 
 /**
  * @note Address: N/A
@@ -235,7 +233,6 @@ asm void PSMTX44Concat(const register Mtx44 A, const register Mtx44 B, register 
 	psq_st f11, 0x28(r5), 0, 0
 	ps_madds1 f13, f5, f1, f13
 	psq_st f13, 0x38(r5), 0, 0
-
 }
 #endif // clang-format on
 
@@ -263,69 +260,74 @@ void PSMTX44Transpose(void)
  */
 u32 C_MTX44Inverse(const Mtx44 src, Mtx44 dst)
 {
-	Mtx44 tmp;
-	s32 i, j, k;
+	Mtx44 tempM;
+	f32 f;
+	s32 i, i2, i3;
 
-	PSMTX44Copy(src, tmp);
+	PSMTX44Copy(src, tempM);
 	PSMTX44Identity(dst);
 
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < 4; ++i)
 	{
-		f32 oneOverVal;
 		f32 max = 0.0f;
-		s32 temp_i = i;
+		s32 tmp_i = i;
 
-		for (k = i; k < 4; k++)
+		// ---- partial pivoting -----
+		for (i3 = i; i3 < 4; i3++)
 		{
-			f32 ftmp;
-			ftmp = __fabsf(tmp[k][i]);
-			if (ftmp > max)
+			f32 tmp;
+			tmp = fabsf(tempM[i3][i]);
+			if (tmp > max)
 			{
-				max = ftmp;
-				temp_i = k;
+				max = tmp;
+				tmp_i = i3;
 			}
 		}
 
 		if (max == 0.0f)
-			return FALSE;
-
-		if (temp_i != i)
 		{
-			for (k = 0; k < 4; k++)
-			{
-				f32 t;
-				t = tmp[i][k];
-				tmp[i][k] = tmp[temp_i][k];
-				tmp[temp_i][k] = t;
+			return 0;
+		}
 
-				t = dst[i][k];
-				dst[i][k] = dst[temp_i][k];
-				dst[temp_i][k] = t;
+		if (tmp_i != i)
+		{
+			for (i3 = 0; i3 < 4; i3++)
+			{
+				f32 tmp;
+				tmp = tempM[i][i3];
+				tempM[i][i3] = tempM[tmp_i][i3];
+				tempM[tmp_i][i3] = tmp;
+
+				tmp = dst[i][i3];
+				dst[i][i3] = dst[tmp_i][i3];
+				dst[tmp_i][i3] = tmp;
 			}
 		}
 
-		oneOverVal = 1.0f / tmp[i][i];
-		for (j = 0; j < 4; j++)
+		f = 1.0f / tempM[i][i];
+		for (i2 = 0; i2 < 4; i2++)
 		{
-			tmp[i][j] *= oneOverVal;
-			dst[i][j] *= oneOverVal;
+			tempM[i][i2] *= f;
+			dst[i][i2] *= f;
 		}
 
-		for (k = 0; k < 4; k++)
+		for (i3 = 0; i3 < 4; i3++)
 		{
-			if (k == i)
-				continue;
-
-			oneOverVal = tmp[k][i];
-			for (j = 0; j < 4; j++)
+			if (i3 == i)
 			{
-				tmp[k][j] -= tmp[i][j] * tmp[k][i];
-				dst[k][j] -= dst[i][j] * tmp[k][i];
+				continue;
+			}
+
+			f = tempM[i3][i];
+			for (i2 = 0; i2 < 4; i2++)
+			{
+				tempM[i3][i2] -= tempM[i][i2] * f;
+				dst[i3][i2] -= dst[i][i2] * f;
 			}
 		}
 	}
 
-	return TRUE;
+	return 1;
 }
 
 /**
@@ -443,11 +445,11 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 s, regist
 		frsp f6, f1
 		ori r0, axis, 0x20
 		frsp f5, f2
-		cmplwi r0, 0x78 // X
+		cmplwi r0, 'x'
 		beq _axis_x
-		cmplwi r0, 0x79 // Y
+		cmplwi r0, 'y'
 		beq _axis_y
-		cmplwi r0, 0x7a // Z
+		cmplwi r0, 'z'
 		beq _axis_z
 		b _done
 	_axis_x:

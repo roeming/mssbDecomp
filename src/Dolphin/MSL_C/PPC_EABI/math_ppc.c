@@ -482,10 +482,7 @@ void fminl(void)
  * @note Address: N/A
  * @note Size: 0x24
  */
-void acosf(void)
-{
-	// UNUSED FUNCTION
-}
+WEAKFUNC f32 acosf(f32 __x) { return acos((f64)__x); }
 
 /**
  * @note Address: N/A

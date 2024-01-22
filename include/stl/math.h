@@ -45,6 +45,7 @@ f64 tan(f64);
 f32 tanf(f32);
 
 f64 acos(f64);
+f32 acosf(f32);
 f64 asin(f64);
 f64 atan(f64);
 f64 atan2(f64, f64);
@@ -107,6 +108,7 @@ f64 __setflm(f64);
 #define fabs(x) __fabs(x)
 
 inline f128 fabsl(f128 x) { return __fabs((f64)x); }
+inline f32 fabsf(f32 x) { return __fabsf(x); }
 
 /**
  * kludges for emulating inlined f versions of funcs.

@@ -134,27 +134,47 @@ config.ldflags = [
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
 cflags_base = [
-    "-nodefaults",
     "-proc gekko",
-    "-align powerpc",
-    "-enum int",
-    "-fp hardware",
+    "-nodefaults",
     "-Cpp_exceptions off",
-    # "-W all",
-    "-O4,p",
-    "-inline auto",
-    '-pragma "cats off"',
-    '-pragma "warn_notinlined off"',
-    "-maxerrors 1",
-    "-nosyspath",
     "-RTTI off",
+    "-fp hard",
     "-fp_contract on",
-    "-str reuse",
-	"-multibyte", # For Wii compilers, replace with `-enc SJIS`
+    "-O4,p",
+    "-maxerrors 1",
+    "-enum int",
+    "-inline auto",
+    "-str reuse,readonly",
+    "-nosyspath",
+    "-use_lmw_stmw on",
+    "-sdata 8",
+    "-sdata2 8",
+    "-DVERNUM={version_num}",
     "-i include",
-    f"-i build/{config.version}/include",
-    "-i include/stl",
-    f"-DVERSION={version_num}",
+    "-i include/stl"
+
+
+    # "-nodefaults",
+    # "-proc gekko",
+    # "-align powerpc",
+    # "-enum int",
+    # "-fp hardware",
+    # "-Cpp_exceptions off",
+    # # "-W all",
+    # "-O4,p",
+    # "-inline auto",
+    # '-pragma "cats off"',
+    # '-pragma "warn_notinlined off"',
+    # "-maxerrors 1",
+    # "-nosyspath",
+    # "-RTTI off",
+    # "-fp_contract on",
+    # "-str reuse",
+	# "-multibyte", # For Wii compilers, replace with `-enc SJIS`
+    # "-i include",
+    # f"-i build/{config.version}/include",
+    # "-i include/stl",
+    # f"-DVERSION={version_num}",
 ]
 
 # Debug flags
@@ -226,12 +246,13 @@ config.libs = [
         [
             Object(Matching, "Dolphin/mtx/mtx.c"),
             Object(Matching, "Dolphin/mtx/mtxvec.c"),
-            Object(NonMatching, "Dolphin/mtx/mtx44.c"),
+            Object(Matching, "Dolphin/mtx/mtx44.c"),
             Object(Matching, "Dolphin/mtx/mtx44vec.c"),
             Object(Matching, "Dolphin/mtx/vec.c"),
-            Object(NonMatching, "Dolphin/mtx/quat.c"),
+            Object(Matching, "Dolphin/mtx/quat.c"),
             Object(Matching, "Dolphin/mtx/psmtx.c"),
         ],
+        flags=cflags_base + ["-fp_contract off"]
     ),
 ]
 
