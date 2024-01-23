@@ -258,7 +258,8 @@ config.libs = [
         "db",
         [
             Object(Matching, "Dolphin/db/db.c")
-        ]
+        ],
+        flags = cflags_base + ["-str noreadonly"]
     ), 
     DolphinLib(
         "OS",
@@ -267,8 +268,12 @@ config.libs = [
             Object(Matching, "Dolphin/os/OSTime.c"),
             Object(Matching, "Dolphin/os/OSThread.c"),
             Object(Matching, "Dolphin/os/OSSync.c"),
-            Object(NonMatching, "Dolphin/os/OSSemaphore.c"),
-        ]
+            Object(Matching, "Dolphin/os/OSSemaphore.c"),
+            Object(Matching, "Dolphin/os/OSRtc.c"),
+            Object(Matching, "Dolphin/os/OSResetSW.c"),
+            Object(Matching, "Dolphin/os/OSReset.c"),
+        ],
+        flags = cflags_base + ["-str noreadonly"]
     ),
 
 ]

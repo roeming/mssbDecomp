@@ -11,20 +11,21 @@ void OSInitSemaphore(OSSemaphore *a, BOOL count)
     OSRestoreInterrupts(interrupts);
 }
 
-s32 OSWaitSemaphore(OSSemaphore *a)
+s32 OSWaitSemaphore(OSSemaphore volatile *a)
 {
     BOOL interrupts;
     s32 ret;
-    
-    interrupts = OSDisableInterrupts();
-    
-    while ((ret = a->num) <= 0)
-    {
-        OSSleepThread(&a->queue);
-    }
-    
-    a->num--;
 
+    interrupts = OSDisableInterrupts();
+    {
+
+        while ((ret = a->num) <= 0)
+        {
+            OSSleepThread(&a->queue);
+        }
+        
+        a->num--;
+    }
     OSRestoreInterrupts(interrupts);
 
     return ret;
@@ -34,13 +35,15 @@ s32 OSSignalSemaphore(OSSemaphore *a)
 {
     BOOL interrupts;
     s32 ret;
+    
     interrupts = OSDisableInterrupts();
+    {
+        ret = a->num;
+        
+        a->num++;
 
-    ret = a->num;
-    a->num++;
-    OSWakeupThread(&a->queue);
-
-
+        OSWakeupThread(&a->queue);
+    }
     OSRestoreInterrupts(interrupts);
 
     return ret;

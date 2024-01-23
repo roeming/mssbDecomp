@@ -8,7 +8,7 @@ static BOOL Prepared;
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0); //(*(u32 *)0x812fdff0)
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);   //(*(u32 *)0x812fdfec)
 extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
-extern u8 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2); // unknown function, set to true by __OSReboot
+extern u32 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2); // unknown function, set to true by __OSReboot
 
 extern void* __OSSavedRegionStart;
 extern void* __OSSavedRegionEnd;

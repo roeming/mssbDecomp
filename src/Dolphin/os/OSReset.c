@@ -1,9 +1,10 @@
 #include "Dolphin/os.h"
 #include "Dolphin/hw_regs.h"
+#include "Dolphin/pad.h"
 
 static OSResetQueue ResetFunctionQueue;
 static u32 bootThisDol;
-
+s32 lbl_802e5250[8];
 /**
  * @note Address: 0x800F02A4
  * @note Size: 0x84
@@ -17,15 +18,15 @@ void OSRegisterResetFunction(OSResetFunctionInfo* info)
 		;
 	}
 
-	if (iter == nullptr) {
+	if (iter == NULL) {
 		tmp = ResetFunctionQueue.tail;
-		if (tmp == nullptr) {
+		if (tmp == NULL) {
 			ResetFunctionQueue.head = info;
 		} else {
 			tmp->next = info;
 		}
 		info->prev              = tmp;
-		info->next              = nullptr;
+		info->next              = NULL;
 		ResetFunctionQueue.tail = info;
 		return;
 	}
@@ -34,7 +35,7 @@ void OSRegisterResetFunction(OSResetFunctionInfo* info)
 	tmp        = iter->prev;
 	iter->prev = info;
 	info->prev = tmp;
-	if (tmp == nullptr) {
+	if (tmp == NULL) {
 		ResetFunctionQueue.head = info;
 		return;
 	}
@@ -45,21 +46,21 @@ void OSRegisterResetFunction(OSResetFunctionInfo* info)
  * @note Address: N/A
  * @note Size: 0x94
  */
-BOOL __OSCallResetFunctions(BOOL final)
-{
-	OSResetFunctionInfo* iter;
-	BOOL retCode = FALSE;
-
-	for (iter = ResetFunctionQueue.head; (iter != nullptr && retCode == FALSE); iter = iter->next) {
-		retCode |= !iter->func(final);
+BOOL __OSCallResetFunctions(s32 priority) {
+    OSResetFunctionInfo* iter;
+    s32 retCode = 0;
+	u32 _priority = 0;
+	for (iter = ResetFunctionQueue.head; iter != NULL; _priority = iter->priority, iter = iter->next)
+	{
+		if (retCode && _priority != iter->priority)
+		{
+			break;
+		} 
+        retCode |= !iter->func(priority);
 	}
 
 	retCode |= !__OSSyncSram();
-
-	if (retCode) {
-		return FALSE;
-	}
-	return TRUE;
+    return retCode ? FALSE : TRUE;
 }
 
 /**
@@ -156,22 +157,14 @@ void __OSDoHotReset(s32 code)
  * @note Address: 0x800F03E0
  * @note Size: 0x2BC
  */
+#pragma dont_inline on
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
 {
 	BOOL rc;
 	BOOL disableRecalibration;
-	u32 unk[3]; // dumb compiler
+	u32 stackManip;
 
 	OSDisableScheduler();
-	__OSStopAudioSystem();
-
-	if (reset == OS_RESET_SHUTDOWN || (reset == OS_RESET_RESTART && bootThisDol != 0)) {
-		disableRecalibration = __PADDisableRecalibration(TRUE);
-	}
-
-	while (!__OSCallResetFunctions(FALSE)) {
-		;
-	}
 
 	if (reset == OS_RESET_HOTRESET && forceMenu) {
 		OSSram* sram;
@@ -179,28 +172,52 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
 		sram = __OSLockSram();
 		sram->flags |= 0x40;
 		__OSUnlockSram(TRUE);
-
-		while (!__OSSyncSram()) {
-			;
-		}
+		
 		resetCode = 0;
 	}
+	if (reset == OS_RESET_SHUTDOWN || (reset == OS_RESET_RESTART && (bootThisDol || (resetCode + 0x3fff0000 == 0))))
+	{
+		__OSStopAudioSystem();
+		disableRecalibration = __PADDisableRecalibration(1);
+		while (!__OSCallResetFunctions(FALSE));
+		while(!__OSSyncSram());
+		{
+			OSDisableInterrupts();
+			__OSCallResetFunctions(1);
 
-	OSDisableInterrupts();
-	__OSCallResetFunctions(TRUE);
-	LCDisable();
-	if (reset == OS_RESET_HOTRESET) {
-		__OSDoHotReset(resetCode);
-	} else if (reset == OS_RESET_RESTART) {
-		if ((*(u32*)OSPhysicalToCached(0x30EC) = bootThisDol) != 0) {
-			__PADDisableRecalibration(disableRecalibration);
+			LCDisable();
+			__PADDisableRecalibration(disableRecalibration);			
+			KillThreads();
 		}
-		KillThreads();
+	}
+	else {
+		__OSStopAudioSystem();
+		while(!__OSCallResetFunctions(FALSE));
+		while(!__OSSyncSram());
+		{
+			OSDisableInterrupts();
+			__OSCallResetFunctions(TRUE);
+			LCDisable();
+			KillThreads();
+		}
+	}
+	if (reset == OS_RESET_HOTRESET)
+	{
+		OSDisableInterrupts();
+		__VIRegs[1] = 0;
+		ICFlashInvalidate();
+		Reset(resetCode << 3);
+	}
+	else if (reset == OS_RESET_RESTART)
+	{
+		if (forceMenu == 1)
+		{
+			OSReport("OSResetSystem(): You can't specify TRUE to forceMenu if you restart. Ignored\n");
+		}
 		OSEnableScheduler();
-		__OSReboot(resetCode, forceMenu);
+		__OSReboot(resetCode, bootThisDol);
 	}
 
-	KillThreads();
 	memset(OSPhysicalToCached(0x40), 0, 0xCC - 0x40);
 	memset(OSPhysicalToCached(0xD4), 0, 0xE8 - 0xD4);
 	memset(OSPhysicalToCached(0xF4), 0, 0xF8 - 0xF4);
@@ -208,7 +225,7 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
 	memset(OSPhysicalToCached(0x30C8), 0, 0xD4 - 0xC8);
 	memset(OSPhysicalToCached(0x30E2), 0, 1);
 
-	__PADDisableRecalibration(disableRecalibration);
+	// __PADDisableRecalibration(disableRecalibration);
 }
 
 /**
@@ -217,8 +234,8 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
  */
 u32 OSGetResetCode()
 {
-	if (*(u8*)OSPhysicalToCached(0x30E2) != 0) {
-		return *(u32*)OSPhysicalToCached(0x30F0) | 0x80000000;
+	if (lbl_802e5250[0] != 0) {
+		return lbl_802e5250[1] | 0x80000000;
 	}
 
 	return ((__PIRegs[PI_RESETCODE] & ~7) >> 3);

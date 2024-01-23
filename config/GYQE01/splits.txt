@@ -14,6 +14,20 @@ Sections:
 	.sdata2     type:rodata
 	.sbss2      type:bss
 
+Dolphin/os/OSReset.c:
+	.text       start:0x80072328 end:0x800727AC
+	.data       start:0x8010CB70 end:0x8010CBBE
+	.bss        start:0x802E5250 end:0x802E5270
+	.sbss       start:0x803CBDD0 end:0x803CBDDC
+
+Dolphin/os/OSResetSW.c:
+	.text       start:0x800727AC end:0x80072B38
+	.sbss       start:0x803CBDE0 end:0x803CBE00
+
+Dolphin/os/OSRtc.c:
+	.text       start:0x80072B38 end:0x800736C8
+	.bss        start:0x802E52C0 end:0x802E5318
+
 Dolphin/os/OSSemaphore.c:
 	.text       start:0x800736C8 end:0x800737F0
 
