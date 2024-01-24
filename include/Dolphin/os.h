@@ -43,6 +43,19 @@ extern void __OSStopAudioSystem();
 extern void __OSInitMemoryProtection();
 extern void __OSInitAlarm();
 
+typedef struct {
+	s32 _00;
+	u32 _04;
+	u32 _08;
+	void *_0C_lo;
+	void *_10_hi;
+	u32 _14;
+	u32 _18;
+	u32 _1C;
+}RebootParams;
+
+extern RebootParams __OSRebootParams;
+
 void OSInit();
 
 // OS logging and reporting.

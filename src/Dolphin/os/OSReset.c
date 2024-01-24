@@ -4,7 +4,7 @@
 
 static OSResetQueue ResetFunctionQueue;
 static u32 bootThisDol;
-s32 lbl_802e5250[8];
+
 /**
  * @note Address: 0x800F02A4
  * @note Size: 0x84
@@ -234,8 +234,8 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
  */
 u32 OSGetResetCode()
 {
-	if (lbl_802e5250[0] != 0) {
-		return lbl_802e5250[1] | 0x80000000;
+	if (__OSRebootParams._00 != 0) {
+		return __OSRebootParams._04 | 0x80000000;
 	}
 
 	return ((__PIRegs[PI_RESETCODE] & ~7) >> 3);

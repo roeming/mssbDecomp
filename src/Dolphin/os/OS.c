@@ -1,8 +1,9 @@
 #include "types.h"
 #include "Dolphin/os.h"
 #include "Dolphin/PPCArch.h"
+#include "Dolphin/hw_regs.h"
 
-DECL_SECT(".init") extern char _db_stack_end[];
+DECL_SECT(".init") extern unsigned char _stack_addr[];
 
 // memory locations for important stuff
 #define OS_DBINTERFACE_ADDR     0x40
@@ -21,7 +22,7 @@ extern u8 __ArenaLo[];
 extern u32 __DVDLongFileNameFlag;
 extern u32 __PADSpec;
 // OS version
-char* __OSVersion = "<< Dolphin SDK - OS\trelease build: Nov 26 2003 05:18:37 (0x2301) >>";
+char* __OSVersion = "<< Dolphin SDK - OS\trelease build: Nov 10 2004 06:26:41 (0x2301) >>";
 
 // main workhorse functions
 void ClearArena();
@@ -30,7 +31,7 @@ void DVDInquiryAsync(void*, void*, void*);
 void EXIInit();
 void EnableMetroTRKInterrupts();
 int OSEnableInterrupts();
-void OSExceptionInit();
+static void OSExceptionInit();
 void OSRegisterVersion(const char*);
 void PPCMtmmcr0(int);
 void PPCMtmmcr1(int);
@@ -75,10 +76,12 @@ extern char* __OSResetSWInterruptHandler[];
 #define OS_EXCEPTIONTABLE_ADDR 0x3000
 #define OS_DBJUMPPOINT_ADDR    0x60
 
+
 vu16 __OSDeviceCode : (OS_BASE_CACHED | OS_DVD_DEVICECODE);
 void OSDefaultExceptionHandler(__OSException exception, OSContext* context);
 static DVDDriveInfo DriveInfo ATTRIBUTE_ALIGN(32);
 static DVDCommandBlock DriveBlock;
+RebootParams __OSRebootParams;
 
 // flags and system info
 static OSBootInfo* BootInfo;
@@ -294,6 +297,8 @@ void OSInit(void)
 		__OSStartTime = __OSGetSystemTime();
 		OSDisableInterrupts();
 
+		__OSGetExecParams(&__OSRebootParams);
+
 		// set some PPC things
 		PPCMtmmcr0(0);
 		PPCMtmmcr1(0);
@@ -337,7 +342,7 @@ void OSInit(void)
 		// if the input arenaLo is null, and debug flag location exists (and flag is < 2),
 		//     set arenaLo to just past the end of the db stack
 		if ((BootInfo->arenaLo == NULL) && (BI2DebugFlag != 0) && (*BI2DebugFlag < 2)) {
-			debugArenaLo = (char*)(((u32)_db_stack_end + 0x1f) & ~0x1f);
+			debugArenaLo = (char*)(((u32)_stack_addr + 0x1f) & ~0x1f);
 			OSSetArenaLo(debugArenaLo);
 		}
 
@@ -367,7 +372,7 @@ void OSInit(void)
 
 		// begin OS reporting
 		OSReport("\nDolphin OS\n");
-		OSReport("Kernel built : %s %s\n", "Nov 26 2003", "05:18:37");
+		OSReport("Kernel built : %s %s\n", "Nov 10 2004", "06:26:41");
 		OSReport("Console Type : ");
 
 		// this is a function in the same file, but it doesn't seem to match
@@ -425,8 +430,32 @@ void OSInit(void)
 			EnableMetroTRKInterrupts();
 		}
 
+		if (!((OSGetResetCode() & 0x80000000) ? 1 : 0))
+		{
+			memset(OSGetArenaLo(), 0, (size_t)OSGetArenaHi() - (size_t)OSGetArenaLo());
+		}
+		else if (!__OSRebootParams._0C_lo)
+		{
+			memset(OSGetArenaLo(), 0, (size_t)OSGetArenaHi() - (size_t)OSGetArenaLo());
+		}
+		else if ((size_t)OSGetArenaLo() < (size_t)__OSRebootParams._0C_lo)
+		{
+			if ((size_t)OSGetArenaHi() <= (size_t)__OSRebootParams._0C_lo)
+			{
+				memset(OSGetArenaLo(), 0, (size_t)OSGetArenaHi() - (size_t)OSGetArenaLo());
+			}
+			else
+			{
+				memset(OSGetArenaLo(), 0, (size_t)__OSRebootParams._0C_lo - (size_t)OSGetArenaLo());
+				
+				if ((size_t)OSGetArenaHi() > (size_t)__OSRebootParams._10_hi)
+				{
+					memset(__OSRebootParams._10_hi, 0, (size_t)OSGetArenaHi() - (size_t)__OSRebootParams._10_hi);
+				}
+			}
+		}
+
 		// free up memory and re-enable things
-		ClearArena();
 		OSEnableInterrupts();
 
 		// check if we can load OS from IPL; if not, grab it from DVD (?)
@@ -589,6 +618,7 @@ ASM static void __OSDBJump(void) {
 entry __OSDBJUMPSTART
 	bla     OS_DBJUMPPOINT_ADDR
 entry __OSDBJUMPEND
+	
 #endif // clang-format on
 }
 
@@ -747,7 +777,6 @@ void __OSPSInit(void)
  * @note Address: 0x800EBA74
  * @note Size: 0x14
  */
-extern vu32 __DIRegs[];
 #define DI_CONFIG_IDX         0x9
 #define DI_CONFIG_CONFIG_MASK 0xFF
 u32 __OSGetDIConfig(void) { return (__DIRegs[DI_CONFIG_IDX] & DI_CONFIG_CONFIG_MASK); }

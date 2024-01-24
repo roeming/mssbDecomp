@@ -16,8 +16,9 @@ Sections:
 
 Dolphin/os/OS.c:
 	.text       start:0x8006D138 end:0x8006DC04
-	.bss        start:0x802E5200 end:0x802E5250
-	.sdata      start:0x803CB904 end:0x803CB908
+	.data       start:0x8010B610 end:0x8010B808
+	.bss        start:0x802E5200 end:0x802E5270
+	.sdata      start:0x803CB8F8 end:0x803CB908
 	.sbss       start:0x803CBD40 end:0x803CBD78
 
 Dolphin/os/OSAlarm.c:
@@ -49,7 +50,9 @@ Dolphin/os/OSContext.c:
 
 Dolphin/os/OSError.c:
 	.text       start:0x8006F7E0 end:0x8006FE8C
-	.data       start:0x8010BCA0 end:0x8010BF7C
+	.data       start:0x8010BCA0 end:0x8010BFC0
+	.bss        start:0x802E5270 end:0x802E52C0
+	.sdata      start:0x803CB918 end:0x803CB920
 
 Dolphin/os/OSExec.c:
 	.text       start:0x8006FE8C end:0x800707EC
@@ -87,7 +90,6 @@ Dolphin/os/OSReboot.c:
 Dolphin/os/OSReset.c:
 	.text       start:0x80072328 end:0x800727AC
 	.data       start:0x8010CB70 end:0x8010CBBE
-	.bss        start:0x802E5250 end:0x802E5270
 	.sbss       start:0x803CBDD0 end:0x803CBDDC
 
 Dolphin/os/OSResetSW.c:
