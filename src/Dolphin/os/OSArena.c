@@ -55,13 +55,18 @@ void OSSetArenaLo(void* arena_lo)
  * @note Address: N/A
  * @note Size: 0x2C
  */
-void* OSAllocFromArenaLo(size_t size, s32 align)
+#define ROUND(n, a) (((u32)(n) + (a)-1) & ~((a)-1))
+void* OSAllocFromArenaLo(size_t size, u32 align)
 {
-  void* newPtr = (void*)ALIGN_NEXT((size_t)__OSArenaLo, align);
+  void* ptr;
+  u8* arenaLo;
 
-  __OSArenaLo = (void*)ALIGN_NEXT((size_t)newPtr + size, align);
-
-  return newPtr;
+  ptr = OSGetArenaLo();
+  arenaLo = ptr = (void*)ROUND(ptr, align);
+  arenaLo += size;
+  arenaLo = (u8*)ROUND(arenaLo, align);
+  OSSetArenaLo(arenaLo);
+  return ptr;
 }
 
 /**

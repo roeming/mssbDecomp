@@ -16,12 +16,19 @@ Sections:
 
 Dolphin/os/OS.c:
 	.text       start:0x8006D138 end:0x8006DC04
+	.bss        start:0x802E5200 end:0x802E5250
+	.sdata      start:0x803CB904 end:0x803CB908
+	.sbss       start:0x803CBD40 end:0x803CBD78
 
 Dolphin/os/OSAlarm.c:
 	.text       start:0x8006DC04 end:0x8006E360
+	.data       start:0x8010B808 end:0x8010B818
+	.sbss       start:0x803CBD78 end:0x803CBD80
 
 Dolphin/os/OSAlloc.c:
 	.text       start:0x8006E360 end:0x8006E574
+	.sdata      start:0x803CB908 end:0x803CB910
+	.sbss       start:0x803CBD80 end:0x803CBD90
 
 Dolphin/os/OSArena.c:
 	.text       start:0x8006E574 end:0x8006E5C0
@@ -38,6 +45,7 @@ Dolphin/os/OSCache.c:
 
 Dolphin/os/OSContext.c:
 	.text       start:0x8006EF70 end:0x8006F7E0
+	.data       start:0x8010BAC8 end:0x8010BCA0
 
 Dolphin/os/OSError.c:
 	.text       start:0x8006F7E0 end:0x8006FE8C
