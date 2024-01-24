@@ -5,8 +5,8 @@ static void* SaveStart = nullptr;
 static void* SaveEnd   = nullptr;
 static BOOL Prepared;
 
-extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0); //(*(u32 *)0x812fdff0)
-extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);   //(*(u32 *)0x812fdfec)
+extern u32 BOOT_REGION_START AT_ADDRESS(0x81280000); //(*(u32 *)0x812fdff0)
+extern u32 BOOT_REGION_END AT_ADDRESS(0x812f0000);   //(*(u32 *)0x812fdfec)
 extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
 extern u32 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2); // unknown function, set to true by __OSReboot
 
@@ -73,72 +73,21 @@ static void Callback(void) { Prepared = TRUE; }
  * @note Address: 0x800EFF68
  * @note Size: 0x330
  */
+extern void __OSBootDol(u32, u32, void*);
 void __OSReboot(u32 resetCode, u32 bootDol)
 {
 	OSContext exceptionContext;
-	OSTime time1;
-	DVDCommandBlock dvdCmd;
-	DVDCommandBlock dvdCmd2;
-	DVDCommandBlock dvdCmd3;
-	u32 numBytes;
-	u32 offset;
+	u32 t;
+	
 	OSDisableInterrupts();
-	OS_RESET_CODE     = resetCode;
-	OS_REBOOT_BOOL    = TRUE;
-	BOOT_REGION_START = (u32)SaveStart;
-	BOOT_REGION_END   = (u32)SaveEnd;
+	OSSetArenaLo((void*)0x81280000);
+	OSSetArenaHi((void*)0x812f0000);
 	OSClearContext(&exceptionContext);
 	OSSetCurrentContext(&exceptionContext);
-	DVDInit();
-	DVDSetAutoInvalidation(TRUE);
-	DVDResume();
+	
+	t = 0;
 
-	Prepared = FALSE;
-	__DVDPrepareResetAsync(Callback);
-
-	__OSMaskInterrupts(0xffffffe0);
-	__OSUnmaskInterrupts(0x400);
-	OSEnableInterrupts();
-
-	time1 = OSGetTime();
-	while (Prepared != TRUE) {
-		ReadApploader(time1);
-	};
-
-	if (!__OSIsGcam) {
-		if (IsStreamEnabled()) {
-			AISetStreamVolLeft(0);
-			AISetStreamVolRight(0);
-			DVDCancelStreamAsync(&dvdCmd, nullptr);
-			time1 = OSGetTime();
-			while (DVDGetCommandBlockStatus(&dvdCmd)) {
-				ReadApploader(time1);
-			}
-
-			AISetStreamPlayState(0);
-		}
-	}
-
-	DVDReadAbsAsyncPrio(&dvdCmd2, Header.date, 32, 0x2440, nullptr, 0);
-
-	time1 = OSGetTime();
-	while (DVDGetCommandBlockStatus(&dvdCmd2)) {
-		ReadApploader(time1);
-	}
-
-	offset   = Header.size + 0x20;
-	numBytes = OSRoundUp32B(Header.rebootSize);
-	DVDReadAbsAsyncPrio(&dvdCmd3, (void*)(OS_BOOTROM_ADDR), numBytes, offset + 0x2440, nullptr, 0);
-
-	time1 = OSGetTime();
-	while (DVDGetCommandBlockStatus(&dvdCmd3)) {
-		ReadApploader(time1);
-	}
-
-	ICInvalidateRange((void*)(OS_BOOTROM_ADDR), numBytes);
-	OSDisableInterrupts();
-	ICFlashInvalidate();
-	Run(OS_BOOTROM_ADDR);
+	__OSBootDol(resetCode, bootDol | 0x80000000, &t);
 }
 
 /**

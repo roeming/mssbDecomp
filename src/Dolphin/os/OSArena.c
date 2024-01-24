@@ -1,3 +1,4 @@
+#include "Dolphin/os.h"
 static void* __OSArenaHi = (void*)0x00000000;
 static void* __OSArenaLo = (void*)0xffffffff;
 
@@ -49,19 +50,18 @@ void OSSetArenaLo(void* arena_lo)
 	__OSArenaLo = arena_lo;
 	return;
 }
-/*
-.loc_0x0:
-  stw       r3, -0x7CA0(r13)
-  blr
-*/
 
 /**
  * @note Address: N/A
  * @note Size: 0x2C
  */
-void OSAllocFromArenaLo(void)
+void* OSAllocFromArenaLo(size_t size, s32 align)
 {
-	// UNUSED FUNCTION
+  void* newPtr = (void*)ALIGN_NEXT((size_t)__OSArenaLo, align);
+
+  __OSArenaLo = (void*)ALIGN_NEXT((size_t)newPtr + size, align);
+
+  return newPtr;
 }
 
 /**

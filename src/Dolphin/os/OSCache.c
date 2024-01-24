@@ -445,7 +445,7 @@ void LCEnable(void)
  * @note Address: 0x800EC958
  * @note Size: 0x28
  */
-ASM void LCDisable(void) {
+ASM void LCDisable(void){
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 
@@ -485,16 +485,26 @@ _loop:
 //  * @note Address: N/A
 //  * @note Size: 0x24
 //  */
-// void LCLoadBlocks(void* destTag, void* srcAddr, u32 numBlocks)
-// {
-// 	// UNUSED FUNCTION
-// }
+ASM void LCLoadBlocks(register void *destTag, register void *srcAddr, register u32 numBlocks){
+#ifdef __MWERKS__ // clang-format off
+	nofralloc;
+	extrwi r6, numBlocks, 5, 25	
+	clrlwi srcAddr, srcAddr, 4
+	or r6, r6, srcAddr
+	mtspr DMA_U, r6
+	clrlslwi r6, numBlocks, 30, 2
+	or r6, r6, destTag
+	ori r6, r6, 0x12
+	mtspr DMA_L, r6
+	blr
+#endif // clang-format on
+}
 
 /**
  * @note Address: 0x800EC980
  * @note Size: 0x24
  */
-ASM void LCStoreBlocks(register void* destAddr, register void* srcTag, register u32 numBlocks) {
+ASM void LCStoreBlocks(register void *destAddr, register void *srcTag, register u32 numBlocks){
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	rlwinm  r6, numBlocks, 30, 27, 31
@@ -531,18 +541,35 @@ ASM void LCStoreBlocks(register void* destAddr, register void* srcTag, register 
 //  * @note Address: N/A
 //  * @note Size: 0xAC
 //  */
-// u32 LCLoadData(void* destAddr, void* srcAddr, u32 nBytes)
-// {
-// 	// UNUSED FUNCTION
-// }
+u32 LCLoadData(void *destAddr, void *srcAddr, u32 nBytes)
+{
+	u32 byteCount = (nBytes + 31) / 32;
+	u32 originalCount = (byteCount + 127) / 128;
+	while (byteCount != 0)
+	{
+		if (byteCount < 0x80)
+		{
+			LCLoadBlocks(destAddr, srcAddr, byteCount);
+			byteCount = 0;
+		}
+		else
+		{
+			LCLoadBlocks(destAddr, srcAddr, 0);
+			byteCount -= 0x80;
+			destAddr   = (void*)((u8*)destAddr + 0x1000);
+			srcAddr    = (void*)((u8*)srcAddr + 0x1000);
+		}
+	}
+	return originalCount;
+}
 
 /**
  * @note Address: 0x800EC9A4
  * @note Size: 0xAC
  */
-u32 LCStoreData(void* destAddr, // to main memory destination
-                void* srcAddr,  // from locked cache source
-                u32 nBytes)
+u32 LCStoreData(void *destAddr, // to main memory destination
+				void *srcAddr,	// from locked cache source
+				u32 nBytes)
 {
 	u32 numBlocks       = (nBytes + 31) / 32;
 	u32 numTransactions = (numBlocks + LC_MAX_DMA_BLOCKS - 1) / LC_MAX_DMA_BLOCKS;

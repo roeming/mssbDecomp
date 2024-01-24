@@ -19,6 +19,8 @@ typedef void (*OSErrorHandlerNoVARG)(OSError error, OSContext* context, u32 p1, 
 
 // Error functions.
 OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler);
+void OSReport(const char* msg, ...);
+void OSPanic(const char* file, int line, const char* msg, ...);
 
 // Error defines.
 #define OS_ERROR_SYSTEM_RESET       (0)

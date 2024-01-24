@@ -14,6 +14,68 @@ Sections:
 	.sdata2     type:rodata
 	.sbss2      type:bss
 
+Dolphin/os/OS.c:
+	.text       start:0x8006D138 end:0x8006DC04
+
+Dolphin/os/OSAlarm.c:
+	.text       start:0x8006DC04 end:0x8006E360
+
+Dolphin/os/OSAlloc.c:
+	.text       start:0x8006E360 end:0x8006E574
+
+Dolphin/os/OSArena.c:
+	.text       start:0x8006E574 end:0x8006E5C0
+	.sdata      start:0x803CB910 end:0x803CB914
+	.sbss       start:0x803CBD90 end:0x803CBD94
+
+Dolphin/os/OSAudioSystem.c:
+	.text       start:0x8006E5C0 end:0x8006E854
+	.data       start:0x8010B818 end:0x8010B898
+
+Dolphin/os/OSCache.c:
+	.text       start:0x8006E854 end:0x8006EF70
+	.data       start:0x8010B898 end:0x8010BAC8
+
+Dolphin/os/OSContext.c:
+	.text       start:0x8006EF70 end:0x8006F7E0
+
+Dolphin/os/OSError.c:
+	.text       start:0x8006F7E0 end:0x8006FE8C
+	.data       start:0x8010BCA0 end:0x8010BF7C
+
+Dolphin/os/OSExec.c:
+	.text       start:0x8006FE8C end:0x800707EC
+	.sbss       start:0x803CBD98 end:0x803CBDA0
+
+Dolphin/os/OSFont.c:
+	.text       start:0x800707EC end:0x80070B00
+	.data       start:0x8010BFD0 end:0x8010CAE0
+	.sdata      start:0x803CB928 end:0x803CB930
+	.sbss       start:0x803CBDA0 end:0x803CBDB0
+
+Dolphin/os/OSInterrupt.c:
+	.text       start:0x80070B00 end:0x8007136C
+	.data       start:0x8010CAE0 end:0x8010CB10
+	.sbss       start:0x803CBDB0 end:0x803CBDC8
+
+Dolphin/os/OSLink.c:
+	.text       start:0x8007136C end:0x80071D58
+	.data       start:0x8010CB10 end:0x8010CB60
+
+Dolphin/os/OSMessage.c:
+	.text       start:0x80071D58 end:0x80071F5C
+
+Dolphin/os/OSMemory.c:
+	.text       start:0x80071F5C end:0x80072234
+	.data       start:0x8010CB60 end:0x8010CB70
+
+Dolphin/os/OSMutex.c:
+	.text       start:0x80072234 end:0x800722A4
+
+Dolphin/os/OSReboot.c:
+	.text       start:0x800722A4 end:0x80072328
+	.sbss       start:0x803CBDC8 end:0x803CBDD0
+
 Dolphin/os/OSReset.c:
 	.text       start:0x80072328 end:0x800727AC
 	.data       start:0x8010CB70 end:0x8010CBBE

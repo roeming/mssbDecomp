@@ -21,7 +21,7 @@ s32 OSWaitSemaphore(OSSemaphore volatile *a)
 
         while ((ret = a->num) <= 0)
         {
-            OSSleepThread(&a->queue);
+            OSSleepThread((OSThreadQueue*)&a->queue);
         }
         
         a->num--;

@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "Dolphin/OS/OSContext.h"
+#define OS_MODULE_VERSION 3
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,13 +55,20 @@ struct OSModuleHeader {
 	u8 prologSection;     // _30, prolog section #
 	u8 epilogSection;     // _31, epilog section #
 	u8 unresolvedSection; // _32, unresolved section #
+	u8 bssSection; 		  // _33, unresolved section #
 	u32 prolog;           // _34, prolog offset
 	u32 epilog;           // 38, epilog offset
 	u32 unresolved;       // _3C, unresolved offset
 
-	// may have 0x8 more here? check if needed for P2.
-	// u32 align;    // _40
-	// u32 bssAlign; // _44
+#if (2 <= OS_MODULE_VERSION)
+  u32 align;    // module alignment constraint
+  u32 bssAlign; // bss alignment constraint
+#endif
+
+  // OS_MODULE_VERSION == 3
+#if (3 <= OS_MODULE_VERSION)
+  u32 fixSize;
+#endif
 };
 
 // Section information struct.

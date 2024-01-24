@@ -3,13 +3,41 @@
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/gx.h"
 
+
+typedef struct OSFontData
+{
+	u16 type;
+	u16 firstChar;
+	u16 lastChar;
+	u16 invalidChar;
+	u16 ascent;
+	u16 descent;
+	u16 charWidth;
+	u16 lineFeed;
+	u16 cellWidth;
+	u16 cellHeight;
+	u32 texSize;
+	u16 texFmt;
+	u16 texNumCol;
+	u16 texNumRow;
+	u16 texWidth;
+	u16 texHeight;
+	u16 charWidthTblOfs;
+	u32 tileDataOfs;
+	u32 tileDataSize;
+} OSFontData;
+
 // outside functions
 BOOL __OSReadROM(void* buffer, s32 length, s32 offset);
-
+const u8* ParseStringS(u16 encode, const u8* str, OSFontData** fontOut, u32* codeOut);
 static OSFontHeader* FontData; // type unsure
 static u8* SheetImage;         // type unsure
 static u8* WidthTable;         // type unsure
 static int CharsInSheet;       // type unsure
+
+static OSFontData* FontDataAnsi;
+static OSFontData* FontDataSjis;
+static const u8* (*lbl_803CBDA8)(u16 encode, const u8* str, OSFontData** fontOut, u32* codeOut);
 
 // clang-format off
 static u16 HankakuToCode[]
@@ -219,12 +247,12 @@ static BOOL IsSjisTrailByte(u8 letter) { return (letter >= 0x40 && letter <= 0xF
  * @note Address: 0x800EDD98
  * @note Size: 0x19C
  */
-static int GetFontCode(u16 code)
+static int GetFontCode(u16 encoding, u16 code)
 {
 	int preCode;
 	int lastByte;
 
-	if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS) {
+	if (encoding == OS_FONT_ENCODE_SJIS) {
 		if (code >= 0x20 && code <= 0xDF) {
 			return HankakuToCode[code - 0x20];
 		}
@@ -352,17 +380,17 @@ static u32 GetFontSize(u8* in)
  * @note Address: 0x800EE0A8
  * @note Size: 0x58
  */
+
 u16 OSGetFontEncode(void)
 {
-	static u16 fontEncode = 0xFFFF;
-	if (fontEncode <= 1) {
+	static u16 fontEncode = OS_FONT_ENCODE_NULL;
+	if (fontEncode != 0xffff) {
 		return fontEncode;
 	}
 	switch (__OSTVMode) {
 	case VI_NTSC:
 		fontEncode = (__VIRegs[VI_DTV_STAT] & 2) ? OS_FONT_ENCODE_SJIS : OS_FONT_ENCODE_ANSI;
 		break;
-
 	case VI_PAL:
 	case VI_MPAL:
 	case VI_DEBUG:
@@ -371,10 +399,45 @@ u16 OSGetFontEncode(void)
 	default:
 		fontEncode = OS_FONT_ENCODE_ANSI;
 	}
-
+	
+	lbl_803CBDA8 = ParseStringS;
+	
 	return fontEncode;
 }
 
+
+const u8* ParseStringS(u16 encode, const u8* str, OSFontData** fontOut,
+                         u32* codeOut) {
+    OSFontData* font;
+    u16 code = 0;
+
+    switch(encode) {
+        case OS_FONT_ENCODE_ANSI:
+            font = FontDataAnsi;
+            code = *str;
+            if (code != 0) {
+                str++;
+            }
+            break;
+        case OS_FONT_ENCODE_SJIS:
+            font = FontDataSjis;
+            code = *str;
+            if (code == 0) {
+                break;
+            }
+            str++;
+            
+            if (IsSjisLeadByte(code) && IsSjisTrailByte(*str)) {
+                code = (code << 8 | *str++);
+            }
+            break;
+    }
+
+    *fontOut = font;
+    *codeOut = GetFontCode(encode, code);
+    
+    return str;
+}
 /**
  * @note Address: 0x800EE100
  * @note Size: 0x8C
@@ -437,7 +500,7 @@ u32 OSLoadFont(OSFontHeader* fontInfo, void* temp)
 
 			const u16 codes[4] = { 0x2ABE, 0x003D, 0x003D, 0x003D };
 
-			fontCodeT = GetFontCode('T'); // ????
+			fontCodeT = GetFontCode(1, 'T'); // ????
 			sheet     = fontCodeT / CharsInSheet;
 			numChars  = fontCodeT - sheet * CharsInSheet;
 			row       = numChars / FontData->sheetColumn;
@@ -540,7 +603,7 @@ char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* wi
 		}
 	}
 
-	code = GetFontCode(firstChar);
+	code = GetFontCode(1, firstChar);
 
 	// Font sheet on which the texture resides
 	sheet = code / CharsInSheet;
@@ -586,7 +649,7 @@ char* OSGetFontWidth(const char* string, s32* width)
 	}
 
 	if (width) {
-		*width = WidthTable[GetFontCode(firstChar)];
+		*width = WidthTable[GetFontCode(1, firstChar)];
 	}
 
 	return string;
