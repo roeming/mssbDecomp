@@ -1,36 +1,39 @@
 #include "Dolphin/os.h"
 #include "stl/stdio.h"
+#include "string.h"
 
-static u32 lbl_803CBD98;
+static int lbl_803CBD98;
 static int CachedApploaderAddr;
 
 typedef struct{
     u32 _00[0x800];
 }ArgsStruct;
 
-BOOL PackArgs(ArgsStruct* r3, int r4, ArgsStruct* r5)
+BOOL PackArgs(ArgsStruct* param_1, int param_2, ArgsStruct* param_3)
 {
     u32 i;
     int ii;
     ArgsStruct* next;
 
-    memset(r3, 0, sizeof(ArgsStruct));
-    if (!r4)
+    memset(param_1, 0, sizeof(ArgsStruct));
+    if (!param_2)
     {
-        r3->_00[2] = 0;
-        return TRUE;
+        param_1->_00[2] = 0;
     }
-    next = r3 + 1;
-    for (ii = r4; ii >= 0; ii--)
+    else
     {
+        next = param_1 + 1;
+        // param_3 += param_2;
+        for (ii = param_2; ii >= 0; ii--)
+        {
+            strlen((char*)&param_3[ii]);
+            strcpy((char*)0, (char*)next);
+        }
 
-    }
-    strlen();
-    strcpy();
-
-    for (i = 0; i < r4 + 1; i++)
-    {
-        r3->_00[i] = r5->_00[i];
+        for (i = 0; i < param_2 + 1; i++)
+        {
+            param_1->_00[i] = param_3->_00[i];
+        }
     }
 
     return TRUE;
@@ -48,7 +51,7 @@ ASM void Run(register void (*runFunc)(void))
 }
 #endif // clang-format on
 
-void ReadDisc(u32* addr, s32 len, s32 offset)
+static void ReadDisc(u32* addr, s32 len, s32 offset)
 {
     DVDCommandBlock bloc;
 
@@ -70,12 +73,11 @@ void Callback(void)
 extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
 extern int OS_APPLOADER_ADDR AT_ADDRESS(0x800030F4);
 
-static void __OSGetExecParams(void *outParams)
+void __OSGetExecParams(void *outParams)
 {
-    u32 t = 1 << 31;
-    if (t <= OS_RESET_CODE)
+    if (0x80000000 <= OS_RESET_CODE)
     {
-        memcpy(outParams, OS_RESET_CODE, 0x1c);
+        memcpy(outParams, (void*)OS_RESET_CODE, 0x1c);
     }
     else
     {
@@ -113,9 +115,11 @@ u32 GetApploaderPosition(void)
 
     return CachedApploaderAddr;
 }
-static void __OSBootDolSimple(u32 v, u32 b, void *start, void *end, u32 c, u32 count, u32*)
+
+static void __OSBootDolSimple(u32 v, u32 b, void *start, void *end, u32 c, u32 count, ArgsStruct *param_7)
 {
-  u32 *src;
+  ArgsStruct *src;
+  DVDCommandBlock* bloc;
 //   void *pvVar1;
 //   char *pcVar2;
 //   int iVar3;
@@ -131,46 +135,49 @@ static void __OSBootDolSimple(u32 v, u32 b, void *start, void *end, u32 c, u32 c
 //   undefined4 local_60;
 //   undefined4 local_5c [2];
 //   undefined auStack84 [52];
-  int interrupts;
+    int interrupts;
 
-  interrupts = OSDisableInterrupts();
-  src = (u32 *)OSAllocFromArenaLo(0x1c, 1);
-  //   *src = 1;
-  //   src[1] = param_2;
-  //   src[3] = param_3;
-  //   src[4] = param_4;
-  //   src[5] = param_5;
-  //   if (param_5 == 0) {
-  //     pvVar1 = OSArena::OSAllocFromArenaLo(0x2000,1);
-  //     src[6] = pvVar1;
-  //     PackArgs((u32 *)src[6],param_6,param_7);
-  //   }
-  //   dvd::dvd::DVDInit();
-  //   dvd::dvd::DVDSetAutoInvalidation(1);
-  //   dvd::dvd::DVDResume();
-  //   DAT_803cbd98 = 0;
-  //   dvd::dvd::__DVDPrepareResetAsync(Callback);
-  //   OSInterrupt::__OSMaskInterrupts(0xffffffe0);
-  //   OSInterrupt::__OSUnmaskInterrupts(0x400);
-  //   OSInterrupt::OSEnableInterrupts();
-  //   while (DAT_803cbd98 != 1) {
-  //     iVar3 = dvd::dvd::DVDCheckDisk();
-  //     if (iVar3 == 0) {
-  //       OSMemory::__OSDoHotReset(0);
-  //     }
-  //   }
-  //   if ((DAT_803cbd4c == 0) && (pcVar2 = dvd::dvd::DVDGetCurrentDiskID(), pcVar2[8] != '\0')) {
-  //     ai::ai::AISetStreamVolLeft(0);
-  //     ai::ai::AISetStreamVolRight(0);
-  //     dvd::dvd::DVDCancelStreamAsync(auStack84,0);
-  //     while (iVar3 = dvd::dvd::DVDGetCommandBlockStatus(auStack84), iVar3 != 0) {
-  //       iVar3 = dvd::dvd::DVDCheckDisk();
-  //       if (iVar3 == 0) {
-  //         OSMemory::__OSDoHotReset(0);
-  //       }
-  //     }
-  //     ai::ai::AISetStreamPlayState(0);
-  //   }
+    interrupts = OSDisableInterrupts();
+    src = (ArgsStruct *)OSAllocFromArenaLo(0x1c, 1);
+    src->_00[0] = 1;
+    src->_00[1] = b;
+    src->_00[3] = (u32)start;
+    src->_00[4] = (u32)end;
+    src->_00[5] = c;
+    if (!c)
+    {
+        src->_00[6] = (u32)OSAllocFromArenaLo(0x2000, 1);
+        PackArgs((ArgsStruct *)src->_00[6], c, param_7);
+    }
+    DVDInit();
+    DVDSetAutoInvalidation(1);
+    DVDResume();
+    lbl_803CBD98 = 0;
+    __DVDPrepareResetAsync(Callback);
+    __OSMaskInterrupts(0xffffffe0);
+    __OSUnmaskInterrupts(0x400);
+    OSEnableInterrupts();
+    while (lbl_803CBD98 != 1)
+    {
+        if (!DVDCheckDisk())
+        {
+            __OSDoHotReset(0);
+        }
+    }
+    if ((__OSIsGcam == 0) && (DVDGetCurrentDiskID()->streaming))
+    {
+        AISetStreamVolLeft(0);
+        AISetStreamVolRight(0);
+        DVDCancelStreamAsync(bloc, 0);
+            while (DVDGetCommandBlockStatus(bloc))
+            {
+                if (!DVDCheckDisk())
+                {
+                    __OSDoHotReset(0);
+                }
+            }
+        AISetStreamPlayState(0);
+    }
   //   pvVar1 = OSArena::OSAllocFromArenaLo(0x20,0x20);
   //   uVar4 = GetApploaderPosition();
   //   ReadDisc(pvVar1,0x20,uVar4);
@@ -243,10 +250,10 @@ static void __OSBootDolSimple(u32 v, u32 b, void *start, void *end, u32 c, u32 c
 }
 
 #pragma dont_inline on
-static void __OSBootDol(u32 a, u32 b, u32* data)
+void __OSBootDol(u32 a, u32 b, u32* data)
 {
     char buff[0x10];
-    u32 *ppcVar3;
+    ArgsStruct *ppcVar3;
     int count, i;
     void *start, *end;
 
@@ -263,13 +270,13 @@ static void __OSBootDol(u32 a, u32 b, u32* data)
         }
     }
 
-    ppcVar3 = (u32 *)(void*)OSAllocFromArenaLo((count + 2) * sizeof(u32), 1);
-    *ppcVar3 = (u32)buff;
+    ppcVar3 = (ArgsStruct *)OSAllocFromArenaLo((count + 2) * sizeof(u32), 1);
+    ppcVar3->_00[0] = (u32)buff;
 
     count++;
     for (i = 1; i < count; i++)
     {
-        ppcVar3[i] = data[i-1];
+        ppcVar3->_00[i] = data[i-1];
     }
 
     __OSBootDolSimple(0xffffffff, b, start, end, 0, count, ppcVar3);

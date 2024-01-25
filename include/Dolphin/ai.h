@@ -18,7 +18,7 @@ void AIInitDMA(u32 start_addr, u32 length);
 BOOL AIGetDMAEnableFlag(void);
 void AIStartDMA(void);
 void AIStopDMA(void);
-u32 AIGetDMABytesLeft(void);
+void AIGetDMABytesLeft(u16 *count);
 u32 AIGetDMAStartAddr(void);
 u32 AIGetDMALength(void);
 u32 AIGetDSPSampleRate(void);

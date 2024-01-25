@@ -22,7 +22,7 @@ static void cbForReadAsync(s32 result, DVDCommandBlock* block);
 static void cbForReadSync(s32 result, DVDCommandBlock* block);
 static void cbForSeekAsync(s32 result, DVDCommandBlock* block);
 static void cbForSeekSync(s32 result, DVDCommandBlock* block);
-static void cbForPrepareStreamAsync(s32 result, DVDCommandBlock* block);
+static void cbForPrepareStreamAsync(s32 result, DVDFileInfo* block);
 static void cbForPrepareStreamSync(s32 result, DVDCommandBlock* block);
 
 #ifndef offsetof
@@ -427,6 +427,7 @@ static void cbForReadSync(s32 result, DVDCommandBlock* block) { OSWakeupThread(&
  */
 BOOL DVDSeekAsyncPrio(DVDFileInfo* fileInfo, s32 offset, DVDCallback callback, s32 prio)
 {
+	STRIPPED_STRING("DVDSeek(): offset is out of the file  ");
 	// UNUSED FUNCTION
 }
 
@@ -545,16 +546,41 @@ void* DVDGetFSTLocation() { return BootInfo->FSTLocation; }
  */
 BOOL DVDPrepareStreamAsync(DVDFileInfo* fileInfo, u32 length, u32 offset, DVDCallback callback)
 {
-	// UNUSED FUNCTION
+	u32 stackManip;
+
+	if ((fileInfo->startAddr + offset) % 0x8000 != 0)
+	{
+		OSPanic("dvdfs.c", 0x4bb, "DVDPrepareStreamAsync(): Specified start address (filestart(0x%x) + offset(0x%x)) is not 32KB aligned", fileInfo->startAddr, offset);
+	}
+	
+	if (length == 0)
+	{
+		length = fileInfo->length - offset;
+	}
+
+	if (length % 0x8000 != 0)
+	{
+		OSPanic("dvdfs.c", 0x4c5, "DVDPrepareStreamAsync(): Specified length (0x%x) is not a multiple of 32768(32*1024)", length);
+	}
+	if ( offset > fileInfo->length || (offset + length) > fileInfo->length)
+	{
+		OSPanic("dvdfs.c", 0x4cd, "DVDPrepareStreamAsync(): The area specified (offset(0x%x), length(0x%x)) is out of the file", offset, length);
+	}
+
+	fileInfo->callback = callback;
+	DVDPrepareStreamAbsAsync(fileInfo, length, fileInfo->startAddr + offset, cbForPrepareStreamAsync);
 }
 
 /**
  * @note Address: N/A
  * @note Size: 0x30
  */
-static void cbForPrepareStreamAsync(s32 result, DVDCommandBlock* block)
+static void cbForPrepareStreamAsync(s32 result, DVDFileInfo* block)
 {
-	// UNUSED FUNCTION
+	if (block->callback)
+	{
+		block->callback(result, block);
+	}
 }
 
 /**
@@ -563,6 +589,10 @@ static void cbForPrepareStreamAsync(s32 result, DVDCommandBlock* block)
  */
 void DVDPrepareStream()
 {
+	STRIPPED_STRING("DVDPrepareStream(): Specified start address (filestart(0x%x) + offset(0x%x)) is not 32KB aligned");
+	STRIPPED_STRING("DVDPrepareStream(): Specified length (0x%x) is not a multiple of 32768(32*1024)");
+	STRIPPED_STRING("DVDPrepareStream(): The area specified (offset(0x%x), length(0x%x)) is out of the file");
+
 	// UNUSED FUNCTION
 }
 

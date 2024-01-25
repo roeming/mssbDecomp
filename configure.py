@@ -242,6 +242,49 @@ config.libs = [
         ],
     },
     DolphinLib(
+        "base",
+        [
+            Object(Matching, "Dolphin/base/PPCArch.c"),
+        ],
+    ),
+    DolphinLib(
+        "OS",
+        [
+            Object(Matching, "Dolphin/os/OS.c"),
+            Object(Matching, "Dolphin/os/OSAlarm.c"),
+            Object(Matching, "Dolphin/os/OSAlloc.c"),
+            Object(Matching, "Dolphin/os/OSArena.c"),
+            Object(Matching, "Dolphin/os/OSAudioSystem.c"),
+            Object(Matching, "Dolphin/os/OSCache.c"),
+            Object(Matching, "Dolphin/os/OSContext.c"),
+            Object(Matching, "Dolphin/os/OSError.c"),
+            Object(NonMatching, "Dolphin/os/OSExec.c"),
+            Object(Matching, "Dolphin/os/OSFont.c"),
+            Object(Matching, "Dolphin/os/OSInterrupt.c"),
+            Object(Matching, "Dolphin/os/OSLink.c"),
+            Object(Matching, "Dolphin/os/OSMemory.c"),
+            Object(Matching, "Dolphin/os/OSMessage.c"),
+            Object(Matching, "Dolphin/os/OSMutex.c"),
+            Object(Matching, "Dolphin/os/OSReboot.c"),
+            Object(Matching, "Dolphin/os/OSReset.c"),
+            Object(Matching, "Dolphin/os/OSResetSW.c"),
+            Object(Matching, "Dolphin/os/OSRtc.c"),
+            Object(Matching, "Dolphin/os/OSSemaphore.c"),
+            Object(Matching, "Dolphin/os/OSSync.c"),
+            Object(Matching, "Dolphin/os/OSThread.c"),
+            Object(Matching, "Dolphin/os/OSTime.c"),
+            Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp"),
+        ],
+        flags = cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "db",
+        [
+            Object(Matching, "Dolphin/db/db.c")
+        ],
+        flags = cflags_base + ["-str noreadonly"]
+    ), 
+    DolphinLib(
         "mtx",
         [
             Object(Matching, "Dolphin/mtx/mtx.c"),
@@ -255,43 +298,49 @@ config.libs = [
         flags=cflags_base + ["-fp_contract off"]
     ),
     DolphinLib(
-        "db",
+        "dvd",
         [
-            Object(Matching, "Dolphin/db/db.c")
+            Object(Matching, "Dolphin/dvd/dvdlow.c"),
+            Object(Matching, "Dolphin/dvd/dvdfs.c"),
+            Object(Matching, "Dolphin/dvd/dvd.c"),
+            Object(Matching, "Dolphin/dvd/dvdqueue.c"),
+            Object(Matching, "Dolphin/dvd/dvderror.c"),
+            Object(Matching, "Dolphin/dvd/dvdidutils.c"),
+            Object(Matching, "Dolphin/dvd/dvdfatal.c"),
+            Object(Matching, "Dolphin/dvd/fstload.c"),
         ],
-        flags = cflags_base + ["-str noreadonly"]
-    ), 
-    DolphinLib(
-        "OS",
-        [
-            Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp"),
-            Object(Matching, "Dolphin/os/OSTime.c"),
-            Object(Matching, "Dolphin/os/OSThread.c"),
-            Object(Matching, "Dolphin/os/OSSync.c"),
-            Object(Matching, "Dolphin/os/OSSemaphore.c"),
-            Object(Matching, "Dolphin/os/OSRtc.c"),
-            Object(Matching, "Dolphin/os/OSResetSW.c"),
-            Object(Matching, "Dolphin/os/OSReset.c"),
-            Object(NonMatching, "Dolphin/os/OSReboot.c"),
-            Object(Matching, "Dolphin/os/OSMutex.c"),
-            Object(Matching, "Dolphin/os/OSMemory.c"),
-            Object(Matching, "Dolphin/os/OSMessage.c"),
-            Object(Matching, "Dolphin/os/OSLink.c"),
-            Object(Matching, "Dolphin/os/OSInterrupt.c"),
-            Object(Matching, "Dolphin/os/OSFont.c"),
-            Object(NonMatching, "Dolphin/os/OSExec.c"),
-            Object(Matching, "Dolphin/os/OSError.c"),
-            Object(Matching, "Dolphin/os/OSContext.c"),
-            Object(Matching, "Dolphin/os/OSCache.c"),
-            Object(Matching, "Dolphin/os/OSAudioSystem.c"),
-            Object(Matching, "Dolphin/os/OSArena.c"),
-            Object(Matching, "Dolphin/os/OSAlloc.c"),
-            Object(Matching, "Dolphin/os/OSAlarm.c"),
-            Object(Matching, "Dolphin/os/OS.c"),
-        ],
-        flags = cflags_base + ["-str noreadonly"]
+        flags=cflags_base + ["-str noreadonly"]
     ),
-
+    DolphinLib(
+        "vi",
+        [
+            Object(Matching, "Dolphin/vi/vi.c")
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "pad",
+        [
+            Object(Matching, "Dolphin/pad/Padclamp.c"),
+            Object(Matching, "Dolphin/pad/Pad.c"),
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "ai",
+        [
+            Object(Matching, "Dolphin/ai/ai.c"),
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "ar",
+        [
+            Object(Matching, "Dolphin/ar/ar.c"),
+            Object(NonMatching, "Dolphin/ar/arq.c"),
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
 ]
 
 if args.mode == "configure":

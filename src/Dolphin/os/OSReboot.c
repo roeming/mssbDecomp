@@ -35,15 +35,14 @@ BOOL IsStreamEnabled(void)
  * @note Address: 0x800EFF4C
  * @note Size: 0x10
  */
-ASM static void Run(register u32 addr)
+static void Run(register u32 addr)
 {
 #ifdef __MWERKS__ // clang-format off
-	nofralloc
-
+asm{
 	sync
 	isync
 	mtlr addr
-	blr
+}
 #endif // clang-format on
 }
 
@@ -81,7 +80,7 @@ void __OSReboot(u32 resetCode, u32 bootDol)
 	
 	t = 0;
 
-	__OSBootDol(resetCode, bootDol | 0x80000000, &t);
+	__OSBootDol(bootDol, resetCode | 0x80000000, &t);
 }
 
 /**

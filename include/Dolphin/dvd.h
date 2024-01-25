@@ -158,7 +158,8 @@ BOOL DVDFastOpenDir(s32 entryNum, DVDDir* dir);
 BOOL DVDCancelAllAsync(DVDCBCallback callback);
 s32 DVDCancelAll();
 void DVDDumpWaitingQueue();
-
+BOOL DVDReadAbsAsyncForBS(DVDCommandBlock* block, void* addr, s32 length, s32 offset, DVDCBCallback callback);
+BOOL DVDReadDiskID(DVDCommandBlock* block, DVDDiskID* diskID, DVDCBCallback callback);
 //////////////////////////////////
 
 ////// USEFUL DVD DEFINES ////////

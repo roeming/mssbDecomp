@@ -2,7 +2,7 @@
 #include "Dolphin/os.h"
 #include "Dolphin/hw_regs.h"
 
-char* __ARVersion = "<< Dolphin SDK - AR\trelease build: Nov 26 2003 05:19:42 (0x2301) >>";
+char* __ARVersion = "<< Dolphin SDK - AR\trelease build: Apr 17 2003 12:33:55 (0x2301) >>";
 
 static ARCallback __AR_Callback;
 static u32 __AR_Size;
@@ -16,7 +16,7 @@ static u32* __AR_BlockLength;
 static volatile BOOL __AR_init_flag = FALSE;
 
 static void __ARHandler(__OSInterrupt interrupt, OSContext* context);
-static void __ARChecksize(void);
+void __ARChecksize(void);
 static void __ARClearArea(u32 start_addr, u32 length);
 
 /**

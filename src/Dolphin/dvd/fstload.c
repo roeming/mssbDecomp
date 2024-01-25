@@ -12,9 +12,9 @@ struct bb2struct {
 
 static u32 status;
 static struct bb2struct* bb2; // pointer?
-static u8* idTmp;             // also pointer
+static DVDDiskID* idTmp;             // also pointer
 static u8 bb2Buf[0x3F];
-static u8 block[0x30];
+static DVDCommandBlock block;
 
 struct blah {
 	s8 Gamecode[4];
@@ -32,7 +32,7 @@ struct blah {
  * @note Size: 0xD8
  */
 
-static void cb(s32 param_1, void* param_2) // param_2 is probably a struct
+static void cb(s32 param_1, DVDCommandBlock* param_2) // param_2 is probably a struct
 {
 	if (param_1 > 0) {
 		switch (status) {

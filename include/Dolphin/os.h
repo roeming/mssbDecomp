@@ -62,12 +62,12 @@ void OSInit();
 void OSReport(const char* message, ...);
 void OSPanic(const char* file, int line, const char* message, ...);
 
-#define OSError(...) OSPanic(__FILE__, __LINE__, __VA_ARGS__)
-#ifndef MATCHING
-#define OSErrorLine(line, ...) OSError(__VA_ARGS__)
-#else
+// #define OSError(...) OSPanic(__FILE__, __LINE__, __VA_ARGS__)
+// #ifndef MATCHING
+// #define OSErrorLine(line, ...) OSError(__VA_ARGS__)
+// #else
 #define OSErrorLine(line, ...) OSPanic(__FILE__, line, __VA_ARGS__)
-#endif
+// #endif
 
 // Other OS functions.
 void OSRegisterVersion(const char*);

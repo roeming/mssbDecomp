@@ -1,7 +1,10 @@
 #include "types.h"
 #include "Dolphin/dvd.h"
+#include "Dolphin/os.h"
 
-struct DVDQueue WaitingQueue[4];
+#define NUM_QUEUES 4
+
+static struct DVDQueue WaitingQueue[NUM_QUEUES];
 
 /**
  * @note Address: 0x800DF45C
@@ -89,6 +92,8 @@ BOOL __DVDCheckWaitingQueue()
 	return FALSE;
 }
 
+
+
 /**
  * @note Address: 0x800DF5F4
  * @note Size: 0x60
@@ -107,4 +112,58 @@ BOOL __DVDDequeueWaitingQueue(struct DVDQueue* queue)
 	head->mTail = tail;
 	OSRestoreInterrupts(intrEnabled);
 	return TRUE;
+}
+
+static const char *CommandStrings[16] = {
+	"",
+	"READ",
+	"SEEK",
+	"CHANGE_DISK",
+	"BSREAD",
+	"READID",
+	"INITSTREAM",
+	"CANCELSTREAM",
+	"STOP_STREAM_AT_END",
+	"REQUEST_AUDIO_ERROR",
+	"REQUEST_PLAY_ADDR",
+	"REQUEST_START_ADDR",
+	"REQUEST_LENGTH",
+	"AUDIO_BUFFER_CONFIG",
+	"INQUIRY",
+	"BS_CHANGE_DISK",
+};
+
+void DVDDumpWaitingQueue()
+{
+
+	u32 queueNum;
+	OSReport("==== DVD Waiting Queue Status ====\n");
+	queueNum = 0;
+	do {
+		DVDQueue* queue = &WaitingQueue[queueNum];
+		OSReport("< Queue #%d > ", queueNum);
+		if (queue->mHead == queue)
+		{
+			OSReport("None\n");
+		}
+		else
+		{
+			DVDCommandBlock* queueIter;
+			OSReport("\n");
+			for (queueIter = (DVDCommandBlock*)queue->mHead; queueIter != (DVDCommandBlock*)queue; queueIter = queueIter->next)
+			{
+				OSReport("0x%08x: Command: %s ", queueIter, CommandStrings[queueIter->command]);
+				if(queueIter->command == 1)
+				{
+					OSReport("Disk offset: %d, Length: %d, Addr: 0x%08x\n", queueIter->offset, queueIter->length, queueIter->addr);
+				}
+				else 
+				{
+					OSReport("\n");
+				}
+			}
+		}
+		queueNum++;
+		queue++;
+	} while(queueNum < NUM_QUEUES);
 }

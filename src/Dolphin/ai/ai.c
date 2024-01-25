@@ -81,9 +81,9 @@ void AIStopDMA(void) { RESET_FLAG(__DSPRegs[DSP_DMA_CONTROL_LEN], DSP_DMA_START_
  * @note Address: N/A
  * @note Size: 0x10
  */
-u32 AIGetDMABytesLeft(void)
+void AIGetDMABytesLeft(u16 *count)
 {
-	// UNUSED FUNCTION
+	__DSPRegs[0x1b] &= ~0x8000;
 }
 
 /**

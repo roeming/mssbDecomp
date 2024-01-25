@@ -102,6 +102,7 @@ void PADSetSpec(u32 spec);
 typedef void (*PADSamplingCallback)(void);
 
 PADSamplingCallback PADSetSamplingCallback(PADSamplingCallback callback);
+BOOL __PADDisableRecalibration(BOOL disable);
 
 extern u32 __PADFixBits;
 

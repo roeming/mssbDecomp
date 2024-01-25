@@ -1122,7 +1122,7 @@ BOOL DVDReadDiskID(DVDCommandBlock* block, DVDDiskID* diskID, DVDCBCallback call
  * @note Address: N/A
  * @note Size: 0xC4
  */
-static BOOL DVDPrepareStreamAbsAsync(DVDCommandBlock* block, u32 length, u32 offset, DVDCBCallback callback)
+BOOL DVDPrepareStreamAbsAsync(DVDCommandBlock* block, u32 length, u32 offset, DVDCBCallback callback)
 {
 	BOOL idle;
 	block->command  = 6;
@@ -1195,7 +1195,7 @@ static void cbForCancelStreamSync(s32 result, DVDCommandBlock* block)
  * @note Address: N/A
  * @note Size: 0xBC
  */
-static BOOL DVDStopStreamAtEndAsync(DVDCommandBlock* block, DVDCBCallback callback)
+BOOL DVDStopStreamAtEndAsync(DVDCommandBlock* block, DVDCBCallback callback)
 {
 	BOOL idle;
 
@@ -1206,6 +1206,32 @@ static BOOL DVDStopStreamAtEndAsync(DVDCommandBlock* block, DVDCBCallback callba
 
 	return idle;
 }
+
+BOOL DVDGetStreamErrorStatusAsync(DVDCommandBlock* block, DVDCBCallback callback)
+{
+	BOOL idle;
+
+	block->command  = 9;
+	block->callback = callback;
+
+	idle = issueCommand(1, block);
+
+	return idle;
+}
+
+
+BOOL DVDGetStreamPlayAddrAsync(DVDCommandBlock* block, DVDCBCallback callback)
+{
+	BOOL idle;
+
+	block->command  = 10;
+	block->callback = callback;
+
+	idle = issueCommand(1, block);
+
+	return idle;
+}
+
 
 /**
  * @note Address: 0x800DEC50

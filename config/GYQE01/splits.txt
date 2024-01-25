@@ -14,6 +14,9 @@ Sections:
 	.sdata2     type:rodata
 	.sbss2      type:bss
 
+Dolphin/base/PPCArch.c:
+	.text       start:0x8006D024 end:0x8006D138
+
 Dolphin/os/OS.c:
 	.text       start:0x8006D138 end:0x8006DC04
 	.data       start:0x8010B610 end:0x8010B808
@@ -153,3 +156,82 @@ Dolphin/mtx/quat.c:
 
 Dolphin/mtx/psmtx.c:
 	.text       start:0x80076A1C end:0x80076A68
+
+Dolphin/dvd/dvdlow.c:
+	.text       start:0x80076A68 end:0x800778E4
+	.bss        start:0x802E5D10 end:0x802E5DE0
+	.sdata      start:0x803CB940 end:0x803CB948
+	.sbss       start:0x803CBE20 end:0x803CBE68
+
+Dolphin/dvd/dvdfs.c:
+	.text       start:0x800778E4 end:0x800782DC
+	.data       start:0x8010CC38 end:0x8010D028
+	.sdata      start:0x803CB948 end:0x803CB950
+	.sbss       start:0x803CBE68 end:0x803CBE88
+
+Dolphin/dvd/dvd.c:
+	.text       start:0x800782DC end:0x8007AD08
+	.data       start:0x8010D028 end:0x8010D1A8
+	.bss        start:0x802E5DE0 end:0x802E5E78
+	.sdata      start:0x803CB950 end:0x803CB968
+	.sbss       start:0x803CBE88 end:0x803CBED0
+
+Dolphin/dvd/dvdqueue.c:
+	.text       start:0x8007AD08 end:0x8007B00C
+	.data       start:0x8010D1A8 end:0x8010D310
+	.bss        start:0x802E5E78 end:0x802E5E98
+	.sdata      start:0x803CB968 end:0x803CB9A0
+
+Dolphin/dvd/dvderror.c:
+	.text       start:0x8007B00C end:0x8007B1A4
+	.data       start:0x8010D310 end:0x8010D358
+
+Dolphin/dvd/dvdidutils.c:
+	.text       start:0x8007B1A4 end:0x8007B29C
+
+Dolphin/dvd/dvdfatal.c:
+	.text       start:0x8007B29C end:0x8007B2CC
+	.sbss       start:0x803CBED0 end:0x803CBED8
+
+Dolphin/dvd/fstload.c:
+	.text       start:0x8007B2CC end:0x8007B50C
+	.data       start:0x8010D358 end:0x8010D3C8
+	.bss        start:0x802E5E98 end:0x802E5F08
+	.sdata      start:0x803CB9A0 end:0x803CB9B0
+	.sbss       start:0x803CBED8 end:0x803CBEE8
+
+Dolphin/vi/vi.c:
+	.text       start:0x8007B50C end:0x8007D358
+	.data       start:0x8010D3C8 end:0x8010D798
+	.bss        start:0x802E5F08 end:0x802E6050
+	.sdata      start:0x803CB9B0 end:0x803CB9C0
+	.sbss       start:0x803CBEE8 end:0x803CBF48
+
+Dolphin/pad/Padclamp.c:
+	.text       start:0x8007D358 end:0x8007D59C
+	.rodata     start:0x800E6A10 end:0x800E6A20
+
+Dolphin/pad/Pad.c:
+	.text       start:0x8007D59C end:0x8007EEE4
+	.data       start:0x8010D798 end:0x8010D7F0
+	.bss        start:0x802E6050 end:0x802E60A0
+	.sdata      start:0x803CB9C0 end:0x803CB9E0
+	.sbss       start:0x803CBF48 end:0x803CBF78
+
+Dolphin/ai/ai.c:
+	.text       start:0x8007EEE4 end:0x8007F84C
+	.data       start:0x8010D7F0 end:0x8010D838
+	.sdata      start:0x803CB9E0 end:0x803CB9E8
+	.sbss       start:0x803CBF78 end:0x803CBFB8
+
+Dolphin/ar/ar.c:
+	.text       start:0x8007F84C end:0x8008132C
+	.data       start:0x8010D838 end:0x8010D880
+	.sdata      start:0x803CB9E8 end:0x803CB9F0
+	.sbss       start:0x803CBFB8 end:0x803CBFD8
+
+Dolphin/ar/arq.c:
+	.text       start:0x8008132C end:0x80081810
+	.data       start:0x8010D880 end:0x8010D8C8
+	.sdata      start:0x803CB9F0 end:0x803CB9F8
+	.sbss       start:0x803CBFD8 end:0x803CC010
