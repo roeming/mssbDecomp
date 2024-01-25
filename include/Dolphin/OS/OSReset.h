@@ -46,7 +46,7 @@ BOOL OSGetResetButtonState();
 BOOL OSGetResetSwitchState();
 
 // Reboot functions.
-void __OSReboot(u32 resetCode, u32 bootDol);
+// void __OSReboot(u32 resetCode, u32 bootDol);
 void __OSDoHotReset(s32 code);
 void OSSetSaveRegion(void* start, void* end);
 void OSGetSaveRegion(void** start, void** end);

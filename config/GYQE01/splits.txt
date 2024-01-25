@@ -56,6 +56,8 @@ Dolphin/os/OSError.c:
 
 Dolphin/os/OSExec.c:
 	.text       start:0x8006FE8C end:0x800707EC
+	.data       start:0x8010BFC0 end:0x8010BFD0
+	.sdata      start:0x803CB920 end:0x803CB928
 	.sbss       start:0x803CBD98 end:0x803CBDA0
 
 Dolphin/os/OSFont.c:

@@ -125,6 +125,7 @@ void* OSGetArenaHi(void);
 void* OSGetArenaLo(void);
 void OSSetArenaHi(void* addr);
 void OSSetArenaLo(void* addr);
+void* OSAllocFromArenaLo(size_t size, size_t alignment);
 
 // targsupp
 extern u32 TRKAccessFile(u32, u32, u32*, u8*);

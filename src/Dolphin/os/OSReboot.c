@@ -5,11 +5,6 @@ static void* SaveStart = nullptr;
 static void* SaveEnd   = nullptr;
 static BOOL Prepared;
 
-extern u32 BOOT_REGION_START AT_ADDRESS(0x81280000); //(*(u32 *)0x812fdff0)
-extern u32 BOOT_REGION_END AT_ADDRESS(0x812f0000);   //(*(u32 *)0x812fdfec)
-extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
-extern u32 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2); // unknown function, set to true by __OSReboot
-
 extern void* __OSSavedRegionStart;
 extern void* __OSSavedRegionEnd;
 
@@ -73,7 +68,6 @@ static void Callback(void) { Prepared = TRUE; }
  * @note Address: 0x800EFF68
  * @note Size: 0x330
  */
-extern void __OSBootDol(u32, u32, void*);
 void __OSReboot(u32 resetCode, u32 bootDol)
 {
 	OSContext exceptionContext;
