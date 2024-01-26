@@ -337,7 +337,16 @@ config.libs = [
         "ar",
         [
             Object(Matching, "Dolphin/ar/ar.c"),
-            Object(NonMatching, "Dolphin/ar/arq.c"),
+            Object(Matching, "Dolphin/ar/arq.c"),
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "dsp",
+        [
+            Object(Matching, "Dolphin/dsp/dsp.c"),
+            Object(Matching, "Dolphin/dsp/dsp_debug.c"),
+            Object(NonMatching, "Dolphin/dsp/dsp_task.c"),
         ],
         flags=cflags_base + ["-str noreadonly"]
     ),

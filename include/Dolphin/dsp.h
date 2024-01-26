@@ -79,6 +79,7 @@ u32 DSPCheckMailFromDSP();
 
 // Used/defined in JSystem.
 DSPTaskInfo* DSPAddTask(DSPTaskInfo* task);
+DSPTaskInfo* DSPCancelTask(DSPTaskInfo* task);
 void __DSPHandler(__OSInterrupt interrupt, OSContext* context);
 
 // Unused/inlined in P2.

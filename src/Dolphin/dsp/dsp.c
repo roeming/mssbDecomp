@@ -77,3 +77,32 @@ void DSPInit()
 	__DSP_init_flag  = TRUE;
 	OSRestoreInterrupts(old);
 }
+
+DSPTaskInfo* DSPAddTask(DSPTaskInfo* task)
+{
+	BOOL interrupts;
+	
+	interrupts = OSDisableInterrupts();
+	__DSP_insert_task(task);
+	task->state = 0;
+	task->flags = 1;
+	OSRestoreInterrupts(interrupts);
+	
+	if (task == __DSP_first_task)
+	{
+		__DSP_boot_task(task);
+	}
+	
+	return task;
+}
+
+DSPTaskInfo* DSPCancelTask(DSPTaskInfo* task)
+{
+	BOOL interrupts;
+
+	interrupts = OSDisableInterrupts();
+	task->flags |= 0x2;
+	OSRestoreInterrupts(interrupts);
+
+	return task;
+}

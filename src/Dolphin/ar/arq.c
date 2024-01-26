@@ -1,11 +1,14 @@
 #include "Dolphin/ar.h"
-
-const char* __ARQVersion = "<< Dolphin SDK - ARQ\trelease build: Nov 26 2003 05:19:43 (0x2301) >>";
+#include "Dolphin/os.h"
+const char* __ARQVersion = "<< Dolphin SDK - ARQ\trelease build: Apr 17 2003 12:33:56 (0x2301) >>";
 
 static ARQRequest* __ARQRequestQueueHi;
 static ARQRequest* __ARQRequestTailHi;
 static ARQRequest* __ARQRequestQueueLo;
 static ARQRequest* __ARQRequestTailLo;
+static ARQRequest* __ARQOwnerRequestHi;
+static ARQRequest* __ARQOwnerRequestLo;
+
 static ARQRequest* __ARQRequestPendingHi;
 static ARQRequest* __ARQRequestPendingLo;
 static ARQCallback __ARQCallbackHi;
@@ -188,4 +191,84 @@ void ARQPostRequest(ARQRequest* task, u32 owner, u32 type, u32 priority, u32 sou
 	}
 
 	OSRestoreInterrupts(enabled);
+}
+
+ARQRemoveOwnerRequest(int in)
+{
+	BOOL interrupts;
+	ARQRequest* queue;
+	interrupts = OSDisableInterrupts();
+	__ARQOwnerRequestHi = 0;
+	__ARQOwnerRequestLo = 0;
+
+	queue = __ARQRequestQueueHi;
+	while(queue)
+	{
+		if(queue->owner != in)
+		{
+			if (!__ARQOwnerRequestHi)
+			{
+				__ARQOwnerRequestHi = queue;
+				__ARQOwnerRequestLo = queue;
+			}
+			else
+			{
+				__ARQOwnerRequestLo->next = queue;
+				__ARQOwnerRequestLo = queue;
+			}
+		}
+		queue = queue->next;
+	}
+
+	__ARQRequestQueueHi = __ARQOwnerRequestHi;
+	__ARQRequestTailHi = __ARQOwnerRequestLo;
+	queue = __ARQRequestQueueLo;
+	__ARQOwnerRequestHi = 0;
+	__ARQOwnerRequestLo = 0;
+
+	while (queue)
+	{
+		if (queue->owner != in)
+		{
+			if(!__ARQOwnerRequestHi)
+			{
+				__ARQOwnerRequestHi = queue;
+				__ARQOwnerRequestLo = queue;
+			}
+			else
+			{
+				__ARQOwnerRequestLo->next = queue;
+				__ARQOwnerRequestLo = queue;
+			}
+		}
+		queue = queue->next;
+	}
+
+	__ARQRequestQueueLo = __ARQOwnerRequestHi;
+	__ARQRequestTailLo = __ARQOwnerRequestLo;
+
+	OSRestoreInterrupts(interrupts);
+}
+
+void ARQFlushQueue()
+{
+	BOOL interrupts = OSDisableInterrupts();
+	__ARQRequestQueueHi = 0;
+	__ARQRequestTailHi = 0;
+	__ARQRequestQueueLo = 0;
+	__ARQRequestTailLo = 0;
+	OSRestoreInterrupts(interrupts);
+}
+
+void ARQSetChunkSize(size_t size)
+{
+	if (size % 32 != 0)
+	{
+		size = size + (32 - size % 32);
+		__ARQChunkSize = size;
+	}
+	else
+	{
+		__ARQChunkSize = size;
+	}
 }

@@ -234,4 +234,18 @@ Dolphin/ar/arq.c:
 	.text       start:0x8008132C end:0x80081810
 	.data       start:0x8010D880 end:0x8010D8C8
 	.sdata      start:0x803CB9F0 end:0x803CB9F8
-	.sbss       start:0x803CBFD8 end:0x803CC010
+	.sbss       start:0x803CBFD8 end:0x803CC008
+
+Dolphin/dsp/dsp.c:
+	.text       start:0x80081810 end:0x800819D0
+	.data       start:0x8010D8C8 end:0x8010D948
+	.sdata      start:0x803CB9F8 end:0x803CBA00
+	.sbss       start:0x803CC008 end:0x803CC010
+
+Dolphin/dsp/dsp_debug.c:
+	.text       start:0x800819D0 end:0x80081A20
+
+Dolphin/dsp/dsp_task.c:
+	.text       start:0x80081A20 end:0x800822A4
+	.data       start:0x8010D948 end:0x8010DA88
+	.sbss       start:0x803CC010 end:0x803CC028
