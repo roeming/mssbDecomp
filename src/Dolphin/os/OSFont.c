@@ -459,7 +459,7 @@ static void ReadROM(void* string, int len, int offset)
 		}
 
 		offset += inc;
-		(u8*)string += inc;
+		string = (char *)string + inc;
 	}
 }
 
@@ -582,7 +582,7 @@ BOOL OSInitFont(OSFontHeader* font)
  * @note Address: 0x800EE950
  * @note Size: 0x1A8
  */
-char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* width)
+const char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* width)
 {
 	int numRestTex;
 	int code;
@@ -634,7 +634,7 @@ char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* wi
  * @note Address: 0x800EEAF8
  * @note Size: 0x140
  */
-char* OSGetFontWidth(const char* string, s32* width)
+const char* OSGetFontWidth(const char* string, s32* width)
 {
 	u16 firstChar = (u8)string[0];
 
