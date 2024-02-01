@@ -93,7 +93,7 @@ s32 __CARDIsReadable(CARDControl* card, CARDDir* entry)
  * @note Address: N/A
  * @note Size: 0x150
  */
-static s32 __CARDGetFileNo(CARDControl* card, char* fileName, s32* outFileNo)
+s32 __CARDGetFileNo(CARDControl* card, const char* fileName, s32* outFileNo)
 {
 	CARDDirectoryBlock* dir;
 	CARDDir* entry;
@@ -169,4 +169,9 @@ s32 CARDClose(CARDFileInfo* fileInfo)
 
 	fileInfo->chan = -1;
 	return __CARDPutControlBlock(card, CARD_RESULT_READY);
+}
+
+BOOL __CARDIsOpened()
+{
+	return FALSE;
 }

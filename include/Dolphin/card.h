@@ -202,7 +202,12 @@ typedef struct CARDDecodeParameters {
 } CARDDecodeParameters;
 
 // Enum for 'permission' in CARDDir.
-typedef enum { FilePermPublic = 0x2, FilePermNoCopy = 0x4, FilePermNoMove = 0x8 } CARDFilePermissions;
+typedef enum
+{
+	FilePermPublic = 0x2,
+	FilePermNoCopy = 0x4,
+	FilePermNoMove = 0x8
+} CARDFilePermissions;
 
 // Enum for banner format in CARDDir.
 typedef enum { BannerColorCI8 = 0x1, BannerPresent = 0x2, IconAnimationPingPong = 0x4 } CARDBannerFlag;
@@ -257,6 +262,7 @@ s32 CARDSetStatusAsync(s32 channel, s32 fileNo, CARDStat* state, CARDCallback ca
 
 // CARD serial functions.
 s32 CARDGetSerialNo(s32 channel, u64* serialNo);
+CARDDirectoryBlock* __CARDGetDirBlock(CARDControl* card);
 
 // NB: steal more functions from prime as required.
 
@@ -288,6 +294,10 @@ s32 __CARDGetControlBlock(s32 channel, CARDControl** card);
 s32 __CARDPutControlBlock(CARDControl* card, s32 result);
 s32 __CARDSync(s32 channel);
 void __CARDCheckSum(void* data, int length, u16* checksum, u16* checksumInv);
+s32 __CARDGetFileNo(CARDControl* card, const char* fileName, s32* outFileNo);
+s32 __CARDUpdateDir(s32 channel, CARDCallback callback);
+s32 __CARDGetStatusEx(u32 chan, s32 cardFile, CARDDir* dst);
+s32 __CARDSetStatusExAsync(u32 chan, s32 cardFile, CARDDir* dst, CARDCallback callback);
 
 CARDDirectoryBlock* __CARDGetDirBlock(CARDControl* card);
 CARDFatBlock* __CARDGetFatBlock(CARDControl* card);

@@ -123,6 +123,11 @@ s32 __CARDFormatRegionAsync(s32 channel, u16 encode, CARDCallback callback)
 	return result;
 }
 
+s32 CARDFormatAsync(s32 channel, CARDCallback callback)
+{
+	return __CARDFormatRegionAsync(channel, __CARDGetFontEncode(), callback);
+}
+
 /**
  * @note Address: 0x800D95C8
  * @note Size: 0x54

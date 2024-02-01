@@ -334,6 +334,12 @@ s32 CARDCheckExAsync(s32 channel, s32* xferBytes, CARDCallback callback)
 	return CARD_RESULT_READY;
 }
 
+s32 CARDCheckAsync(s32 channel, CARDCallback callback)
+{
+	s32 buff[2];
+	CARDCheckExAsync(channel, buff, callback);
+} 
+
 /**
  * @note Address: 0x800D82E0
  * @note Size: 0x54

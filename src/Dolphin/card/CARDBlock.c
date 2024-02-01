@@ -138,6 +138,40 @@ s32 __CARDAllocBlock(s32 chan, u32 cBlock, CARDCallback callback)
 	return __CARDUpdateFatBlock(chan, fat, callback);
 }
 
+s32 __CARDFreeBlock(s32 channel, u16 controlBlock, CARDCallback callback)
+{
+	CARDFatBlock* thisFatBlock;
+	CARDControl *thisControl;
+	// these 2 pointers are flipped
+
+	thisControl = thisControl = &__CARDBlock[channel];
+
+	if (!thisControl->attached)
+	{
+		return CARD_RESULT_NOCARD;
+	}
+
+	thisFatBlock = thisControl->currentFat;
+
+	while (controlBlock != 0xffff)
+	{
+		u16* blockPointer;
+		if (!CARDIsValidBlockNo(thisControl, controlBlock))
+		{
+			return CARD_RESULT_BROKEN;
+		}
+
+		blockPointer = &((u16*)thisFatBlock)[controlBlock];
+		
+		controlBlock = *blockPointer;
+		*blockPointer = 0;
+
+		thisFatBlock->freeBlocks++;
+	}
+	
+	return __CARDUpdateFatBlock(channel, thisFatBlock, callback);
+}
+
 /**
  * @note Address: 0x800D70BC
  * @note Size: 0xAC

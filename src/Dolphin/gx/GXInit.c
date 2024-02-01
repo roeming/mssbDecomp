@@ -6,7 +6,7 @@ static GXFifoObj FifoObj;
 static GXData gxData;
 GXData* const __GXData = &gxData;
 
-char* __GXVersion = "<< Dolphin SDK - GX\trelease build: Nov 26 2003 05:19:07 (0x2301) >>";
+char* __GXVersion = "<< Dolphin SDK - GX\trelease build: Nov 10 2004 06:27:12 (0x2301) >>";
 
 void* __piReg  = nullptr;
 void* __cpReg  = nullptr;
@@ -196,6 +196,46 @@ BOOL __GXShutdown(BOOL final)
 	return TRUE;
 }
 
+void __GXInitRevisionBits()
+{
+	int i;
+	for (i = 0; i < 8; i++) {
+		GX_SET_REG(gx->vatA[i], 1, 1, 1);
+		GX_SET_REG(gx->vatB[i], 1, 0, 0);
+
+		GX_CP_LOAD_REG(i | 0x80, gx->vatB[i]);
+	}
+
+	{
+		u32 reg1 = 0;
+		u32 reg2 = 0;
+
+		GX_SET_REG(reg1, 1, 31, 31);
+		GX_SET_REG(reg1, 1, 30, 30);
+		GX_SET_REG(reg1, 1, 29, 29);
+		GX_SET_REG(reg1, 1, 28, 28);
+		GX_SET_REG(reg1, 1, 27, 27);
+		GX_SET_REG(reg1, 1, 26, 26);
+
+		GX_XF_LOAD_REG(0x1000, reg1);
+
+		GX_SET_REG(reg2, 1, 31, 31);
+
+		GX_XF_LOAD_REG(0x1012, reg2);
+	}
+
+	{
+		u32 reg = 0;
+		GX_SET_REG(reg, 1, 31, 31);
+		GX_SET_REG(reg, 1, 30, 30);
+		GX_SET_REG(reg, 1, 29, 29);
+		GX_SET_REG(reg, 1, 28, 28);
+		GX_SET_REG(reg, 0x58, 0, 7);
+
+		GX_BP_LOAD_REG(reg);
+	}
+}
+
 /**
  * @note Address: 0x800E2930
  * @note Size: 0x798
@@ -205,7 +245,6 @@ GXFifoObj* GXInit(void* base, u32 size)
 	static u32 resetFuncRegistered = 0;
 	u32 i;
 	u32 pad;  // for stack matching
-	u32 pad2; // for stack matching
 
 	OSRegisterVersion(__GXVersion);
 	gx->inDispList    = GX_FALSE;
@@ -304,41 +343,7 @@ GXFifoObj* GXInit(void* base, u32 size)
 		GX_BP_LOAD_REG(val1);
 	}
 
-	for (i = 0; i < 8; i++) {
-		GX_SET_REG(gx->vatA[i], 1, 1, 1);
-		GX_SET_REG(gx->vatB[i], 1, 0, 0);
-
-		GX_CP_LOAD_REG(i | 0x80, gx->vatB[i]);
-	}
-
-	{
-		u32 reg1 = 0;
-		u32 reg2 = 0;
-
-		GX_SET_REG(reg1, 1, 31, 31);
-		GX_SET_REG(reg1, 1, 30, 30);
-		GX_SET_REG(reg1, 1, 29, 29);
-		GX_SET_REG(reg1, 1, 28, 28);
-		GX_SET_REG(reg1, 1, 27, 27);
-		GX_SET_REG(reg1, 1, 26, 26);
-
-		GX_XF_LOAD_REG(0x1000, reg1);
-
-		GX_SET_REG(reg2, 1, 31, 31);
-
-		GX_XF_LOAD_REG(0x1012, reg2);
-	}
-
-	{
-		u32 reg = 0;
-		GX_SET_REG(reg, 1, 31, 31);
-		GX_SET_REG(reg, 1, 30, 30);
-		GX_SET_REG(reg, 1, 29, 29);
-		GX_SET_REG(reg, 1, 28, 28);
-		GX_SET_REG(reg, 0x58, 0, 7);
-
-		GX_BP_LOAD_REG(reg);
-	}
+	__GXInitRevisionBits();
 
 	for (i = 0; i < GX_MAX_TEXMAP; i++) {
 		GXInitTexCacheRegion(&gx->TexRegions0[i], GX_FALSE, GXTexRegionAddrTable[i], GX_TEXCACHE_32K, GXTexRegionAddrTable[i + 8],

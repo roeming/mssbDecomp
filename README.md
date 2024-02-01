@@ -1,4 +1,4 @@
-Some Game  
+Mario Superstar Baseball  
 <!--
 [![Build Status]][actions] ![Progress] ![DOL Progress] ![RELs Progress] [![Discord Badge]][discord]
 -->

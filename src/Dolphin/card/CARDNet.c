@@ -32,3 +32,47 @@ s32 CARDGetSerialNo(s32 channel, u64* serialNo)
 
 	return __CARDPutControlBlock(card, CARD_RESULT_READY);
 }
+
+s32 CARDSetAttributesAsync(s32 channel, s32 cardFile, u8 permissions, CARDCallback callback)
+{
+	CARDDir dir;
+	s32 res;
+	if (permissions & ~__CARDPermMask)
+	{
+		return CARD_RESULT_NOPERM;
+	}
+
+	res = __CARDGetStatusEx(channel, cardFile, &dir);
+	if (res < 0)
+	{
+		return res;
+	}
+
+	if (
+		((dir.permission & 0x20u) && !(permissions & 0x20u)) ||
+		((dir.permission & 0x40u) && !(permissions & 0x40u))
+	   )
+	{
+		return CARD_RESULT_NOPERM;
+	}
+
+	if (((permissions & 0x20u) && (permissions & 0x40u)) ||
+		((permissions & 0x20u) && (dir.permission & 0x40u)) ||
+		((permissions & 0x40u) && (dir.permission & 0x20u)))
+	{
+		return CARD_RESULT_NOPERM;
+	}
+	
+	dir.permission = permissions;
+	return __CARDSetStatusExAsync(channel, cardFile, &dir, callback);
+}
+
+s32 CARDSetAttributes(s32 channel, s32 cardFile, u8 permissions)
+{
+	s32 ret = CARDSetAttributesAsync(channel, cardFile, permissions, __CARDSyncCallback);
+	if(ret < 0)
+	{
+		return ret;
+	}
+	return __CARDSync(channel);
+}
