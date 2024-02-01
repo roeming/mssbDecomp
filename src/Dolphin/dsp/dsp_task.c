@@ -1,9 +1,197 @@
 #include "Dolphin/dsp.h"
+#include "Dolphin/os.h"
+#include "Dolphin/hw_regs.h"
 
 DSPTaskInfo* __DSP_curr_task;
 DSPTaskInfo* __DSP_first_task;
 DSPTaskInfo* __DSP_last_task;
 DSPTaskInfo* __DSP_tmp_task;
+DSPTaskInfo* lbl_803cc014;
+int lbl_803cc010;
+
+void __DSPHandler(__OSInterrupt interrupt, OSContext* context)
+{
+	u32 v;
+	u32 mail;
+	u32 stackmanip;
+	OSContext c;
+	
+	v = __DSPRegs[5];
+	__DSPRegs[5] = (v & ~0x28) | 0x80;
+
+	OSClearContext(&c);
+	OSSetCurrentContext(&c);
+
+	while(!DSPCheckMailFromDSP());
+	mail = DSPReadMailFromDSP();
+	if ((__DSP_curr_task->flags & 2) && (mail == 0xdcd10002))
+	{
+		mail = 0xdcd10003;
+	}
+
+switch (mail)
+{
+case 0xdcd10000:
+	__DSP_curr_task->state = 1;
+	if (__DSP_curr_task->init_cb)
+	{
+		__DSP_curr_task->init_cb(__DSP_curr_task);
+	}
+	break;
+
+case 0xdcd10001:
+	__DSP_curr_task->state = 1;
+	if (__DSP_curr_task->res_cb)
+	{
+		__DSP_curr_task->res_cb(__DSP_curr_task);
+	}
+	break;
+
+case 0xdcd10002:
+	if (lbl_803cc010)
+	{
+		if (__DSP_curr_task == lbl_803cc014)
+		{
+			DSPSendMailToDSP(0xcdd10003);
+			while (DSPCheckMailToDSP())
+				;
+			lbl_803cc014 = 0;
+			lbl_803cc010 = 0;
+			if (__DSP_curr_task->res_cb)
+			{
+				__DSP_curr_task->res_cb(__DSP_curr_task);
+			}
+		}
+		else
+		{
+			DSPSendMailToDSP(0xcdd10001);
+			while (DSPCheckMailToDSP())
+				;
+			__DSP_exec_task(__DSP_curr_task, lbl_803cc014);
+			__DSP_curr_task->state = 2;
+			__DSP_curr_task = lbl_803cc014;
+			lbl_803cc010 = 0;
+			lbl_803cc014 = 0;
+		}
+	}
+	else 
+	{
+		if (!__DSP_curr_task->next)
+		{
+			if (__DSP_curr_task == __DSP_first_task)
+			{
+				DSPSendMailToDSP(0xcdd10003);
+				while (DSPCheckMailToDSP())
+					;
+				if (__DSP_curr_task->res_cb)
+				{
+					__DSP_curr_task->res_cb(__DSP_curr_task);
+				}
+			}
+			else
+			{
+				DSPSendMailToDSP(0xcdd10001);
+				while (DSPCheckMailToDSP())
+					;
+				__DSP_exec_task(__DSP_curr_task, __DSP_first_task);
+				__DSP_curr_task->state = 2;
+				__DSP_curr_task = __DSP_first_task;
+			}
+		}
+		else
+		{
+			DSPSendMailToDSP(0xcdd10001);
+			while (DSPCheckMailToDSP())
+				;
+			__DSP_exec_task(__DSP_curr_task, __DSP_curr_task->next);
+			__DSP_curr_task->state = 2;
+			__DSP_curr_task = __DSP_curr_task->next;
+		}
+	}
+	break;
+
+case 0xdcd10003:
+	if (lbl_803cc010)
+	{
+		if (__DSP_curr_task->done_cb)
+		{
+			__DSP_curr_task->done_cb(__DSP_curr_task);
+		}
+		DSPSendMailToDSP(0xcdd10001);
+		while (DSPCheckMailToDSP())
+			;
+		__DSP_exec_task(0, lbl_803cc014);
+		__DSP_remove_task(__DSP_curr_task);
+		__DSP_curr_task = lbl_803cc014;
+		lbl_803cc010 = 0;
+		lbl_803cc014 = 0;
+	}
+	else
+	{
+		if (!__DSP_curr_task->next)
+		{
+			if (__DSP_curr_task == __DSP_first_task)
+			{
+				if (__DSP_curr_task->done_cb)
+				{
+					__DSP_curr_task->done_cb(__DSP_curr_task);
+				}
+				DSPSendMailToDSP(0xcdd10002);
+				while (DSPCheckMailToDSP())
+					;
+				__DSP_curr_task->state = 3;
+				__DSP_remove_task(__DSP_curr_task);
+			}
+			else
+			{
+				if (__DSP_curr_task->done_cb)
+				{
+					__DSP_curr_task->done_cb(__DSP_curr_task);
+				}
+
+				DSPSendMailToDSP(0xcdd10001);
+				while (DSPCheckMailToDSP())
+					;
+				__DSP_curr_task->state = 3;
+
+				__DSP_exec_task(0, __DSP_first_task);
+				__DSP_curr_task = __DSP_first_task;
+				__DSP_remove_task(__DSP_last_task);
+			}
+		}
+		else
+		{
+			if (__DSP_curr_task->done_cb)
+			{
+				__DSP_curr_task->done_cb(__DSP_curr_task);
+			}
+
+			DSPSendMailToDSP(0xcdd10001);
+			while (DSPCheckMailToDSP())
+				;
+			__DSP_curr_task->state = 3;
+
+			__DSP_exec_task(0, __DSP_curr_task->next);
+			__DSP_curr_task = __DSP_curr_task->next;
+			__DSP_remove_task(__DSP_curr_task->prev);
+		}
+	}
+	break;
+
+case 0xdcd10004:
+	if (__DSP_curr_task->req_cb)
+	{
+		__DSP_curr_task->req_cb(__DSP_curr_task);
+	}
+	
+	break;
+default:
+	break;
+}
+
+	OSClearContext(&c);
+	OSSetCurrentContext(context);
+}
 
 /**
  * @note Address: 0x800DAE50

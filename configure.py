@@ -346,7 +346,15 @@ config.libs = [
         [
             Object(Matching, "Dolphin/dsp/dsp.c"),
             Object(Matching, "Dolphin/dsp/dsp_debug.c"),
-            Object(NonMatching, "Dolphin/dsp/dsp_task.c"),
+            Object(Matching, "Dolphin/dsp/dsp_task.c"),
+        ],
+        flags=cflags_base + ["-str noreadonly"]
+    ),
+    DolphinLib(
+        "card",
+        [
+            Object(Matching, "Dolphin/card/CARDBios.c"),
+            Object(Matching, "Dolphin/card/CARDUnlock.c"),
         ],
         flags=cflags_base + ["-str noreadonly"]
     ),
