@@ -6,7 +6,32 @@
  */
 void GXProject(f32 x, f32 y, f32 z, Mtx viewMtx, f32* projMtx, f32* viewport, f32* screenX, f32* screenY, f32* screenZ)
 {
-	// UNUSED FUNCTION
+	f32 f1;
+	f32 f2;
+	f32 f3;
+	f32 f5;
+	f32 f4;
+	f1 = viewMtx[0][0] * x + viewMtx[0][1] * y + viewMtx[0][2] * z + viewMtx[0][3];
+	f2 = viewMtx[1][0] * x + viewMtx[1][1] * y + viewMtx[1][2] * z + viewMtx[1][3];
+	f3 = viewMtx[2][0] * x + viewMtx[2][1] * y + viewMtx[2][2] * z + viewMtx[2][3];
+	
+	if (projMtx[0] == 0.0f)
+	{
+		f5 = f1 * projMtx[1] + f3 * projMtx[2];
+		f2 = f2 * projMtx[3] + f3 * projMtx[4];
+		f4 = projMtx[6] + f3 * projMtx[5];
+		f1 = 1.0f / -f3;
+	}
+	else
+	{
+		f5 = f1 * projMtx[1] + projMtx[2];
+		f2 = f2 * projMtx[3] + projMtx[4];
+		f4 = f3 * projMtx[5] + projMtx[6];
+		f1 = 1.0f;
+	}
+	*screenX = viewport[0] + 0.5f * viewport[2] + viewport[2] * f1 * f5 * 0.5f;
+	*screenY = viewport[1] + 0.5f * viewport[3] + viewport[3] * -f2 * f1 * 0.5f;
+	*screenZ = (viewport[5] - viewport[4]) * f4 * f1 + viewport[5];
 }
 
 /**
@@ -33,7 +58,7 @@ static void WriteProjPS(const register f32 src[6], register volatile void* dst)
  * @note Address: N/A
  * @note Size: 0x1C
  */
-static void Copy6Floats(const register f32 src[6], register f32 dst[6])
+inline static void Copy6Floats(const register f32 src[6], register f32 dst[6])
 {
 	register f32 ps_0, ps_1, ps_2;
 
@@ -105,7 +130,9 @@ void GXSetProjectionv(const f32* proj)
  */
 void GXGetProjectionv(f32* ptr)
 {
-	// UNUSED FUNCTION
+	*ptr = gx->projType != 0 ? 1.0f : 0.0f;
+
+	Copy6Floats(gx->projMtx, &ptr[1]);
 }
 
 /**
@@ -322,7 +349,20 @@ void __GXSetViewport(void)
  */
 void GXSetViewportJitter(f32 left, f32 top, f32 width, f32 height, f32 nearZ, f32 farZ, u32 field)
 {
-	// UNUSED FUNCTION
+	if (!field)
+	{
+		top = top - 0.5f;
+	}
+	gx->vpLeft = left;
+	gx->vpTop = top;
+	gx->vpWd = width;
+	gx->vpHt = height;
+	gx->vpNearz = nearZ;
+	gx->vpFarz = farZ;
+
+	__GXSetViewport();
+
+	gx->bpSentNot = GX_TRUE;
 }
 
 /**
@@ -347,7 +387,7 @@ void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearZ, f32 farZ
  */
 void GXGetViewportv(f32* viewport)
 {
-	// UNUSED FUNCTION
+	Copy6Floats(&gx->vpLeft, viewport);
 }
 
 /**

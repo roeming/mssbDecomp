@@ -213,6 +213,14 @@ def DolphinLib(lib_name, objects, flags = cflags_base):
         "objects": objects,
     }
 
+def TRKLib(lib_name, objects, flags = cflags_base):
+    return {
+        "lib": lib_name,
+        "mw_version": "GC/2.6",
+        "cflags": flags,
+        "host": False,
+        "objects": objects,
+    }
 
 # Helper function for REL script objects
 def Rel(lib_name, objects):
@@ -376,8 +384,29 @@ config.libs = [
         "gx",
         [
             Object(Matching, "Dolphin/gx/GXInit.c"),
+            Object(Matching, "Dolphin/gx/GXFifo.c"),
+            Object(Matching, "Dolphin/gx/GXAttr.c"),
+            Object(Matching, "Dolphin/gx/GXMisc.c"),
+            Object(Matching, "Dolphin/gx/GXGeometry.c"),
+            Object(NonMatching, "Dolphin/gx/GXFrameBuf.c"),
+            Object(Matching, "Dolphin/gx/GXLight.c"),
+            Object(Matching, "Dolphin/gx/GXTexture.c"),
+            Object(Matching, "Dolphin/gx/GXBump.c"),
+            Object(Matching, "Dolphin/gx/GXTev.c"),
+            Object(Matching, "Dolphin/gx/GXPixel.c"),
+            Object(NonMatching, "Dolphin/gx/GXDraw.c"),
+            Object(Matching, "Dolphin/gx/GXDisplayList.c"),
+            Object(NonMatching, "Dolphin/gx/GXTransform.c"),
+            Object(NonMatching, "Dolphin/gx/GXPerf.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        flags=cflags_base + ["-common off", "-str noreadonly", "-fp_contract off"]
+    ),
+    TRKLib(
+        "TRK",
+        [
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mainloop.c"),
+        ],
+        flags=cflags_base + ["-inline deferred", "-sdata 0", "-sdata2 0"]
     ),
 ]
 

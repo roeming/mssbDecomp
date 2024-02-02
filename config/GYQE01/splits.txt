@@ -313,3 +313,65 @@ Dolphin/gx/GXInit.c:
 	.sdata      start:0x803CBA18 end:0x803CBA20
 	.sbss       start:0x803CC030 end:0x803CC058
 	.sdata2     start:0x803CC998 end:0x803CC9C0
+
+Dolphin/gx/GXFifo.c:
+	.text       start:0x8008A464 end:0x8008AB10
+	.sbss       start:0x803CC058 end:0x803CC078
+
+Dolphin/gx/GXAttr.c:
+	.text       start:0x8008AB10 end:0x8008BFC8
+	.data       start:0x8010DEC0 end:0x8010E138
+	.sdata      start:0x803CBA20 end:0x803CBA30
+
+Dolphin/gx/GXMisc.c:
+	.text       start:0x8008BFC8 end:0x8008C6B0
+	.sbss       start:0x803CC078 end:0x803CC090
+
+Dolphin/gx/GXGeometry.c:
+	.text       start:0x8008C6B0 end:0x8008CA08
+
+Dolphin/gx/GXFrameBuf.c:
+	.text       start:0x8008CA08 end:0x8008D4B0
+	.data       start:0x8010E138 end:0x8010E268
+	.sdata2     start:0x803CC9C0 end:0x803CC9C8
+
+Dolphin/gx/GXLight.c:
+	.text       start:0x8008D4B0 end:0x8008D83C
+
+Dolphin/gx/GXTexture.c:
+	.text       start:0x8008D83C end:0x8008E8C0
+	.data       start:0x8010E268 end:0x8010E490
+	.sdata      start:0x803CBA30 end:0x803CBA70
+	.sdata2     start:0x803CC9C8 end:0x803CC9F0
+
+Dolphin/gx/GXBump.c:
+	.text       start:0x8008E8C0 end:0x8008EDFC
+	.sdata2     start:0x803CC9F0 end:0x803CC9F8
+
+Dolphin/gx/GXTev.c:
+	.text       start:0x8008EDFC end:0x8008F4B8
+	.data       start:0x8010E490 end:0x8010E508
+
+Dolphin/gx/GXPixel.c:
+	.text       start:0x8008F4B8 end:0x8008FAF0
+	.data       start:0x8010E508 end:0x8010E528
+	.sdata2     start:0x803CC9F8 end:0x803CCA30
+
+Dolphin/gx/GXDraw.c:
+	.text       start:0x8008FAF0 end:0x8008FFB8
+	.data       start:0x8010E528 end:0x8010E838
+	.bss        start:0x802E6910 end:0x802E6B98
+	.sdata2     start:0x803CCA30 end:0x803CCA48
+
+Dolphin/gx/GXDisplayList.c:
+	.text       start:0x8008FFB8 end:0x80090028
+
+Dolphin/gx/GXTransform.c:
+	.text       start:0x80090028 end:0x8009079C
+	.sdata2     start:0x803CCA48 end:0x803CCA60
+
+Dolphin/gx/GXPerf.c:
+	.text       start:0x8009079C end:0x80091450
+
+Dolphin/TRK_MINNOW_DOLPHIN/mainloop.c:
+	.text       start:0x80091608 end:0x80091700

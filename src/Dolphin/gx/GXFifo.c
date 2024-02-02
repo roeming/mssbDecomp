@@ -7,9 +7,8 @@ static OSThread* __GXCurrentThread;
 static u8 CPGPLinked;
 static BOOL GXOverflowSuspendInProgress;
 static GXBreakPtCallback BreakPointCB;
+static u32 __GXCurrentBP;
 static u32 __GXOverflowCount;
-static u32 __GXCurrentBP; // unused and removed
-
 /**
  * @note Address: N/A
  * @note Size: 0x50
@@ -171,6 +170,7 @@ void GXSetCPUFifo(GXFifoObj* fifo)
  */
 void GXSetGPFifo(GXFifoObj* fifo)
 {
+	u32 reg = 0;
 	GXFifoObjPriv* pFifo = (GXFifoObjPriv*)fifo;
 	int interrupts       = OSDisableInterrupts();
 	__GXFifoReadDisable();
@@ -203,6 +203,15 @@ void GXSetGPFifo(GXFifoObj* fifo)
 		__GXWriteFifoIntEnable(0, 0);
 		__GXFifoLink(0);
 	}
+
+	reg = __GXData->cpEnable;
+	GX_SET_REG(reg, 0, 30, 30);
+	GX_SET_REG(reg, 0, 26, 26);
+
+	GX_SET_CP_REG(1, reg);
+	GX_SET_CP_REG(1, __GXData->cpEnable);
+
+	// __GXData
 	__GXWriteFifoIntReset(1, 1);
 	__GXFifoReadEnable();
 	OSRestoreInterrupts(interrupts);
@@ -487,17 +496,26 @@ void __GXCleanGPFifo(void)
  * @note Address: N/A
  * @note Size: 0x4C
  */
-void GXSetCurrentGXThread(void)
+OSThread* GXSetCurrentGXThread()
 {
-	// UNUSED FUNCTION
+	BOOL interrupts;
+	OSThread* oldThread;
+
+	interrupts = OSDisableInterrupts();
+	oldThread = __GXCurrentThread;
+	__GXCurrentThread = OSGetCurrentThread();
+	OSRestoreInterrupts(interrupts);
+	
+	return oldThread;
 }
 
 /**
  * @note Address: N/A
  * @note Size: 0x8
  */
-void GXGetCurrentGXThread(void)
+OSThread* GXGetCurrentGXThread(void)
 {
+	return __GXCurrentThread;
 	// UNUSED FUNCTION
 }
 

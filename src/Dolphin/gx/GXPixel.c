@@ -8,7 +8,7 @@
 void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor color)
 {
 	f32 a, c;
-	u32 a_bits, c_bits;
+	u32 a_bits, c_bits, colorBits;
 
 	u32 fogColorReg  = 0;
 	u32 fogParamReg0 = 0;
@@ -81,9 +81,8 @@ void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor
 
 	GX_SET_REG(fogParamReg3, GX_BP_REG_FOGPARAM3, 0, 7);
 
-	GX_SET_REG(fogColorReg, color.b, GX_BP_FOGCOLOR_RGB_ST + 16, GX_BP_FOGCOLOR_RGB_END);
-	GX_SET_REG(fogColorReg, color.g, (GX_BP_FOGCOLOR_RGB_ST + 8), (GX_BP_FOGCOLOR_RGB_END - 8));
-	GX_SET_REG(fogColorReg, color.r, (GX_BP_FOGCOLOR_RGB_ST + 0), (GX_BP_FOGCOLOR_RGB_END - 16));
+	colorBits = GXCOLOR_AS_U32(color);
+	GX_SET_REG(fogColorReg, (colorBits >> 8) & 0xffffff, 8, 31);
 	GX_SET_REG(fogColorReg, GX_BP_REG_FOGCOLOR, 0, 7);
 
 	GX_BP_LOAD_REG(fogParamReg0);

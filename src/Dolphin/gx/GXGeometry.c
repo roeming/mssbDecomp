@@ -86,6 +86,12 @@ void GXSetLineWidth(u8 width, GXTexOffset offsets)
 	gx->bpSentNot = GX_FALSE;
 }
 
+void GXGetLineWidth(u8* width, GXTexOffset* offset)
+{
+	*width = GX_GET_REG(gx->lpSize, 24, 31);
+	*offset = GX_GET_REG(gx->lpSize, 13, 15);
+}
+
 /**
  * @note Address: 0x800E5B20
  * @note Size: 0x40
@@ -120,17 +126,17 @@ void GXEnableTexOffsets(GXTexCoordID coord, GXBool line, GXBool point)
  */
 void GXSetCullMode(GXCullMode mode)
 {
-	switch (mode) {
-	case GX_CULL_FRONT:
-		mode = GX_CULL_BACK;
-		break;
-	case GX_CULL_BACK:
-		mode = GX_CULL_FRONT;
-		break;
-	}
-
+	mode = (((mode & 1) << 1) | ((mode >> 1) & 1));
 	GX_SET_REG(gx->genMode, mode, 16, 17);
-	gx->dirtyState |= 4;
+	gx->dirtyState |= GX_DIRTY_GEN_MODE;
+}
+#define GX_BP_GET_GENMODE_CULLMODE(reg) GX_BITGET(reg, 16, 2)
+
+void GXGetCullMode(GXCullMode* out) {
+    s32 bits = 0;
+    bits |= (s32)(gx->genMode >> 14 & 0x2) >> 1;
+    bits |= (s32)(gx->genMode >> 13 & 0x2);
+    *out = (GXCullMode)bits;
 }
 
 /**

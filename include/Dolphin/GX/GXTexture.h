@@ -43,8 +43,8 @@ extern void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter minFilter, GXTexFilter ma
                             GXBool doBiasClamp, GXBool doEdgeLOD, GXAnisotropy maxAniso);
 
 // Get functions.
-extern GXTexFmt GXGetTexObjFmt(GXTexObj* obj);
-extern GXBool GXGetTexObjMipMap(GXTexObj* obj);
+extern GXTexFmt GXGetTexObjFmt(const GXTexObj* obj);
+extern GXBool GXGetTexObjMipMap(const GXTexObj* obj);
 extern u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, GXBool mipmap, u8 max_lod);
 
 // Load functions.
@@ -78,6 +78,9 @@ extern void GXInitTexObjTlut(GXTexObj* obj, u32 tlutName);
 // TODO: finish filling these out for reference purposes.
 
 extern void __GetImageTileCount(GXTexFmt format, u16 width, u16 height, u32* a, u32* b, u32* c);
+
+extern u32 GXGetTexObjWidth(GXTexObj* obj);
+
 
 ////////////////////////////////////////////
 

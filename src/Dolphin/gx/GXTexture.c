@@ -403,25 +403,26 @@ void GXGetTexObjData(void)
  * @note Address: N/A
  * @note Size: 0x10
  */
-void GXGetTexObjWidth(void)
+u32 GXGetTexObjWidth(GXTexObj* obj)
 {
-	// UNUSED FUNCTION
+	GXTexObjPriv* priv = (GXTexObjPriv*)obj;
+	return GX_BITGET(priv->image0, 22, 10) + 1;
 }
 
 /**
  * @note Address: N/A
  * @note Size: 0x10
  */
-void GXGetTexObjHeight(void)
+u32 GXGetTexObjHeight(GXTexObj* obj)
 {
-	// UNUSED FUNCTION
-}
+	GXTexObjPriv* priv = (GXTexObjPriv*)obj;
+	return GX_BITGET(priv->image0, 12, 10) + 1;}
 
 /**
  * @note Address: 0x800E7574
  * @note Size: 0x8
  */
-GXTexFmt GXGetTexObjFmt(GXTexObj* obj)
+GXTexFmt GXGetTexObjFmt(const GXTexObj* obj)
 {
 	GXTexObjPriv* pObj = (GXTexObjPriv*)obj;
 	return pObj->format;
@@ -449,7 +450,7 @@ void GXGetTexObjWrapT(void)
  * @note Address: 0x800E757C
  * @note Size: 0x18
  */
-GXBool GXGetTexObjMipMap(GXTexObj* obj)
+GXBool GXGetTexObjMipMap(const GXTexObj* obj)
 {
 	GXTexObjPriv* internal = (GXTexObjPriv*)obj;
 	return (internal->flags & 1) == 1;
@@ -827,9 +828,20 @@ void GXPreLoadEntireTexture(void)
  * @note Address: N/A
  * @note Size: 0x7C
  */
-void GXSetTexCoordScaleManually(void)
+void GXSetTexCoordScaleManually(GXTexCoordID coord, GXBool enable, u32 ss, u32 ts)
 {
-	// UNUSED FUNCTION
+	gx->tcsManEnab = (gx->tcsManEnab & ~(1 << coord)) | (enable << coord);
+	if (!enable)
+	{
+		return;
+	}
+
+	GX_SET_REG(gx->suTs0[coord], (ss - 1), 16, 31);
+	GX_SET_REG(gx->suTs1[coord], (ts - 1), 16, 31);
+
+	GX_BP_LOAD_REG(gx->suTs0[coord]);
+	GX_BP_LOAD_REG(gx->suTs1[coord]);
+	gx->bpSentNot = GX_FALSE;
 }
 
 /**

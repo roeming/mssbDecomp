@@ -68,7 +68,7 @@ extern void EnableWriteGatherPipe();
 extern void DisableWriteGatherPipe();
 extern void GXResetWriteGatherPipe();
 
-extern void GXReadDrawSync();
+extern u16 GXReadDrawSync();
 extern void GXTexModeSync();
 
 extern void GXPeekARGB(u16 x, u16 y, u32* color);

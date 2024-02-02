@@ -8,7 +8,7 @@ GXRenderModeObj GXNtsc480IntDf = {
 };
 
 GXRenderModeObj GXNtsc480Int = {
-	VI_TVMODE_NTSC_INT, 640, 480, 480, 40, 0, 640, 480, VI_XFBMODE_DF, GX_FALSE, GX_FALSE,
+	VI_TVMODE_NTSC_PROG, 640, 480, 480, 40, 0, 640, 480, VI_XFBMODE_SF, GX_FALSE, GX_FALSE,
 	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
 	0, 0, 21, 22, 21, 0, 0,
 };
@@ -38,7 +38,45 @@ GXRenderModeObj GXEurgb60Hz480IntDf = {
  */
 void GXAdjustForOverscan(GXRenderModeObj* rIn, GXRenderModeObj* rOut, u16 horiz, u16 vert)
 {
-	// UNUSED FUNCTION
+	u32 interlacingType;
+	int vert2;
+	int horiz2;
+
+	horiz2 = (horiz & 0x7fff);
+	vert2 = (vert & 0x7fff) * 2;
+
+	horiz2 *= 2;
+
+	if (rIn != rOut)
+	{
+		*rOut = *rIn;
+	}
+
+	interlacingType = rIn->viTVmode & 3;
+
+	rOut->fbWidth = rIn->fbWidth - horiz2;
+	rOut->efbHeight = rIn->efbHeight - (vert2 * rIn->efbHeight / (u32)rIn->xfbHeight);
+	
+	if ((rIn->xFBmode == VI_XFBMODE_SF) && interlacingType == VI_INTERLACE)
+	{
+		rOut->xfbHeight = rIn->xfbHeight - (vert2 / 2);
+	}
+	else
+	{
+		rOut->xfbHeight = rIn->xfbHeight - vert2;
+	}
+
+	rOut->viWidth = rIn->viWidth - horiz2;
+	if (interlacingType == VI_NON_INTERLACE)
+	{
+		rOut->viHeight = rIn->viHeight - (vert2 * 2);
+	}
+	else
+	{
+		rOut->viHeight = rIn->viHeight - vert2;
+	}
+	rOut->viXOrigin = rIn->viXOrigin + horiz;
+	rOut->viYOrigin = rIn->viYOrigin + vert;
 }
 
 /**

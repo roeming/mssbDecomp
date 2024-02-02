@@ -148,8 +148,9 @@ void GXSetDrawSync(u16 token)
  * @note Address: N/A
  * @note Size: 0xC
  */
-void GXReadDrawSync(void)
+u16 GXReadDrawSync(void)
 {
+	return GX_GET_PE_REG(7);
 	// UNUSED FUNCTION
 }
 

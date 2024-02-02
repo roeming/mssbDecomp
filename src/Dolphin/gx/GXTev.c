@@ -171,16 +171,14 @@ void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale 
  */
 void GXSetTevColor(GXTevRegID reg, GXColor color)
 {
-	u32 ra = 0;
-	u32 bg = 0;
+	u32 ra = (GX_BP_REG_TEVREG0LO + reg * 2) << 24;
+	u32 bg = (GX_BP_REG_TEVREG0HI + reg * 2) << 24;
+	u32 v = GXCOLOR_AS_U32(color);
 
-	GX_SET_REG(ra, color.r, 21, 31);
-	GX_SET_REG(ra, color.a, 9, 19);
-	GX_SET_REG(bg, color.b, 21, 31);
-	GX_SET_REG(bg, color.g, 9, 19);
-
-	GX_SET_REG(ra, 0xE0 + reg * 2, 0, 7);
-	GX_SET_REG(bg, 0xE1 + reg * 2, 0, 7);
+	GX_SET_REG(ra, (v >> 0x18) & 0xff, 24, 31); // A
+	GX_SET_REG(ra, (v >> 0x00) & 0xff, 12, 19); // R
+	GX_SET_REG(bg, (v >> 0x08) & 0xff, 24, 31); // G
+	GX_SET_REG(bg, (v >> 0x10) & 0xff, 12, 19); // B
 
 	GX_BP_LOAD_REG(ra);
 	GX_BP_LOAD_REG(bg);
@@ -215,41 +213,6 @@ void GXSetTevColorS10(GXTevRegID reg, GXColorS10 color)
 	GX_BP_LOAD_REG(bg);
 
 	gx->bpSentNot = GX_FALSE;
-
-	/*
-	.loc_0x0:
-	  lha       r0, 0x0(r4)
-	  rlwinm    r8,r3,1,0,30
-	  li        r5, 0
-	  lha       r3, 0x6(r4)
-	  rlwimi    r5,r0,0,21,31
-	  addi      r9, r5, 0
-	  lha       r6, 0x4(r4)
-	  lha       r0, 0x2(r4)
-	  li        r5, 0x61
-	  lis       r4, 0xCC01
-	  rlwimi    r9,r3,12,9,19
-	  stb       r5, -0x8000(r4)
-	  addi      r7, r8, 0xE0
-	  lwz       r3, -0x6D70(r2)
-	  rlwimi    r9,r7,24,0,7
-	  stw       r9, -0x8000(r4)
-	  li        r7, 0
-	  rlwimi    r7,r6,0,21,31
-	  addi      r6, r7, 0
-	  stb       r5, -0x8000(r4)
-	  rlwimi    r6,r0,12,9,19
-	  addi      r0, r8, 0xE1
-	  rlwimi    r6,r0,24,0,7
-	  stw       r6, -0x8000(r4)
-	  li        r0, 0
-	  stb       r5, -0x8000(r4)
-	  stw       r6, -0x8000(r4)
-	  stb       r5, -0x8000(r4)
-	  stw       r6, -0x8000(r4)
-	  sth       r0, 0x2(r3)
-	  blr
-	*/
 }
 
 /**
@@ -258,20 +221,18 @@ void GXSetTevColorS10(GXTevRegID reg, GXColorS10 color)
  */
 void GXSetTevKColor(GXTevKColorID id, GXColor color)
 {
-	u32 ra;
-	u32 bg;
+	u32 ra, bg;
+	u32 v = GXCOLOR_AS_U32(color);
 
-	ra = 0;
-	GX_SET_REG(ra, color.r, 24, 31);
-	GX_SET_REG(ra, color.a, 12, 19);
+	ra = (GX_BP_REG_TEVREG0LO + id * 2) << 24;
+	GX_SET_REG(ra, (v >> 0x18) & 0xff, 24, 31);
+	GX_SET_REG(ra, (v >> 0x00) & 0xff, 12, 19);
 	GX_SET_REG(ra, 8, 8, 11);
-	GX_SET_REG(ra, 0xE0 + id * 2, 0, 7);
 
-	bg = 0;
-	GX_SET_REG(bg, color.b, 24, 31);
-	GX_SET_REG(bg, color.g, 12, 19);
+	bg = (GX_BP_REG_TEVREG0HI + id * 2) << 24;
+	GX_SET_REG(bg, (v >> 0x8) & 0xff, 24, 31);
+	GX_SET_REG(bg, (v >> 0x10), 12, 19);
 	GX_SET_REG(bg, 8, 8, 11);
-	GX_SET_REG(bg, 0xE1 + id * 2, 0, 7);
 
 	GX_BP_LOAD_REG(ra);
 	GX_BP_LOAD_REG(bg);
