@@ -368,7 +368,7 @@ Dolphin/gx/GXDisplayList.c:
 
 Dolphin/gx/GXTransform.c:
 	.text       start:0x80090028 end:0x8009079C
-	.sdata2     start:0x803CCA48 end:0x803CCA60
+	.sdata2     start:0x803CCA48 end:0x803CCA58
 
 Dolphin/gx/GXPerf.c:
 	.text       start:0x8009079C end:0x80091450
@@ -533,6 +533,80 @@ Dolphin/MSL_C/MSL_Common/alloc.c:
 	.rodata     start:0x800E72F8 end:0x800E7310
 	.bss        start:0x802E9988 end:0x802E99C0
 	.sbss       start:0x803CC0C0 end:0x803CC0C8
+
+Dolphin/MSL_C/MSL_Common/errno.c:
+	.sbss       start:0x803CC0C8 end:0x803CC0D0
+
+Dolphin/MSL_C/MSL_Common/ansi_files.c:
+	.text       start:0x8009878C end:0x800988A4
+	.data       start:0x8010EAC0 end:0x8010EC00
+	.bss        start:0x802E99C0 end:0x802E9CC0
+
+Dolphin/MSL_C/MSL_Common_Embedded/ansi_fp.c:
+	.text       start:0x800988A4 end:0x8009A7F8
+	.rodata     start:0x800E7310 end:0x800E73F0
+	.data       start:0x8010EC00 end:0x8010ED28
+	.sdata2     start:0x803CCA58 end:0x803CCA60
+
+Dolphin/MSL_C/MSL_Common/buffer_io.c:
+	.text       start:0x8009A7F8 end:0x8009A8F0
+
+Dolphin/MSL_C/PPC_EABI/critical_regions.gamecube.c:
+	.text       start:0x8009A8F0 end:0x8009A8FC
+
+Dolphin/MSL_C/MSL_Common/ctype.c:
+	.text       start:0x8009A8FC end:0x8009A920
+	.data       start:0x8010ED28 end:0x8010EF28
+
+Dolphin/MSL_C/MSL_Common/direct_io.c:
+	.text       start:0x8009A920 end:0x8009ACA8
+
+Dolphin/MSL_C/MSL_Common/file_io.c:
+	.text       start:0x8009ACA8 end:0x8009AF9C
+
+Dolphin/MSL_C/MSL_Common/FILE_POS.c:
+	.text       start:0x8009AF9C end:0x8009B35C
+
+Dolphin/MSL_C/MSL_Common/mbstring.c:
+	.text       start:0x8009B35C end:0x8009B474
+	.sdata2     start:0x803CCA60 end:0x803CCA68
+
+Dolphin/MSL_C/MSL_Common/mem.c:
+	.text       start:0x8009B474 end:0x8009B5E4
+
+Dolphin/MSL_C/MSL_Common/mem_funcs.c:
+	.text       start:0x8009B5E4 end:0x8009B8B4
+
+Dolphin/MSL_C/MSL_Common/misc_io.c:
+	.text       start:0x8009B8B4 end:0x8009B8C4
+
+Dolphin/MSL_C/MSL_Common/printf.c:
+	.text       start:0x8009B8C4 end:0x8009D864
+	.rodata     start:0x800E73F0 end:0x800E7418
+	.data       start:0x8010EF28 end:0x8010F158
+	.sdata      start:0x803CBA78 end:0x803CBA80
+	.sdata2     start:0x803CCA68 end:0x803CCA70
+
+Dolphin/MSL_C/MSL_Common/rand.c:
+	.text       start:0x8009D864 end:0x8009D884
+	.sdata      start:0x803CBA80 end:0x803CBA88
+
+Dolphin/MSL_C/MSL_Common/string.c:
+	.text       start:0x8009D884 end:0x8009DA0C
+
+Dolphin/MSL_C/MSL_Common/wchar_io.c:
+	.text       start:0x8009DA0C end:0x8009DA94
+
+Dolphin/MSL_C/PPC_EABI/uart_console_io_gcn.c:
+	.text       start:0x8009DA94 end:0x8009DB64
+	.sbss       start:0x803CC0D0 end:0x803CC0D8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c:
+	.text       start:0x8009DB64 end:0x8009DDA0
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c:
+	.text       start:0x8009DDA0 end:0x8009DFD8
+	.sdata2     start:0x803CCAF8 end:0x803CCB80
 
 Dolphin/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800A0FB8 end:0x800A0FE8
