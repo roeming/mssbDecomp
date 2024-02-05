@@ -39,13 +39,14 @@ GXRenderModeObj GXEurgb60Hz480IntDf = {
 void GXAdjustForOverscan(GXRenderModeObj* rIn, GXRenderModeObj* rOut, u16 horiz, u16 vert)
 {
 	u32 interlacingType;
-	int vert2;
 	int horiz2;
+	int vert2;
 
 	horiz2 = (horiz & 0x7fff);
-	vert2 = (vert & 0x7fff) * 2;
+	vert2 = (vert & 0x7fff);
 
 	horiz2 *= 2;
+	vert2 *= 2;
 
 	if (rIn != rOut)
 	{
