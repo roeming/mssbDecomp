@@ -14,15 +14,6 @@ static void (*__atexit_funcs[64])(void);
 
 /**
  * @note Address: N/A
- * @note Size: 0x9C
- */
-void abort(void)
-{
-	// UNUSED FUNCTION
-}
-
-/**
- * @note Address: N/A
  * @note Size: 0x4C
  */
 void atexit(void)
@@ -72,7 +63,7 @@ void exit(int status)
 		__console_exit();
 		__console_exit = NULL;
 	}
-	_ExitProcess();
+	abort();
 }
 
 /**

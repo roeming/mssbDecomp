@@ -140,7 +140,6 @@ static BOOL DBGWriteMailbox(u32 p1)
  * @note Address: 0x800D04A4
  * @note Size: 0xAC
  */
-#pragma dont_inline on
 static BOOL DBGReadMailbox(u32* p1)
 {
 	BOOL total = FALSE;
@@ -231,7 +230,7 @@ static BOOL DBGWrite(u32 count, void* buffer, s32 param3)
  * @note Address: 0x800D0240
  * @note Size: 0xAC
  */
-inline static BOOL _DBGReadStatus(u32* p1)
+static BOOL DBGReadStatus(u32* p1)
 {
 	BOOL total = FALSE;
 	u32 v;
@@ -249,9 +248,6 @@ inline static BOOL _DBGReadStatus(u32* p1)
 
 	return IS_FALSE(total);
 }
-#pragma dont_inline on
-static BOOL DBGReadStatus(u32* p1) { return _DBGReadStatus(p1); }
-#pragma dont_inline reset
 
 /**
  * @note Address: 0x800D0204
@@ -311,40 +307,36 @@ void DBInitInterrupts(void)
 	__OSUnmaskInterrupts(0x40);
 }
 
-/**
- * @note Address: N/A
- * @note Size: 0x150
- */
-static void CheckMailBox(void)
-{
-	u32 v;
-	DBGReadStatus(&v);
-	if (v & 1) {
-		DBGReadMailbox(&v);
-		v &= 0x1fffffff;
-
-		if ((v & 0x1f000000) == 0x1f000000) {
-			SendMailData = v;
-			RecvDataLeng = v & 0x7fff;
-			EXIInputFlag = 1;
-		}
-	}
-}
-
+#pragma dont_inline on
 /**
  * @note Address: 0x800D005C
  * @note Size: 0x9C
  */
 u32 DBQueryData(void)
 {
+	BOOL interrupts;
 	EXIInputFlag = 0;
 	if (!RecvDataLeng) {
-		BOOL interrupts = OSDisableInterrupts();
-		CheckMailBox();
-		OSRestoreInterrupts(interrupts);
+		u32 v;
+		interrupts = OSDisableInterrupts();
+		DBGReadStatus(&v);
+		if (v & 1)
+		{
+			DBGReadMailbox(&v);
+			v &= 0x1fffffff;
+
+			if ((v & 0x1f000000) == 0x1f000000)
+			{
+				SendMailData = v;
+				RecvDataLeng = v & 0x7fff;
+				EXIInputFlag = 1;
+			}
+		}
 	}
+	OSRestoreInterrupts(interrupts);
 	return RecvDataLeng;
 }
+#pragma dont_inline reset
 
 /**
  * @note Address: 0x800CFFD0
@@ -362,7 +354,7 @@ BOOL DBRead(u32* buffer, s32 count)
 
 	OSRestoreInterrupts(interrupts);
 
-	return 0;
+	return FALSE;
 }
 
 /**
@@ -376,7 +368,7 @@ BOOL DBWrite(void* src, u32 size)
 	BOOL interrupts = OSDisableInterrupts();
 
 	do {
-		_DBGReadStatus(&busyFlag);
+		DBGReadStatus(&busyFlag);
 	} while (busyFlag & 2);
 
 	SendCount++;
@@ -386,7 +378,7 @@ BOOL DBWrite(void* src, u32 size)
 		;
 
 	do {
-		_DBGReadStatus(&busyFlag);
+		DBGReadStatus(&busyFlag);
 	} while (busyFlag & 2);
 
 	v = SendCount;
@@ -394,7 +386,7 @@ BOOL DBWrite(void* src, u32 size)
 		;
 
 	do {
-		while (!_DBGReadStatus(&busyFlag))
+		while (!DBGReadStatus(&busyFlag))
 			;
 	} while (busyFlag & 2);
 

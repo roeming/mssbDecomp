@@ -149,7 +149,7 @@ ASM u32 __cvt_fp2unsigned(register f64 d)
  * @note Address: 0x800C1BA8
  * @note Size: 0x4C
  */
-ASM static void __save_fpr(void) {
+ASM void __save_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	ENTRY_SAVE_FPR(14)
@@ -243,7 +243,7 @@ ASM static void __restore_fpr(void) {
  * @note Address: 0x800C1C40
  * @note Size: 0x4C
  */
-ASM static void __save_gpr(void) {
+ASM void __save_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	ENTRY_SAVE_GPR(14)
@@ -290,7 +290,7 @@ ASM static void __save_gpr(void) {
  * @note Address: 0x800C1C8C
  * @note Size: 0x4C
  */
-ASM static void __restore_gpr(void) {
+ASM void __restore_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	ENTRY_RESTORE_GPR(14)

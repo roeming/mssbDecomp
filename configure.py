@@ -212,7 +212,22 @@ def DolphinLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
         "host": False,
         "objects": objects,
     }
-
+def RuntimeLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
+    return {
+        "lib": lib_name,
+        "mw_version": "GC/2.6",
+        "cflags": flags + extra_cflags,
+        "host": False,
+        "objects": objects,
+    }
+def DebuggerLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
+    return {
+        "lib": lib_name,
+        "mw_version": "GC/1.2.5",
+        "cflags": flags + extra_cflags,
+        "host": False,
+        "objects": objects,
+    }
 def TRKLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
     return {
         "lib": lib_name,
@@ -239,16 +254,93 @@ NonMatching = False
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
-    {
-        "lib": "Runtime.PPCEABI.H",
-        "mw_version": config.linker_version,
-        "cflags": cflags_runtime,
-        "host": False,
-        "objects": [
-            Object(Matching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
-            Object(Matching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
+    RuntimeLib(
+        "Runtime",
+        [
+            Object(Matching, "Dolphin/Runtime/__va_arg.c"),
+            Object(Matching, "Dolphin/Runtime/global_destructor_chain.c"),
+            Object(Matching, "Dolphin/Runtime/runtime.c"),
+            Object(NonMatching, "Dolphin/Runtime/__init_cpp_exceptions.cpp"),
+            Object(Matching, "Dolphin/Runtime/Gecko_ExceptionPPC.cp",
+                extra_cflags=["-inline deferred", "-Cpp_exceptions on"],
+            ),
+            Object(Matching, "Dolphin/Runtime/GCN_mem_alloc.c"),
+            Object(Matching, "Dolphin/Runtime/__mem.c", 
+                   extra_cflags=["-inline deferred"]),
         ],
-    },
+    ),
+    RuntimeLib(
+        "MSL_C",
+        [
+            Object(Matching, "Dolphin/MSL_C/PPC_EABI/abort_exit.c"),
+            Object(Matching, "Dolphin/MSL_C/MSL_Common/alloc.c"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/ansi_files"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/ansi_fp",
+                   extra_cflags=["-inline deferred", "-str pool"],
+            ),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/arith"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/buffer_io"),
+            Object(NonMatching, "Dolphin/MSL_C/PPC_EABI/critical_regions.gamecube"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/ctype"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/direct_io"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/errno"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/file_io"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/FILE_POS"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/locale",
+                   extra_cflags=["-str pool"],
+            ),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/mbstring",
+                   extra_cflags=["-inline noauto,deferred"],
+            ),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/mem"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/mem_funcs"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/misc_io"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/printf",
+                   extra_cflags=["-inline deferred", "-str pool"],
+            ),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/rand"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/float"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/scanf"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/string"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/strtold"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/strtoul"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/wchar_io"),
+            Object(NonMatching, "Dolphin/MSL_C/PPC_EABI/uart_console_io_gcn"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_exp"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log10"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_pow"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_sin"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_tan"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_atan"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ceil"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_copysign"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_cos"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_floor"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_exp"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_log10"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_pow"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_sqrt"),
+            Object(NonMatching, "Dolphin/MSL_C/PPC_EABI/math_ppc"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt"),
+            Object(NonMatching, "Dolphin/MSL_C/MSL_Common/extras"),
+        ],
+        extra_cflags=["-inline deferred"]
+    ),
     DolphinLib(
         "base",
         [
@@ -439,6 +531,72 @@ config.libs = [
             Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/MWCriticalSection_gc.cpp"),
         ],
         extra_cflags=["-inline deferred", "-sdata 0", "-sdata2 0"]
+    ),
+    DolphinLib(
+        "amcstubs",
+        [
+            Object(Matching, "Dolphin/amcstubs/AmcExi2Stubs.c"),
+        ]
+    ),
+    DolphinLib(
+        "odenotstub",
+        [
+            Object(Matching, "Dolphin/odenotstub/odenotstub.c"),
+        ]
+    ),
+    DebuggerLib(
+        "OdemuExi2",
+        [
+            Object(Matching, "Dolphin/OdemuExi2/DebuggerDriver.c"),
+        ]
+    ),
+    DolphinLib(
+        "exi",
+        [
+            Object(Matching, "Dolphin/exi/EXIBios.c"),
+            Object(Matching, "Dolphin/exi/EXIUart.c"),
+        ],
+        extra_cflags=["-str noreadonly"]
+    ),
+    DolphinLib(
+        "si",
+        [
+            Object(Matching, "Dolphin/si/SIBios.c"),
+            Object(Matching, "Dolphin/si/SISamplingRate.c"),
+        ],
+        extra_cflags=["-str noreadonly"]
+    ),
+    DolphinLib(
+        "musyx",
+        [
+            Object(NonMatching, "Musyx/chorus_fx.c"),
+            Object(NonMatching, "Musyx/hardware.c"),
+            Object(NonMatching, "Musyx/hw_aramdma.c"),
+            Object(NonMatching, "Musyx/hw_dolphin.c"),
+            Object(NonMatching, "Musyx/hw_dspctrl.c"),
+            Object(NonMatching, "Musyx/hw_memory.c"),
+            Object(NonMatching, "Musyx/hw_volconv.c"),
+            Object(NonMatching, "Musyx/reverb_fx.c"),
+            Object(NonMatching, "Musyx/reverb.c"),
+            Object(NonMatching, "Musyx/s_data.c"),
+            Object(NonMatching, "Musyx/seq_api.c"),
+            Object(NonMatching, "Musyx/seq.c"),
+            Object(NonMatching, "Musyx/snd_init.c"),
+            Object(NonMatching, "Musyx/snd_math.c"),
+            Object(NonMatching, "Musyx/snd_midictrl.c"),
+            Object(NonMatching, "Musyx/snd_service.c"),
+            Object(NonMatching, "Musyx/snd_synthapi.c"),
+            Object(NonMatching, "Musyx/snd3d.c"),
+            Object(NonMatching, "Musyx/stream.c"),
+            Object(NonMatching, "Musyx/synth_vsamples.c"),
+            Object(NonMatching, "Musyx/synth.c"),
+            Object(NonMatching, "Musyx/synthdata.c"),
+            Object(NonMatching, "Musyx/synthmacros.c"),
+            Object(NonMatching, "Musyx/synth_adsr.c"),
+            Object(NonMatching, "Musyx/synth_ac.c"),
+            Object(NonMatching, "Musyx/synthvoice.c"),
+        ],
+        extra_cflags=["-str noreadonly"]
     ),
 ]
 

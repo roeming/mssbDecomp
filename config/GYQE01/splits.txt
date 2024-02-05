@@ -493,3 +493,155 @@ Dolphin/TRK_MINNOW_DOLPHIN/MWTRACE.c:
 
 Dolphin/TRK_MINNOW_DOLPHIN/MWCriticalSection_gc.cpp:
 	.text       start:0x80097808 end:0x80097860
+
+Dolphin/Runtime/__va_arg.c:
+	.text       start:0x80097860 end:0x80097928
+
+Dolphin/Runtime/global_destructor_chain.c:
+	.text       start:0x80097928 end:0x80097970
+	.dtors      start:0x800E6368 end:0x800E636C
+	.sbss       start:0x803CC0A8 end:0x803CC0B0
+
+Dolphin/Runtime/runtime.c:
+	.text       start:0x80097970 end:0x8009804C
+	.rodata     start:0x800E7268 end:0x800E7280
+
+Dolphin/Runtime/__mem.c:
+	.init       start:0x8000540C end:0x80005544
+
+Dolphin/Runtime/__init_cpp_exceptions.cpp:
+	.text       start:0x8009804C end:0x800980C8
+	.ctors      start:0x800E6340 end:0x800E6344
+	.dtors      start:0x800E6360 end:0x800E6368
+	.sdata      start:0x803CBA70 end:0x803CBA78
+
+Dolphin/Runtime/Gecko_ExceptionPPC.cp:
+	.text       start:0x800980C8 end:0x80098130
+	.bss        start:0x802E9878 end:0x802E9888
+
+Dolphin/Runtime/GCN_mem_alloc.c:
+	.text       start:0x80098130 end:0x800981E8
+	.rodata     start:0x800E7280 end:0x800E72F8
+
+Dolphin/MSL_C/PPC_EABI/abort_exit.c:
+	.text       start:0x800981E8 end:0x800982D8
+	.bss        start:0x802E9888 end:0x802E9988
+	.sbss       start:0x803CC0B0 end:0x803CC0C0
+
+Dolphin/MSL_C/MSL_Common/alloc.c:
+	.text       start:0x800982D8 end:0x8009878C
+	.rodata     start:0x800E72F8 end:0x800E7310
+	.bss        start:0x802E9988 end:0x802E99C0
+	.sbss       start:0x803CC0C0 end:0x803CC0C8
+
+Dolphin/amcstubs/AmcExi2Stubs.c:
+	.text       start:0x800A0FB8 end:0x800A0FE8
+
+Dolphin/odenotstub/odenotstub.c:
+	.text       start:0x800A0FE8 end:0x800A0FF0
+
+Dolphin/OdemuExi2/DebuggerDriver.c:
+	.text       start:0x800A0FF0 end:0x800A1A70
+	.sdata      start:0x803CBA90 end:0x803CBA98
+	.sbss       start:0x803CC0D8 end:0x803CC0F0
+
+Dolphin/exi/EXIBios.c:
+	.text       start:0x800A2B5C end:0x800A4538
+	.data       start:0x8010F160 end:0x8010F270
+	.bss        start:0x802E9CC0 end:0x802E9D80
+	.sdata      start:0x803CBAC0 end:0x803CBAC8
+	.sbss       start:0x803CC0F8 end:0x803CC100
+
+Dolphin/exi/EXIUart.c:
+	.text       start:0x800A4538 end:0x800A4B0C
+	.sbss       start:0x803CC100 end:0x803CC110
+
+Dolphin/si/SIBios.c:
+	.text       start:0x800A4B0C end:0x800A61FC
+	.data       start:0x8010F270 end:0x8010F388
+	.bss        start:0x802E9D80 end:0x802E9F80
+	.sdata      start:0x803CBAC8 end:0x803CBAD0
+	.sbss       start:0x803CC110 end:0x803CC120
+
+Dolphin/si/SISamplingRate.c:
+	.text       start:0x800A61FC end:0x800A6304
+	.data       start:0x8010F388 end:0x8010F420
+	.sbss       start:0x803CC120 end:0x803CC128
+
+Musyx/seq.c:
+	.text       start:0x800C0A8C end:0x800C4AB4
+
+Musyx/synth.c:
+	.text       start:0x800C4AB4 end:0x800C7F60
+
+Musyx/seq_api.c:
+	.text       start:0x800C7F60 end:0x800C826C
+
+Musyx/snd_synthapi.c:
+	.text       start:0x800C826C end:0x800C87AC
+
+Musyx/stream.c:
+	.text       start:0x800C87AC end:0x800C9324
+
+Musyx/synthdata.c:
+	.text       start:0x800C9324 end:0x800CB030
+
+Musyx/synthmacros.c:
+	.text       start:0x800CB030 end:0x800CFF18
+
+Musyx/synthvoice.c:
+	.text       start:0x800CFF18 end:0x800D1BDC
+
+Musyx/synth_ac.c:
+	.text       start:0x800D1BDC end:0x800D1CFC
+
+Musyx/synth_adsr.c:
+	.text       start:0x800D1CFC end:0x800D24BC
+
+Musyx/synth_vsamples.c:
+	.text       start:0x800D24BC end:0x800D2E54
+
+Musyx/s_data.c:
+	.text       start:0x800D2E54 end:0x800D3A34
+
+Musyx/hw_dspctrl.c:
+	.text       start:0x800D3A34 end:0x800D70A4
+
+Musyx/hw_volconv.c:
+	.text       start:0x800D70A4 end:0x800D7794
+
+Musyx/snd3d.c:
+	.text       start:0x800D7794 end:0x800D9C10
+
+Musyx/snd_init.c:
+	.text       start:0x800D9C10 end:0x800D9D7C
+
+Musyx/snd_math.c:
+	.text       start:0x800D9D7C end:0x800DA13C
+
+Musyx/snd_midictrl.c:
+	.text       start:0x800DA13C end:0x800DC44C
+
+Musyx/snd_service.c:
+	.text       start:0x800DC44C end:0x800DC720
+
+Musyx/hardware.c:
+	.text       start:0x800DC720 end:0x800DD7A0
+
+Musyx/hw_aramdma.c:
+	.text       start:0x800DD7A0 end:0x800DE2A0
+
+Musyx/hw_dolphin.c:
+	.text       start:0x800DE2A0 end:0x800DE7F0
+
+Musyx/hw_memory.c:
+	.text       start:0x800DE7F0 end:0x800DE87C
+
+Musyx/reverb_fx.c:
+	.text       start:0x800DE87C end:0x800DE918
+
+Musyx/reverb.c:
+	.text       start:0x800DE918 end:0x800DF594
+
+Musyx/chorus_fx.c:
+	.text       start:0x800DF594 end:0x800DFDD4
