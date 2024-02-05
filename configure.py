@@ -204,30 +204,30 @@ config.linker_version = "GC/1.3.2"
 
 
 # Helper function for Dolphin libraries
-def DolphinLib(lib_name, objects, flags = cflags_base):
+def DolphinLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
-        "cflags": flags,
+        "cflags": flags + extra_cflags,
         "host": False,
         "objects": objects,
     }
 
-def TRKLib(lib_name, objects, flags = cflags_base):
+def TRKLib(lib_name, objects, flags = cflags_base, extra_cflags=[]):
     return {
         "lib": lib_name,
         "mw_version": "GC/2.6",
-        "cflags": flags,
+        "cflags": flags + extra_cflags,
         "host": False,
         "objects": objects,
     }
 
 # Helper function for REL script objects
-def Rel(lib_name, objects):
+def Rel(lib_name, objects, flags = cflags_base, extra_cflags=[]):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_rel,
+        "cflags": flags + extra_cflags,
         "host": True,
         "objects": objects,
     }
@@ -283,14 +283,14 @@ config.libs = [
             Object(Matching, "Dolphin/os/OSTime.c"),
             Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp"),
         ],
-        flags = cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "db",
         [
             Object(Matching, "Dolphin/db/db.c")
         ],
-        flags = cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ), 
     DolphinLib(
         "mtx",
@@ -303,7 +303,7 @@ config.libs = [
             Object(Matching, "Dolphin/mtx/quat.c"),
             Object(Matching, "Dolphin/mtx/psmtx.c"),
         ],
-        flags=cflags_base + ["-fp_contract off"]
+        extra_cflags=["-fp_contract off"]
     ),
     DolphinLib(
         "dvd",
@@ -317,14 +317,14 @@ config.libs = [
             Object(Matching, "Dolphin/dvd/dvdfatal.c"),
             Object(Matching, "Dolphin/dvd/fstload.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "vi",
         [
             Object(Matching, "Dolphin/vi/vi.c")
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "pad",
@@ -332,14 +332,14 @@ config.libs = [
             Object(Matching, "Dolphin/pad/Padclamp.c"),
             Object(Matching, "Dolphin/pad/Pad.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "ai",
         [
             Object(Matching, "Dolphin/ai/ai.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "ar",
@@ -347,7 +347,7 @@ config.libs = [
             Object(Matching, "Dolphin/ar/ar.c"),
             Object(Matching, "Dolphin/ar/arq.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "dsp",
@@ -356,7 +356,7 @@ config.libs = [
             Object(Matching, "Dolphin/dsp/dsp_debug.c"),
             Object(Matching, "Dolphin/dsp/dsp_task.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "card",
@@ -378,7 +378,7 @@ config.libs = [
             Object(Matching, "Dolphin/card/CARDStatEx.c"),
             Object(Matching, "Dolphin/card/CARDNet.c"),
         ],
-        flags=cflags_base + ["-str noreadonly"]
+        extra_cflags=["-str noreadonly"]
     ),
     DolphinLib(
         "gx",
@@ -399,14 +399,46 @@ config.libs = [
             Object(NonMatching, "Dolphin/gx/GXTransform.c"),
             Object(NonMatching, "Dolphin/gx/GXPerf.c"),
         ],
-        flags=cflags_base + ["-common off", "-str noreadonly", "-fp_contract off"]
+        extra_cflags=["-common off", "-str noreadonly", "-fp_contract off"]
     ),
     TRKLib(
         "TRK",
         [
             Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mainloop.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/nubevent.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/nubinit.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/msg.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/msgbuf.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/serpoll.c",
+                   extra_cflags=["-inline deferred", "-sdata 8"]),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/usr_put.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/dispatch.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/msghndlr.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/support.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mutex_TRK.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/notify.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/flush_cache.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mem_TRK.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/targimpl.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/targsupp.c",
+                   extra_cflags=["-inline deferred", "-func_align 16"]),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mpc_7xx_603e.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/dolphin_trk.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/main_TRK.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/dolphin_trk_glue.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/targcont.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/target_options.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/mslsupp.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/UDP_stubs.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/ddh/main.c",
+                   extra_cflags=["-inline deferred", "-sdata 8"]),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/CircleBuffer.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/gdev/main.c",
+                   extra_cflags=["-inline deferred", "-sdata 8"]),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/MWTRACE.c"),
+            Object(Matching, "Dolphin/TRK_MINNOW_DOLPHIN/MWCriticalSection_gc.cpp"),
         ],
-        flags=cflags_base + ["-inline deferred", "-sdata 0", "-sdata2 0"]
+        extra_cflags=["-inline deferred", "-sdata 0", "-sdata2 0"]
     ),
 ]
 

@@ -202,7 +202,7 @@ void TRKUARTInterruptHandler(void) { }
  * @note Address: 0x800C0464
  * @note Size: 0x88
  */
-ASM void TRKLoadContext(OSContext* ctx, u32 r4)
+ASM void TRKLoadContext(OSContext *ctx, register u32 param_2)
 {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -220,7 +220,7 @@ L_802CC24C:
 	lmw r13, OSContext.gpr[13](r3)
 L_802CC250:
 	mr r31, r3
-	mr r3, r4
+	mr r3, param_2
 	lwz r4, OSContext.cr(r31)
 	mtcrf 0xff, r4
 	lwz r4, OSContext.lr(r31)

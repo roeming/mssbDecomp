@@ -375,3 +375,121 @@ Dolphin/gx/GXPerf.c:
 
 Dolphin/TRK_MINNOW_DOLPHIN/mainloop.c:
 	.text       start:0x80091608 end:0x80091700
+
+Dolphin/TRK_MINNOW_DOLPHIN/nubevent.c:
+	.text       start:0x80091700 end:0x80091928
+	.bss        start:0x802E6B98 end:0x802E6BC0
+
+Dolphin/TRK_MINNOW_DOLPHIN/nubinit.c:
+	.text       start:0x80091928 end:0x80091AC0
+	.rodata     start:0x800E6A20 end:0x800E6A50
+	.bss        start:0x802E6BC0 end:0x802E6BC8
+
+Dolphin/TRK_MINNOW_DOLPHIN/msg.c:
+	.text       start:0x80091AC0 end:0x80091B04
+	.rodata     start:0x800E6A50 end:0x800E6A78
+
+Dolphin/TRK_MINNOW_DOLPHIN/msgbuf.c:
+	.text       start:0x80091B04 end:0x80092340
+	.rodata     start:0x800E6A78 end:0x800E6A98
+	.bss        start:0x802E6BC8 end:0x802E8578
+
+Dolphin/TRK_MINNOW_DOLPHIN/serpoll.c:
+	.text       start:0x80092340 end:0x800925F8
+	.rodata     start:0x800E6A98 end:0x800E6C28
+	.bss        start:0x802E8578 end:0x802E8590
+	.sbss       start:0x803CC090 end:0x803CC098
+
+Dolphin/TRK_MINNOW_DOLPHIN/usr_put.c:
+	.text       start:0x800925F8 end:0x80092684
+
+Dolphin/TRK_MINNOW_DOLPHIN/dispatch.c:
+	.text       start:0x80092684 end:0x800927FC
+	.rodata     start:0x800E6C28 end:0x800E6C68
+	.data       start:0x8010E980 end:0x8010E9F0
+
+Dolphin/TRK_MINNOW_DOLPHIN/msghndlr.c:
+	.text       start:0x800927FC end:0x8009386C
+	.rodata     start:0x800E6C68 end:0x800E6E50
+	.data       start:0x8010E9F0 end:0x8010EA28
+	.bss        start:0x802E8590 end:0x802E8598
+
+Dolphin/TRK_MINNOW_DOLPHIN/support.c:
+	.text       start:0x8009386C end:0x80093F80
+	.rodata     start:0x800E6E50 end:0x800E6EF8
+
+Dolphin/TRK_MINNOW_DOLPHIN/mutex_TRK.c:
+	.text       start:0x80093F80 end:0x80093F98
+
+Dolphin/TRK_MINNOW_DOLPHIN/notify.c:
+	.text       start:0x80093F98 end:0x80094030
+
+Dolphin/TRK_MINNOW_DOLPHIN/flush_cache.c:
+	.text       start:0x80094030 end:0x80094068
+
+Dolphin/TRK_MINNOW_DOLPHIN/mem_TRK.c:
+	.init       start:0x80003458 end:0x800034AC
+	.text       start:0x80094068 end:0x80094120
+
+Dolphin/TRK_MINNOW_DOLPHIN/targimpl.c:
+	.text       start:0x80094120 end:0x80095CB0
+	.rodata     start:0x800E6EF8 end:0x800E6F90
+	.data       start:0x8010EA28 end:0x8010EA58
+	.bss        start:0x802E8598 end:0x802E8B18
+
+Dolphin/TRK_MINNOW_DOLPHIN/targsupp.c:
+	.text       start:0x80095CB0 end:0x80095CD0
+
+Dolphin/TRK_MINNOW_DOLPHIN/mpc_7xx_603e.c:
+	.text       start:0x80095CD0 end:0x80096040
+
+Dolphin/TRK_MINNOW_DOLPHIN/dolphin_trk.c:
+	.init       start:0x800053E0 end:0x8000540C
+	.text       start:0x80096040 end:0x8009667C
+	.data       start:0x8010EA58 end:0x8010EA98
+	.bss        start:0x802E8B18 end:0x802E8B20
+
+Dolphin/TRK_MINNOW_DOLPHIN/main_TRK.c:
+	.text       start:0x8009667C end:0x800966D4
+	.rodata     start:0x800E6F90 end:0x800E6FA0
+	.bss        start:0x802E8B20 end:0x802E8B28
+
+Dolphin/TRK_MINNOW_DOLPHIN/dolphin_trk_glue.c:
+	.text       start:0x800966D4 end:0x80096C2C
+	.rodata     start:0x800E6FA0 end:0x800E70A8
+	.data       start:0x8010EA98 end:0x8010EAC0
+	.bss        start:0x802E8B28 end:0x802E8B30
+
+Dolphin/TRK_MINNOW_DOLPHIN/targcont.c:
+	.text       start:0x80096C2C end:0x80096C60
+
+Dolphin/TRK_MINNOW_DOLPHIN/target_options.c:
+	.text       start:0x80096C60 end:0x80096C7C
+	.bss        start:0x802E8B30 end:0x802E8B38
+
+Dolphin/TRK_MINNOW_DOLPHIN/mslsupp.c:
+	.text       start:0x80096C7C end:0x80096E78
+
+Dolphin/TRK_MINNOW_DOLPHIN/UDP_stubs.c:
+	.text       start:0x80096E78 end:0x80096EC0
+
+Dolphin/TRK_MINNOW_DOLPHIN/ddh/main.c:
+	.text       start:0x80096EC0 end:0x80097204
+	.rodata     start:0x800E70A8 end:0x800E7188
+	.bss        start:0x802E8B38 end:0x802E9358
+	.sbss       start:0x803CC098 end:0x803CC0A0
+
+Dolphin/TRK_MINNOW_DOLPHIN/CircleBuffer.c:
+	.text       start:0x80097204 end:0x8009746C
+
+Dolphin/TRK_MINNOW_DOLPHIN/gdev/main.c:
+	.text       start:0x8009746C end:0x800977B8
+	.rodata     start:0x800E7188 end:0x800E7268
+	.bss        start:0x802E9358 end:0x802E9878
+	.sbss       start:0x803CC0A0 end:0x803CC0A8
+
+Dolphin/TRK_MINNOW_DOLPHIN/MWTRACE.c:
+	.text       start:0x800977B8 end:0x80097808
+
+Dolphin/TRK_MINNOW_DOLPHIN/MWCriticalSection_gc.cpp:
+	.text       start:0x80097808 end:0x80097860
