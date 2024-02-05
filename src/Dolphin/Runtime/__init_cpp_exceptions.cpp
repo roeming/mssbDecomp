@@ -16,6 +16,20 @@ ASM static char* GetR2()
 #endif // clang-format on
 }
 extern "C" {
+
+	
+/**
+ * @note Address: 0x800C22CC
+ * @note Size: 0x34
+ */
+void __fini_cpp_exceptions()
+{
+	if ((s32)fragmentID != -2) {
+		__unregister_fragment(fragmentID);
+		fragmentID = -2;
+	}
+}
+
 /**
  * @note Address: 0x800C2300
  * @note Size: 0x40
@@ -28,17 +42,6 @@ void __init_cpp_exceptions()
 	}
 }
 
-/**
- * @note Address: 0x800C22CC
- * @note Size: 0x34
- */
-void __fini_cpp_exceptions()
-{
-	if ((s32)fragmentID != -2) {
-		__unregister_fragment(fragmentID);
-		fragmentID = -2;
-	}
-}
 }
 
 DECL_SECT(".ctors") extern void* const __init_cpp_exceptions_reference  = __init_cpp_exceptions;

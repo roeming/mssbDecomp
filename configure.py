@@ -260,7 +260,7 @@ config.libs = [
             Object(Matching, "Dolphin/Runtime/__va_arg.c"),
             Object(Matching, "Dolphin/Runtime/global_destructor_chain.c"),
             Object(Matching, "Dolphin/Runtime/runtime.c"),
-            Object(NonMatching, "Dolphin/Runtime/__init_cpp_exceptions.cpp"),
+            Object(Matching, "Dolphin/Runtime/__init_cpp_exceptions.cpp"),
             Object(Matching, "Dolphin/Runtime/Gecko_ExceptionPPC.cp",
                 extra_cflags=["-inline deferred", "-Cpp_exceptions on"],
             ),
