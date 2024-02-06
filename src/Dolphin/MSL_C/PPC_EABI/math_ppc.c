@@ -478,6 +478,8 @@ void fminl(void)
 	// UNUSED FUNCTION
 }
 
+WEAKFUNC f64 sqrt(f64 __x) { return __ieee754_sqrt((f64)__x); }
+
 /**
  * @note Address: N/A
  * @note Size: 0x24

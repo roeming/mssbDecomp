@@ -57,12 +57,12 @@ qS4 =  7.70381505559019352791e-02; /* 0x3FB3B8C5, 0xB12E9282 */
 f64 __ieee754_acos(f64 x)
 {
     f64 z, p, q, r, w, s, c, df;
-    u32 hx, ix;
+    s32 hx, ix;
     hx = __HI(x);
     ix = hx & 0x7fffffff;
     if (ix >= 0x3ff00000)
     { /* |x| >= 1 */
-        u32 lx;
+        s32 lx;
         lx = __LO(x);
         if (((ix - 0x3ff00000) | lx) == 0)
         { /* |x|==1 */
@@ -71,7 +71,7 @@ f64 __ieee754_acos(f64 x)
             else
                 return pi + 2.0 * pio2_lo; /* acos(-1)= pi */
         }
-        return (x - x) / (x - x); /* acos(|x|>1) is NaN */
+        return NAN; /* acos(|x|>1) is NaN */
     }
     if (ix < 0x3fe00000)
     { /* |x| < 0.5 */

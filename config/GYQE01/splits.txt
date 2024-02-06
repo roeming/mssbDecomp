@@ -603,10 +603,104 @@ Dolphin/MSL_C/PPC_EABI/uart_console_io_gcn.c:
 
 Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c:
 	.text       start:0x8009DB64 end:0x8009DDA0
+	.sdata2     start:0x803CCA70 end:0x803CCAF8
 
 Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c:
 	.text       start:0x8009DDA0 end:0x8009DFD8
 	.sdata2     start:0x803CCAF8 end:0x803CCB80
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2.c:
+	.text       start:0x8009DFD8 end:0x8009E268
+	.sdata2     start:0x803CCB80 end:0x803CCBD8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod.c:
+	.text       start:0x8009E268 end:0x8009E5A4
+	.rodata     start:0x800E7418 end:0x800E7428
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_pow.c:
+	.text       start:0x8009E5A4 end:0x8009EDD4
+	.rodata     start:0x800E7428 end:0x800E7458
+	.sdata2     start:0x803CCBD8 end:0x803CCCE8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2.c:
+	.text       start:0x8009EDD4 end:0x8009F174
+	.rodata     start:0x800E7458 end:0x800E75E0
+	.sdata2     start:0x803CCCE8 end:0x803CCD40
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos.c:
+	.text       start:0x8009F174 end:0x8009F268
+	.sdata2     start:0x803CCD40 end:0x803CCD88
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2.c:
+	.text       start:0x8009F268 end:0x800A00BC
+	.rodata     start:0x800E75E0 end:0x800E7630
+	.sdata2     start:0x803CCD88 end:0x803CCDC8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_sin.c:
+	.text       start:0x800A00BC end:0x800A015C
+	.sdata2     start:0x803CCDC8 end:0x803CCE00
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_tan.c:
+	.text       start:0x800A015C end:0x800A0370
+	.rodata     start:0x800E7630 end:0x800E7698
+	.sdata2     start:0x803CCE00 end:0x803CCE38
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_atan.c:
+	.text       start:0x800A0370 end:0x800A0588
+	.rodata     start:0x800E7698 end:0x800E7730
+	.sdata2     start:0x803CCE38 end:0x803CCE60
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_copysign.c:
+	.text       start:0x800A0588 end:0x800A05B0
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_cos.c:
+	.text       start:0x800A05B0 end:0x800A0684
+	.sdata2     start:0x803CCE60 end:0x803CCE68
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_floor.c:
+	.text       start:0x800A0684 end:0x800A07CC
+	.sdata2     start:0x803CCE68 end:0x803CCE78
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp.c:
+	.text       start:0x800A07CC end:0x800A0858
+	.sdata2     start:0x803CCE78 end:0x803CCE80
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp.c:
+	.text       start:0x800A0858 end:0x800A0A1C
+	.sdata2     start:0x803CCE80 end:0x803CCEA8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf.c:
+	.text       start:0x800A0A1C end:0x800A0B18
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin.c:
+	.text       start:0x800A0B18 end:0x800A0BF0
+	.sdata2     start:0x803CCEA8 end:0x803CCEB0
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan.c:
+	.text       start:0x800A0BF0 end:0x800A0C68
+	.sdata2     start:0x803CCEB0 end:0x803CCEB8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_acos.c:
+	.text       start:0x800A0C68 end:0x800A0C88
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin.c:
+	.text       start:0x800A0C88 end:0x800A0CA8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2.c:
+	.text       start:0x800A0CA8 end:0x800A0CC8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod.c:
+	.text       start:0x800A0CC8 end:0x800A0CE8
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_pow.c:
+	.text       start:0x800A0CE8 end:0x800A0D08
+
+Dolphin/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_sqrt.c:
+	.text       start:0x800A0D08 end:0x800A0F2C
+	.sdata2     start:0x803CCEB8 end:0x803CCEC0
+
+Dolphin/MSL_C/PPC_EABI/math_ppc.c:
+	.text       start:0x800A0F2C end:0x800A0FB8
 
 Dolphin/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800A0FB8 end:0x800A0FE8
