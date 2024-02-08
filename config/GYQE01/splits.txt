@@ -736,11 +736,28 @@ Dolphin/si/SISamplingRate.c:
 	.data       start:0x8010F388 end:0x8010F420
 	.sbss       start:0x803CC120 end:0x803CC128
 
+Unknown/File_0x800a6304.c:
+	extab       start:0x800065D8 end:0x800065E0
+	extabindex  start:0x80008424 end:0x80008430
+	.text       start:0x800A6304 end:0x800A64E0
+	.bss        start:0x803C6780 end:0x803C6990
+
+Unknown/File_0x800a64e0.c:
+	extab       start:0x800065E0 end:0x80006608
+	extabindex  start:0x80008430 end:0x8000846C
+	.text       start:0x800A64E0 end:0x800A6870
+	.bss        start:0x803C6990 end:0x803C6CF8
+
 Musyx/seq.c:
 	.text       start:0x800C0A8C end:0x800C4AB4
+	.data       start:0x801123A8 end:0x801123F8
+	.sbss       start:0x803CC228 end:0x803CC248
+	.sdata2     start:0x803CD0E0 end:0x803CD100
 
 Musyx/synth.c:
 	.text       start:0x800C4AB4 end:0x800C7F60
+	.sbss       start:0x803CC248 end:0x803CC290
+	.sdata2     start:0x803CD100 end:0x803CD140
 
 Musyx/seq_api.c:
 	.text       start:0x800C7F60 end:0x800C826C
@@ -750,9 +767,11 @@ Musyx/snd_synthapi.c:
 
 Musyx/stream.c:
 	.text       start:0x800C87AC end:0x800C9324
+	.sdata2     start:0x803CD140 end:0x803CD158
 
 Musyx/synthdata.c:
 	.text       start:0x800C9324 end:0x800CB030
+	.sbss       start:0x803CC2A0 end:0x803CC2F0
 
 Musyx/synthmacros.c:
 	.text       start:0x800CB030 end:0x800CFF18
@@ -762,6 +781,8 @@ Musyx/synthvoice.c:
 
 Musyx/synth_ac.c:
 	.text       start:0x800D1BDC end:0x800D1CFC
+	.data       start:0x80112840 end:0x80112C40
+	.sdata2     start:0x803CD180 end:0x803CD198
 
 Musyx/synth_adsr.c:
 	.text       start:0x800D1CFC end:0x800D24BC
@@ -813,3 +834,5 @@ Musyx/reverb.c:
 
 Musyx/chorus_fx.c:
 	.text       start:0x800DF594 end:0x800DFDD4
+	.data       start:0x801177E0 end:0x80117FE0
+	.sdata2     start:0x803CD2E0 end:0x803CD2E8

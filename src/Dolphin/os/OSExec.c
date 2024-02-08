@@ -9,33 +9,39 @@ typedef struct{
     u32 _00[0x800];
 }ArgsStruct;
 
-BOOL PackArgs(ArgsStruct* param_1, int param_2, ArgsStruct* param_3)
+BOOL PackArgs(ArgsStruct* in, int count, ArgsStruct* out)
 {
     u32 i;
     int ii;
     ArgsStruct* next;
 
-    memset(param_1, 0, sizeof(ArgsStruct));
-    if (!param_2)
+    memset(in, 0, sizeof(ArgsStruct));
+    if (count == 0)
     {
-        param_1->_00[2] = 0;
+        in->_00[2] = 0;
     }
     else
     {
-        next = param_1 + 1;
-        // param_3 += param_2;
-        for (ii = param_2; ii >= 0; ii--)
+        char* p = (char*)in->_00[0x800];
+        
+        for (ii = count; ii >= 0; ii--)
         {
-            strlen((char*)&param_3[ii]);
-            strcpy((char*)0, (char*)next);
+            u32 l;
+            l = strlen((char*)out->_00[ii]);
+            p -= l + 1;
+            strcpy(p, (char*)out->_00[ii]);
+            out->_00[ii] = (size_t)p - (size_t)in;
+        }
+        next = (ArgsStruct*)in;
+        for (i = 0; i < count + 1; i++)
+        {
+            in->_00[i] = out->_00[i];
         }
 
-        for (i = 0; i < param_2 + 1; i++)
-        {
-            param_1->_00[i] = param_3->_00[i];
-        }
+        next->_00[-1] = count;
+        in->_00[2] = (size_t)next - 4 - (size_t)in;
     }
-
+    
     return TRUE;
 }
     
