@@ -339,6 +339,8 @@ typedef struct DSPvoice {
   u16 srcCoefSelect;
   u16 itdShiftL;
   u16 itdShiftR;
+  u32 FILLER;
+  u8 FILLER2[2];
   u8 singleOffset;
   struct {
     u32 posHi;
@@ -966,9 +968,9 @@ s16 varGet(SYNTH_VOICE* svoice, u32 ctrl, u8 index);
 
 u32 sndGetPitch(u8 key, u32 sInfo);
 s32 sndPitchUpOne(u16 note);
-extern SND_HOOKS salHooks;
+extern SND_HOOKS2 salHooks;
 extern u8 sndActive;
-extern u64 synthIdleWaitActive;
+extern u8 synthIdleWaitActive;
 extern SynthInfo synthInfo;
 typedef s32 (*SND_MESSAGE_CALLBACK)(u32, u32);
 typedef void (*SYNTH_MESSAGE_CALLBACK)(u32, s32);
@@ -1133,7 +1135,7 @@ u32 aramGetStreamBufferAddress(u8 id, u32* len);
 void aramUploadData(void* mram, u32 aram, u32 len, u32 highPrio, void (*callback)(u32), u32 user);
 void aramFreeStreamBuffer(u8 id);
 void* aramStoreData(void* src, u32 len);
-void aramRemoveData(void* aram, u32 len);
+void aramRemoveData(void *aram, u32 len, void *aramWrite);
 u8 aramAllocateStreamBuffer(u32 len);
 u32 macStart(u16 macid, u8 priority, u8 maxVoices, u16 allocId, u8 key, u8 vol, u8 panning, u8 midi,
              u8 midiSet, u8 section, u16 step, u16 trackid, u8 new_vid, u8 vGroup, u8 studio,

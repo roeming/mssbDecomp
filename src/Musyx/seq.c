@@ -809,8 +809,6 @@ void seqSpeed(u32 seqId, u16 speed)
     u32 i; // r30
 
     seqId = seqGetPrivateId(seqId);
-#line 1018
-    MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
 
     if ((seqId & SND_SEQ_CROSSFADE_ID) == 0)
     {
@@ -832,8 +830,6 @@ void seqContinue(u32 seqId)
     struct SEQ_INSTANCE *si; // r31
 
     seqId = seqGetPrivateId(seqId);
-#line 1043
-    MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
 
     if ((seqId & SND_SEQ_CROSSFADE_ID) == 0)
     {
@@ -951,8 +947,6 @@ void seqCrossFade(SND_CROSSFADE *ci, u32 *new_seqId, bool8 irq_call)
     u16 time;        // r27
 
     seqId = seqGetPrivateId(ci->seqId1);
-#line 1170
-    MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
 
     if ((ci->flags & SND_CROSSFADE_SYNC) != 0)
     {

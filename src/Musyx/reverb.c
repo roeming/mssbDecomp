@@ -1,17 +1,19 @@
 #include "math.h"
 #include "musyx/musyx_priv.h"
 
-
-static void DLsetdelay(_SND_REVHI_DELAYLINE* delayline, s32 len) {
+static void DLsetdelay(_SND_REVHI_DELAYLINE *delayline, s32 len)
+{
   delayline->outPoint = delayline->inPoint - (len * sizeof(f32));
-  while (delayline->outPoint < 0) {
+  while (delayline->outPoint < 0)
+  {
     delayline->outPoint += delayline->length;
   }
 }
 
-static void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
+static void DLcreate(_SND_REVHI_DELAYLINE *delayline, s32 length)
+{
   delayline->length = (s32)length * sizeof(f32);
-  delayline->inputs = (f32*)salMalloc(length * sizeof(f32));
+  delayline->inputs = (f32 *)salMalloc(length * sizeof(f32));
   memset(delayline->inputs, 0, length * sizeof(length));
   delayline->lastOutput = 0.f;
   DLsetdelay(delayline, length >> 1);
@@ -19,28 +21,33 @@ static void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
   delayline->outPoint = 0;
 }
 
-static void DLdelete(_SND_REVHI_DELAYLINE* delayline) { salFree(delayline->inputs); }
-bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
-                    f32 preDelay, f32 crosstalk) {
+static void DLdelete(_SND_REVHI_DELAYLINE *delayline) { salFree(delayline->inputs); }
+
+bool ReverbHICreate(_SND_REVHI_WORK *rev, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk)
+{
   static int lens[] = {1789, 1999, 2333, 433, 149, 47, 73, 67};
   unsigned char i; // r31
   unsigned char k; // r29
   if (coloration < 0.f || coloration > 1.f || time < 0.01f || time > 10.f || mix < 0.f ||
       mix > 1.f || crosstalk < 0.f || crosstalk > 1.f || damping < 0.f || damping > 1.f ||
-      preDelay < 0.f || preDelay > 0.1f) {
+      preDelay < 0.f || preDelay > 0.1f)
+  {
     return FALSE;
   }
 
   memset(rev, 0, sizeof(_SND_REVHI_WORK));
 
-  for (k = 0; k < 3; ++k) {
-    for (i = 0; i < 3; ++i) {
+  for (k = 0; k < 3; ++k)
+  {
+    for (i = 0; i < 3; ++i)
+    {
       DLcreate(&rev->C[i + k * 3], lens[i] + 2);
       DLsetdelay(&rev->C[i + k * 3], lens[i]);
-      rev->combCoef[i + k * 3] = powf(10.f, (lens[i] * -3) / (32000.f * time));
+      rev->combCoef[i + k * 3] = pow(10.f, (lens[i] * -3) / (32000.f * time));
     }
 
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < 2; ++i)
+    {
       DLcreate(&rev->AP[i + k * 3], lens[i + 3] + 2);
       DLsetdelay(&rev->AP[i + k * 3], lens[i + 3]);
     }
@@ -53,21 +60,27 @@ bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32
   rev->level = mix;
   rev->crosstalk = crosstalk;
   rev->damping = damping;
-  if (rev->damping < 0.05f) {
+  if (rev->damping < 0.05f)
+  {
     rev->damping = 0.05f;
   }
 
   rev->damping = 1.f - (rev->damping * 0.8f + 0.05f);
-  if (preDelay != 0.f) {
+  if (preDelay != 0.f)
+  {
     rev->preDelayTime = preDelay * 32000.f;
-    for (i = 0; i < 3; ++i) {
-      rev->preDelayLine[i] = (f32*)salMalloc(rev->preDelayTime * sizeof(f32));
+    for (i = 0; i < 3; ++i)
+    {
+      rev->preDelayLine[i] = (f32 *)salMalloc(rev->preDelayTime * sizeof(f32));
       memset(rev->preDelayLine[i], 0, rev->preDelayTime * sizeof(f32));
       rev->preDelayPtr[i] = rev->preDelayLine[i];
     }
-  } else {
+  }
+  else
+  {
     rev->preDelayTime = 0;
-    for (i = 0; i < 3; ++i) {
+    for (i = 0; i < 3; ++i)
+    {
       rev->preDelayPtr[i] = NULL;
       rev->preDelayLine[i] = NULL;
     }
@@ -76,13 +89,15 @@ bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32
   return TRUE;
 }
 
-bool ReverbHIModify(struct _SND_REVHI_WORK* rv, float coloration, float time, float mix,
-                    float damping, float preDelay, float crosstalk) {
+bool ReverbHIModify(struct _SND_REVHI_WORK *rv, float coloration, float time, float mix,
+                    float damping, float preDelay, float crosstalk)
+{
   u8 i; // r30
 
   if (coloration < 0.f || coloration > 1.f || time < 0.01f || time > 10.f || mix < 0.f ||
       mix > 1.f || crosstalk < 0.f || crosstalk > 1.f || damping < 0.f || damping > 1.f ||
-      preDelay < 0.f || preDelay > 0.1f) {
+      preDelay < 0.f || preDelay > 0.1f)
+  {
     return FALSE;
   }
 
@@ -90,22 +105,27 @@ bool ReverbHIModify(struct _SND_REVHI_WORK* rv, float coloration, float time, fl
   rv->level = mix;
   rv->crosstalk = crosstalk;
   rv->damping = damping;
-  if (rv->damping < 0.05f) {
+  if (rv->damping < 0.05f)
+  {
     rv->damping = 0.05f;
   }
 
   rv->damping = 1.f - (rv->damping * 0.8f + 0.05f);
 
-  for (i = 0; i < 9; ++i) {
+  for (i = 0; i < 9; ++i)
+  {
     DLdelete(&rv->AP[i]);
   }
 
-  for (i = 0; i < 9; ++i) {
+  for (i = 0; i < 9; ++i)
+  {
     DLdelete(&rv->C[i]);
   }
 
-  if (rv->preDelayTime != 0) {
-    for (i = 0; i < 3; ++i) {
+  if (rv->preDelayTime != 0)
+  {
+    for (i = 0; i < 3; ++i)
+    {
       salFree(rv->preDelayLine[i]);
     }
   }
@@ -132,13 +152,10 @@ static asm void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
   stw r5, 0x20(r1)
   ps_merge00 f3, f2, f1
   ps_merge00 f4, f1, f2
-  lis r5, value0_6@ha
-  lfs f5, value0_6@l(r5)
   li r5, 0x4f
   mtctr r5
   li r10, -0x8
   li r11, -0x4
-  ps_muls0 f4, f4, f5
   lwz r6, 0x0(r3)
   lwz r7, 0x0(r4)
   xoris r6, r6, 0x8000
@@ -581,12 +598,16 @@ L_00000C6C:
 }
 /* clang-format on */
 
-void ReverbHICallback(s32* left, s32* right, s32* surround, SND_AUX_REVERBHI* rev) {
+void ReverbHICallback(s32 *left, s32 *right, s32 *surround, SND_AUX_REVERBHI *rev)
+{
   u8 i;
-  for (i = 0; i < 3; ++i) {
-    switch (i) {
+  for (i = 0; i < 3; ++i)
+  {
+    switch (i)
+    {
     case 0:
-      if (rev->rv.crosstalk != 0.f) {
+      if (rev->rv.crosstalk != 0.f)
+      {
         DoCrossTalk(left, right, rev->rv.crosstalk * 0.5f, 1.f - (rev->rv.crosstalk * 0.5f));
       }
       HandleReverb(left, rev, 0);
@@ -601,16 +622,21 @@ void ReverbHICallback(s32* left, s32* right, s32* surround, SND_AUX_REVERBHI* re
   }
 }
 
-void ReverbHIFree(_SND_REVHI_WORK* rv) {
+void ReverbHIFree(_SND_REVHI_WORK *rv)
+{
   u8 i;
-  for (i = 0; i < 9; ++i) {
+  for (i = 0; i < 9; ++i)
+  {
     DLdelete(&rv->AP[i]);
   }
-  for (i = 0; i < 9; ++i) {
+  for (i = 0; i < 9; ++i)
+  {
     DLdelete(&rv->C[i]);
   }
-  if (rv->preDelayTime != 0) {
-    for (i = 0; i < 3; ++i) {
+  if (rv->preDelayTime != 0)
+  {
+    for (i = 0; i < 3; ++i)
+    {
       salFree(rv->preDelayLine[i]);
     }
   }

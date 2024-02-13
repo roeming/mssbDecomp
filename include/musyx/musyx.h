@@ -95,6 +95,12 @@ typedef struct SND_HOOKS {
   void (*free)(void* addr);
 } SND_HOOKS;
 
+typedef struct SND_HOOKS2 {
+  void* (*malloc)(u32 len);
+  void* (*mallocPhysical)(u32 len);
+  void (*free)(void* addr);
+} SND_HOOKS2;
+
 void sndSetHooks(SND_HOOKS* hooks);
 
 typedef struct SND_FVECTOR {

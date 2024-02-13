@@ -798,6 +798,7 @@ Musyx/hw_dspctrl.c:
 
 Musyx/hw_volconv.c:
 	.text       start:0x800D70A4 end:0x800D7794
+	.data       start:0x80114E38 end:0x80115060
 
 Musyx/snd3d.c:
 	.text       start:0x800D7794 end:0x800D9C10
@@ -813,15 +814,22 @@ Musyx/snd_midictrl.c:
 
 Musyx/snd_service.c:
 	.text       start:0x800DC44C end:0x800DC720
+	.data       start:0x801150F0 end:0x80115900
 
 Musyx/hardware.c:
 	.text       start:0x800DC720 end:0x800DD7A0
+	.rodata     start:0x800E81D8 end:0x800E82D8
+	.sdata      start:0x803CBB78 end:0x803CBB88
+	.sbss       start:0x803CC3A0 end:0x803CC3A8
+	.sdata2     start:0x803CD27C end:0x803CD298
 
 Musyx/hw_aramdma.c:
 	.text       start:0x800DD7A0 end:0x800DE2A0
+	.sbss       start:0x803CC3A8 end:0x803CC3C8
 
 Musyx/hw_dolphin.c:
 	.text       start:0x800DE2A0 end:0x800DE7F0
+	.sbss       start:0x803CC3C8 end:0x803CC3F8
 
 Musyx/hw_memory.c:
 	.text       start:0x800DE7F0 end:0x800DE87C
@@ -831,6 +839,8 @@ Musyx/reverb_fx.c:
 
 Musyx/reverb.c:
 	.text       start:0x800DE918 end:0x800DF594
+	.data       start:0x801177C0 end:0x801177E0
+	.sdata2     start:0x803CD298 end:0x803CD2E0
 
 Musyx/chorus_fx.c:
 	.text       start:0x800DF594 end:0x800DFDD4

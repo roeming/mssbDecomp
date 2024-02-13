@@ -20,7 +20,7 @@ SynthInfo synthInfo;
 u8 sndActive = 0;
 static u8 synthJobTableIndex = 0;
 u64 synthRealTime;
-u64 synthIdleWaitActive;
+u8 synthIdleWaitActive;
 SYNTH_MESSAGE_CALLBACK synthMessageCallback;
 SYNTH_VOICE* synthVoice;
 u32 synthFlags;
@@ -316,7 +316,7 @@ static void unblockAllAllocatedVoices(u32 vid) {
   u32 id; // r31
 
   id = vidGetInternalId(vid);
-  MUSY_ASSERT_MSG(id != SND_ID_ERROR, "*** Alloc unblock: ID is illegal");
+
   while (id != SND_ID_ERROR) {
     synthVoice[id & 0xff].block = 0;
     id = synthVoice[id & 0xff].child;

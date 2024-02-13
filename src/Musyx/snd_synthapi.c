@@ -36,7 +36,7 @@
 bool sndFXCtrl(SND_VOICEID vid, u8 ctrl, u8 value)
 {
     bool ret;
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
+
     hwDisableIrq();
     ret = synthFXSetCtrl(vid, ctrl, value);
     hwEnableIrq();
@@ -52,7 +52,7 @@ bool sndFXCtrl(SND_VOICEID vid, u8 ctrl, u8 value)
 bool sndFXCtrl14(SND_VOICEID vid, u8 ctrl, u16 value)
 {
     bool ret;
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
+
     hwDisableIrq();
     ret = synthFXSetCtrl14(vid, ctrl, value);
     hwEnableIrq();
@@ -68,7 +68,7 @@ bool sndFXCtrl14(SND_VOICEID vid, u8 ctrl, u16 value)
 bool sndFXKeyOff(SND_VOICEID vid)
 {
     bool ret;
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
+
     hwDisableIrq();
     ret = synthSendKeyOff(vid);
     hwEnableIrq();
@@ -84,7 +84,7 @@ bool sndFXKeyOff(SND_VOICEID vid)
 SND_VOICEID sndFXStartEx(SND_FXID fid, u8 vol, u8 pan, u8 studio)
 {
     SND_VOICEID v;
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
+
     hwDisableIrq();
     v = synthFXStart(fid, 0xff, vol, pan, studio, synthITDDefault[studio].sfx);
     hwEnableIrq();
@@ -110,8 +110,6 @@ SND_VOICEID sndFXStartPara(SND_FXID fid, u8 vol, u8 pan, u8 studio, u8 numPara, 
     u32 value;
     u8 ctrl;
 
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
-
     hwDisableIrq();
 
     if ((vid = synthFXStart(fid, 0, vol, pan, studio, synthITDDefault[studio].sfx)) != -1 &&
@@ -134,14 +132,10 @@ SND_VOICEID sndFXStartPara(SND_FXID fid, u8 vol, u8 pan, u8 studio, u8 numPara, 
             */
             if (ctrl < 0x40 || ctrl == 0x80 || ctrl == 0x84)
             {
-                MUSY_ASSERT_MSG(value <= 0x3fff, "Hires MIDI controller value out of range.");
-
                 synthFXSetCtrl14(vid, ctrl, (u16)value);
             }
             else
             {
-
-                MUSY_ASSERT_MSG(value <= 0x7f, "Lores MIDI controller value out of range.");
                 synthFXSetCtrl(vid, ctrl, (u16)value);
             }
         }
@@ -163,29 +157,19 @@ SND_VOICEID sndFXStartParaInfo(SND_FXID fid, u8 vol, u8 pan, u8 studio,
     unsigned char i;     // r28
     SND_PARAMETER *pPtr; // r31
 
-    MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
-
     hwDisableIrq();
 
     if ((vid = synthFXStart(fid, 0, vol, pan, studio, synthITDDefault[studio].sfx)) != 0xFFFFFFFF)
     {
-        MUSY_ASSERT_MSG(paraInfo != NULL, "Parameter pointer must not be NULL.");
         for (pPtr = paraInfo->paraArray, i = 0; i < paraInfo->numPara; ++pPtr, ++i)
         {
-            /*
 
-            */
             if (pPtr->ctrl < 0x40 || pPtr->ctrl == 0x80 || pPtr->ctrl == 0x84)
             {
-                MUSY_ASSERT_MSG(pPtr->paraData.value14 <= 0x3fff,
-                                "Hires MIDI controller value out of range.");
-
                 synthFXSetCtrl14(vid, pPtr->ctrl, pPtr->paraData.value14);
             }
             else
             {
-
-                MUSY_ASSERT_MSG(pPtr->paraData.value7 <= 0x7f, "Lores MIDI controller value out of range.");
                 synthFXSetCtrl(vid, pPtr->ctrl, pPtr->paraData.value7);
             }
         }
@@ -195,25 +179,10 @@ SND_VOICEID sndFXStartParaInfo(SND_FXID fid, u8 vol, u8 pan, u8 studio,
     return vid;
 }
 
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
+/**/
 SND_VOICEID sndFXCheck(SND_VOICEID vid)
 {
     SND_VOICEID v;
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     hwDisableIrq();
 
     if (vidGetInternalId(vid) == -1)
@@ -224,30 +193,16 @@ SND_VOICEID sndFXCheck(SND_VOICEID vid)
     return vid;
 }
 
-/*
-
-
-
-
-
-*/
+/**/
 bool sndReadFlag(unsigned char num)
 {
-
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     return synthGlobalVariable[num & 0xf];
 }
 
-/*
-
-
-
-
-*/
+/**/
 long sndWriteFlag(unsigned char num, long value)
 {
     long old; // r30
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
 
     num &= 0xf;
 
@@ -258,16 +213,11 @@ long sndWriteFlag(unsigned char num, long value)
 
     return old;
 }
-/*
 
-
-
-
-*/
+/**/
 u32 sndSendMessage(u32 vid, s32 mesg)
 {
     u32 ret; // r31
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
 
     hwDisableIrq();
     ret = macPostMessage(vid, mesg);
@@ -281,7 +231,6 @@ u32 sndSendMessage(u32 vid, s32 mesg)
 */
 void sndSetReceiveMessageCallback(void (*callback)(unsigned long, long))
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     synthMessageCallback = callback;
 }
 
@@ -292,8 +241,6 @@ void sndSetReceiveMessageCallback(void (*callback)(unsigned long, long))
 */
 void sndSilence()
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     hwDisableIrq();
     seqKillAllInstances();
     s3dKillAllEmitter();
@@ -310,8 +257,6 @@ u32 sndIsIdle()
 {
     u32 i;   // r31
     u8 flag; // r30
-
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
 
     flag = 0;
 
@@ -340,8 +285,6 @@ u32 sndFXAssignVolGroup2FXId(SND_FXID fid, u8 vGroup)
 {
     FX_TAB *fx; // r30
     u32 ret;    // r29
-
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
 
     ret = 0;
 
@@ -386,8 +329,6 @@ u32 sndFXAssignVolGroup2FXId(SND_FXID fid, u8 vGroup)
 */
 void sndPauseVolume(u8 volume, u16 time, u8 vGroup)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     hwDisableIrq();
     synthPauseVolume(volume, time, vGroup);
     hwEnableIrq();
@@ -400,8 +341,6 @@ void sndPauseVolume(u8 volume, u16 time, u8 vGroup)
 */
 void sndVolume(u8 volume, u16 time, u8 volgroup)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     hwDisableIrq();
     synthVolume(volume, time, volgroup, 0, -1);
     hwEnableIrq();
@@ -413,7 +352,6 @@ void sndVolume(u8 volume, u16 time, u8 volgroup)
 */
 void sndMasterVolume(u8 volume, u16 time, u8 music, u8 fx)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     hwDisableIrq();
     if (music != 0)
         synthVolume(volume, time, 0x15, 0, -1);
@@ -431,7 +369,7 @@ void sndOutputMode(SND_OUTPUTMODE output)
 {
     u32 i;
     u32 oldFlags;
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
+
     oldFlags = synthFlags;
 
     switch (output)
@@ -458,9 +396,6 @@ void sndOutputMode(SND_OUTPUTMODE output)
 
         break;
     default:
-#line 426
-        MUSY_ASSERT_MSG(FALSE, "Unsupported outputmode selected.");
-#line 418
         break;
     }
 
@@ -491,8 +426,6 @@ void sndSetAuxProcessingCallbacks(u8 studio,
                                   SND_AUX_CALLBACK auxA, void* userA, u8 midiA, SND_SEQID seqIDA, 
                                   SND_AUX_CALLBACK auxB, void* userB, u8 midiB, SND_SEQID seqIDB) {
     // clang-format on
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     hwDisableIrq();
     if (auxA != NULL)
     {
@@ -554,8 +487,6 @@ void sndUpdateAuxParameter(unsigned char studio, unsigned short *para, unsigned 
     struct SND_AUX_INFO info; // r1+0x14
     unsigned long i;          // r30
 
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     for (i = 0; i < 4; ++i)
     {
         info.data.parameterUpdate.para[i] = para[i];
@@ -563,14 +494,10 @@ void sndUpdateAuxParameter(unsigned char studio, unsigned short *para, unsigned 
 
     if (auxBus == 0)
     {
-        MUSY_ASSERT_MSG(synthAuxACallback[studio] != NULL, "No FX is defined for AuxA.");
-
         synthAuxACallback[studio](1, &info, synthAuxAUser);
     }
     else
     {
-
-        MUSY_ASSERT_MSG(synthAuxBCallback[studio] != NULL, "No FX is defined for AuxB.");
         synthAuxBCallback[studio](1, &info, synthAuxBUser);
     }
 }
@@ -591,7 +518,6 @@ void sndSetITDDefault(unsigned char studio, unsigned long musicITD, unsigned lon
 */
 void synthActivateStudio(u8 studio, u32 isMaster, SND_STUDIO_TYPE type)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     hwDisableIrq();
     synthAuxACallback[studio] = NULL;
     synthAuxBCallback[studio] = NULL;
@@ -610,8 +536,6 @@ void synthActivateStudio(u8 studio, u32 isMaster, SND_STUDIO_TYPE type)
 */
 void sndActivateStudioEx(u8 studio, u32 isMaster, SND_STUDIO_TYPE type)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-    MUSY_ASSERT_MSG(studio < synthInfo.studioNum, "Illegal studio index.");
     if (studio != 0)
     {
         hwDisableIrq();
@@ -635,8 +559,6 @@ void sndActivateStudioEx(u8 studio, u32 isMaster, SND_STUDIO_TYPE type)
 void synthDeactivateStudio(u8 studio)
 {
     u32 i;
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     for (i = 0; i < synthInfo.voiceNum; ++i)
     {
 
@@ -673,8 +595,6 @@ void synthDeactivateStudio(u8 studio)
 */
 sndDeactivateStudio(u8 studio)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-    MUSY_ASSERT_MSG(studio < synthInfo.studioNum, "Illegal studio index.");
     if (studio != 0)
     {
         hwDisableIrq();
@@ -696,7 +616,6 @@ sndDeactivateStudio(u8 studio)
 */
 synthChangeStudioMasterMix(u8 studio, u32 isMaster)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     hwChangeStudioMix(studio, isMaster);
 }
 
@@ -704,7 +623,6 @@ synthChangeStudioMasterMix(u8 studio, u32 isMaster)
 
 void sndChangeStudioMasterMix(unsigned char studio, unsigned long isMaster)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     if (studio != 0)
     {
         hwDisableIrq();
@@ -726,9 +644,6 @@ void sndChangeStudioMasterMix(unsigned char studio, unsigned long isMaster)
 */
 u32 synthAddStudioInput(u8 studio, SND_STUDIO_INPUT *in_desc)
 {
-
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
-
     return hwAddInput(studio, in_desc);
 }
 
@@ -737,7 +652,7 @@ u32 synthAddStudioInput(u8 studio, SND_STUDIO_INPUT *in_desc)
 u32 sndAddStudioInput(u8 studio, struct SND_STUDIO_INPUT *in_desc)
 {
     u32 ret;
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
+
     hwDisableIrq();
     ret = synthAddStudioInput(studio, in_desc);
     hwEnableIrq();
@@ -749,7 +664,6 @@ u32 sndAddStudioInput(u8 studio, struct SND_STUDIO_INPUT *in_desc)
 */
 u32 synthRemoveStudioInput(u8 studio, SND_STUDIO_INPUT *in_desc)
 {
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
     return hwRemoveInput(studio, in_desc);
 }
 
@@ -759,7 +673,7 @@ u32 synthRemoveStudioInput(u8 studio, SND_STUDIO_INPUT *in_desc)
 u32 sndRemoveStudioInput(u8 studio, SND_STUDIO_INPUT *in_desc)
 {
     u32 ret;
-    MUSY_ASSERT_MSG(sndActive != NULL, "Sound system is not initialized.");
+
     hwDisableIrq();
     ret = synthRemoveStudioInput(studio, in_desc);
     hwEnableIrq();

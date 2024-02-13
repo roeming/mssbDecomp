@@ -104,53 +104,29 @@ s32 sndInit(u8 voices, u8 music, u8 sfx, u8 studios, u32 flags, u32 aramSize) {
 #endif
   }
 
-  MUSY_DEBUG("Leaving sndInit().\n\n");
   return ret;
 }
 
 /* */
 void sndQuit() {
-  MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
-
   hwExit();
-  /*
-
-
-  */
   dataExit();
-  /*
-   */
   s3dExit();
-  /* */
   synthExit();
-  /* */
   sndActive = 0;
 }
 
-/*
-
-
-*/
+/**/
 void sndSetMaxVoices(u8 music, u8 sfx) {
-  MUSY_ASSERT_MSG(music <= synthInfo.voiceNum, "Music voices are above maximum voice number.");
-  MUSY_ASSERT_MSG(sfx <= synthInfo.voiceNum, "Sfx voices are above maximum voice number.");
 
   synthInfo.maxMusic = music;
   synthInfo.maxSFX = sfx;
 }
 
-/*
-
-
-*/
+/**/
 bool sndIsInstalled() { return sndActive; }
 
-/*
-
-
-
-
-*/
+/**/
 SND_PLAYBACKINFO* sndGetPlayBackInfo() {
   if (sndActive) {
     return &synthInfo.pbInfo;

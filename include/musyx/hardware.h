@@ -19,7 +19,7 @@ void hwDisableIrq();
 void* hwTransAddr(void* samples);
 void hwExitStream(u8 id);
 void hwSaveSample(void* header, void* data);
-void hwRemoveSample(void* header, void* data);
+void hwRemoveSample(void *header, void *data, void *aramWrite);
 u32 hwGetVirtualSampleState(u32 voice);
 bool hwVoiceInStartup(u32 v);
 void hwBreak(s32 vid);

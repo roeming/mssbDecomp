@@ -8,7 +8,7 @@ void salApplyMatrix(const SND_FMATRIX* mat, const SND_FVECTOR* in, SND_FVECTOR* 
 }
 
 float salNormalizeVector(SND_FVECTOR* vec) {
-  float l = sqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+  float l = __frsqrte(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
   vec->x /= l;
   vec->y /= l;
   vec->z /= l;

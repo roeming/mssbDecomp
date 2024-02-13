@@ -36,7 +36,7 @@ u32 fn_800A6354(u32 param_1)
     
     new_val = (data.values2[data.count2]._00 - param_1);
 
-    data.values2[++data.count2]._00 = new_val;
+    data.values2[++data.count2]._00 -= new_val;
     data.values2[data.count2]._04 = param_1;
 
     data.tempValue = new_val - (data.values1[data.count1]._00 + data.values1[data.count1]._04);

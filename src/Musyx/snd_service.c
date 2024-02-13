@@ -120,6 +120,12 @@ void* sndBSearch(void* key, void* base, s32 num, s32 len, SND_COMPARE cmp) {
   return NULL;
 }
 
+f64 sndSqrt(f64 v)
+{
+  return dolsqrtf(v);
+}
+
+
 void sndConvertMs(u32* time) { *time = *time * 256; }
 
 void sndConvertTicks(u32* out, SYNTH_VOICE* svoice) {
