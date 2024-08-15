@@ -13,6 +13,7 @@ typedef struct
     u32 compressedSize;
 } AssetLoadInstructions;
 
+u32 ReadBits(u32 bits);
 
 void SetReadParameters(AssetLoadInstructions * instructions, void* pCompressedData, void*pOutData, BOOL param_4);
 

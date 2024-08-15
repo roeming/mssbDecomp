@@ -18,8 +18,8 @@ typedef f32 Mtx33[3][3];
 typedef f32 Mtx34[3][4];
 typedef f32 Mtx43[4][3];
 typedef f32 Mtx44[4][4];
-typedef f32 (*MtxP)[4];
-typedef f32 PSQuaternion[4];
+typedef f32 (*MtxPtr)[4];
+// typedef f32 PSQuaternion[4];
 
 typedef struct Quaternion {
 	f32 x, y, z, w;
@@ -45,7 +45,7 @@ void PSMTXTransApply(const Mtx src, Mtx dest, f32 xT, f32 yT, f32 zT);
 
 void PSMTXScale(Mtx mtx, f32 xS, f32 yS, f32 zS);
 void PSMTXScaleApply(const Mtx src, Mtx dest, f32 xS, f32 yS, f32 zS);
-void PSMTXQuat(Mtx mtx, const PSQuaternion* quat);
+void PSMTXQuat(Mtx mtx, const Quaternion* quat);
 
 ////////////////////////////////////////////
 

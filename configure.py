@@ -152,29 +152,6 @@ cflags_base = [
     "-DVERNUM={version_num}",
     "-i include",
     "-i include/stl"
-
-
-    # "-nodefaults",
-    # "-proc gekko",
-    # "-align powerpc",
-    # "-enum int",
-    # "-fp hardware",
-    # "-Cpp_exceptions off",
-    # # "-W all",
-    # "-O4,p",
-    # "-inline auto",
-    # '-pragma "cats off"',
-    # '-pragma "warn_notinlined off"',
-    # "-maxerrors 1",
-    # "-nosyspath",
-    # "-RTTI off",
-    # "-fp_contract on",
-    # "-str reuse",
-	# "-multibyte", # For Wii compilers, replace with `-enc SJIS`
-    # "-i include",
-    # f"-i build/{config.version}/include",
-    # "-i include/stl",
-    # f"-DVERSION={version_num}",
 ]
 
 # Debug flags
@@ -481,9 +458,9 @@ config.libs = [
             Object(Matching, "Dolphin/gx/GXBump.c"),
             Object(Matching, "Dolphin/gx/GXTev.c"),
             Object(Matching, "Dolphin/gx/GXPixel.c"),
-            Object(NonMatching, "Dolphin/gx/GXDraw.c"),
+            Object(Matching, "Dolphin/gx/GXDraw.c"),
             Object(Matching, "Dolphin/gx/GXDisplayList.c"),
-            Object(NonMatching, "Dolphin/gx/GXTransform.c"),
+            Object(Matching, "Dolphin/gx/GXTransform.c"),
             Object(NonMatching, "Dolphin/gx/GXPerf.c"),
         ],
         extra_cflags=["-common off", "-str noreadonly", "-fp_contract off"]
@@ -564,11 +541,20 @@ config.libs = [
     {
         "lib": "unk",
         "mw_version": "GC/2.6",
-        "cflags": cflags_base,
+        "cflags": cflags_base + ["-O4,p", "-sym on"],
         "host": False,
         "objects": [
             Object(NonMatching, "Unknown/File_0x800a6304.c", extra_cflags=["-cpp_exceptions on"]),
             Object(NonMatching, "Unknown/File_0x800a64e0.c", extra_cflags=["-cpp_exceptions on"]),
+        ],
+    },
+    {
+        "lib": "C3",
+        "mw_version": "GC/1.3.2",
+        "cflags": cflags_base + ["-O4,p", "-sym on", "-cpp_exceptions on"],
+        "host": False,
+        "objects": [
+            Object(NonMatching, "C3/control/control.c", extra_cflags=["-inline deferred"]),
         ],
     },
     MusyxLib(

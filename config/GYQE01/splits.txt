@@ -1,18 +1,18 @@
 Sections:
-	.init       type:code
-	extab       type:rodata
-	extabindex  type:rodata
-	.text       type:code
-	.ctors      type:rodata
-	.dtors      type:rodata
-	.data6      type:data
-	.rodata     type:rodata
-	.data       type:data
-	.bss        type:bss
-	.sdata      type:data
-	.sbss       type:bss
-	.sdata2     type:rodata
-	.sbss2      type:bss
+	.init       type:code align:4
+	extab       type:rodata align:16
+	extabindex  type:rodata align:32
+	.text       type:code align:32
+	.ctors      type:rodata align:32
+	.dtors      type:rodata align:32
+	.data6      type:data align:32
+	.rodata     type:rodata align:16
+	.data       type:data align:32
+	.bss        type:bss align:32
+	.sdata      type:data align:16
+	.sbss       type:bss align:32
+	.sdata2     type:rodata align:4
+	.sbss2      type:bss align:32
 
 Dolphin/base/PPCArch.c:
 	.text       start:0x8006D024 end:0x8006D138
@@ -372,6 +372,7 @@ Dolphin/gx/GXTransform.c:
 
 Dolphin/gx/GXPerf.c:
 	.text       start:0x8009079C end:0x80091450
+	.data       start:0x8010E894 end:0x8010E980
 
 Dolphin/TRK_MINNOW_DOLPHIN/mainloop.c:
 	.text       start:0x80091608 end:0x80091700
@@ -747,6 +748,14 @@ Unknown/File_0x800a64e0.c:
 	extabindex  start:0x80008430 end:0x8000846C
 	.text       start:0x800A64E0 end:0x800A6870
 	.bss        start:0x803C6990 end:0x803C6CF8
+
+C3/control/control.c:
+	extab       start:0x80006A90 end:0x80006AE0
+	extabindex  start:0x80008B38 end:0x80008BB0
+	.text       start:0x800B7D3C end:0x800B993C
+	.data       start:0x801116A0 end:0x80111700
+	.bss        start:0x803CB1FC end:0x803CB49C
+	.sdata2     start:0x803CCFD8 end:0x803CCFF8
 
 Musyx/seq.c:
 	.text       start:0x800C0A8C end:0x800C4AB4

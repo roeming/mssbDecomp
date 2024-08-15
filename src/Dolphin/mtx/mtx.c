@@ -707,7 +707,7 @@ void C_MTXQuat(void)
  * @note Address: 0x800EA854
  * @note Size: 0xA4
  */
-void PSMTXQuat(register Mtx m, const register PSQuaternion* q)
+void PSMTXQuat(register Mtx m, const register Quaternion* q)
 {
 	register f32 c_zero, c_one, c_two, scale;
 	register f32 tmp0, tmp1, tmp2, tmp3, tmp4;

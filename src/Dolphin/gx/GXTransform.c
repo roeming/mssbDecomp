@@ -6,32 +6,32 @@
  */
 void GXProject(f32 x, f32 y, f32 z, Mtx viewMtx, f32* projMtx, f32* viewport, f32* screenX, f32* screenY, f32* screenZ)
 {
-	f32 f1;
-	f32 f2;
-	f32 f3;
-	f32 f5;
-	f32 f4;
-	f1 = viewMtx[0][0] * x + viewMtx[0][1] * y + viewMtx[0][2] * z + viewMtx[0][3];
-	f2 = viewMtx[1][0] * x + viewMtx[1][1] * y + viewMtx[1][2] * z + viewMtx[1][3];
-	f3 = viewMtx[2][0] * x + viewMtx[2][1] * y + viewMtx[2][2] * z + viewMtx[2][3];
+	Vec peye;
+	f32 xc;
+	f32 yc;
+	f32 zc;
+	f32 wc;
+	peye.x = (viewMtx[0][0] * x) + (viewMtx[0][1] * y) + (viewMtx[0][2] * z) + viewMtx[0][3];
+	peye.y = (viewMtx[1][0] * x) + (viewMtx[1][1] * y) + (viewMtx[1][2] * z) + viewMtx[1][3];
+	peye.z = (viewMtx[2][0] * x) + (viewMtx[2][1] * y) + (viewMtx[2][2] * z) + viewMtx[2][3];
 	
 	if (projMtx[0] == 0.0f)
 	{
-		f5 = f1 * projMtx[1] + f3 * projMtx[2];
-		f2 = f2 * projMtx[3] + f3 * projMtx[4];
-		f4 = projMtx[6] + f3 * projMtx[5];
-		f1 = 1.0f / -f3;
+        xc = (peye.x * projMtx[1]) + (peye.z * projMtx[2]);
+        yc = (peye.y * projMtx[3]) + (peye.z * projMtx[4]);
+        zc = projMtx[6] + (peye.z * projMtx[5]);
+        wc = 1.0f / -peye.z;
 	}
 	else
 	{
-		f5 = f1 * projMtx[1] + projMtx[2];
-		f2 = f2 * projMtx[3] + projMtx[4];
-		f4 = f3 * projMtx[5] + projMtx[6];
-		f1 = 1.0f;
+        xc = projMtx[2] + (peye.x * projMtx[1]);
+        yc = projMtx[4] + (peye.y * projMtx[3]);
+        zc = projMtx[6] + (peye.z * projMtx[5]);
+        wc = 1.0f;
 	}
-	*screenX = viewport[0] + 0.5f * viewport[2] + viewport[2] * f1 * f5 * 0.5f;
-	*screenY = viewport[1] + 0.5f * viewport[3] + viewport[3] * -f2 * f1 * 0.5f;
-	*screenZ = (viewport[5] - viewport[4]) * f4 * f1 + viewport[5];
+    *screenX = (viewport[2] / 2.0f) + (viewport[0] + (wc * (xc * viewport[2] / 2.0f)));
+    *screenY = (viewport[3] / 2.0f) + (viewport[1] + (wc * (-yc * viewport[3] / 2.0f)));
+    *screenZ = viewport[5] + (wc * (zc * (viewport[5] - viewport[4])));
 }
 
 /**

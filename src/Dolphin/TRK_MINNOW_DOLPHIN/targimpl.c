@@ -1162,7 +1162,7 @@ L_802CF694:
  * @note Size: 0x9C
  */
 #ifdef __MWERKS__ // clang-format off
-static asm void TRKExceptionHandler(u16 r3){ 
+static asm void TRKExceptionHandler(u16){ 
 	nofralloc
 	lis r2, gTRKExceptionStatus@h
 	ori r2, r2, gTRKExceptionStatus@l

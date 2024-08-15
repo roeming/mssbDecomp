@@ -2,63 +2,56 @@
 #include "Dolphin/mtx.h"
 #include "math.h"
 
-void Subdivide(u8 subdivisionCount, const Vec *a, const Vec *b, const Vec *c)
+static void normalize(f32 v[3])
 {
-    Vec p1;
-    Vec p2;
-    Vec p3;
-    
-    f32 stackManip[5];
-    f32 sum; 
+    f32 d = dolsqrtf((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
 
-    if (subdivisionCount == 0)
-    {
-        GXBegin(GX_TRIANGLES, GX_VTXFMT3, 3);
-        GXPosition3f32(a->x, a->y, a->z);
-        GXPosition3f32(a->x, a->y, a->z);
-        GXPosition3f32(b->x, b->y, b->z);
-        GXPosition3f32(b->x, b->y, b->z);
-        GXPosition3f32(c->x, c->y, c->z);
-        GXPosition3f32(c->x, c->y, c->z);
-    }
-    else
-    {
-        p1.x = a->x + b->x;
-        p2.x = b->x + c->x;
-        p3.x = c->x + a->x;
-        p1.y = a->y + b->y;
-        p2.y = b->y + c->y;
-        p3.y = c->y + a->y;
-        p1.z = a->z + b->z;
-        p3.z = c->z + a->z;
-        p2.z = b->z + c->z;
-        
-        sum = dolsqrtf(SQUARE(p1.x) + SQUARE(p1.y) + SQUARE(p1.z));
-        
-        p1.x = p1.x / sum;
-        p1.y = p1.y / sum;
-        p1.z = p1.z / sum;
-
-        sum = dolsqrtf(SQUARE(p2.x) + SQUARE(p2.y) + SQUARE(p2.z));
-
-        p2.x = p2.x / sum;
-        p2.y = p2.y / sum;
-        p2.z = p2.z / sum;
-
-        sum = dolsqrtf(SQUARE(p3.x) + SQUARE(p3.y) + SQUARE(p3.z));
-
-        p3.x = p3.x / sum;
-        p3.y = p3.y / sum;
-        p3.z = p3.z / sum;
-
-        subdivisionCount = ((subdivisionCount & 0xff) - 1);
-
-        Subdivide(subdivisionCount & 0xff, a, &p1, &p3);
-        Subdivide(subdivisionCount & 0xff, b, &p2, &p1);
-        Subdivide(subdivisionCount & 0xff, c, &p3, &p2);
-        Subdivide(subdivisionCount & 0xff, &p1, &p2, &p3);
-    }
+    v[0] /= d;
+    v[1] /= d;
+    v[2] /= d;
 }
+
+static void myvertex(f32 v[3], f32 n[3])
+{
+    GXPosition3f32(v[0], v[1], v[2]);
+    GXNormal3f32(n[0], n[1], n[2]);
+}
+
+static void DumpTriangle(f32 v0[3], f32 v1[3], f32 v2[3])
+{
+    GXBegin(GX_TRIANGLES, GX_VTXFMT3, 3);
+    myvertex(v0, v0);
+    myvertex(v1, v1);
+    myvertex(v2, v2);
+    GXEnd();
+}
+
+static void Subdivide(u8 depth, f32 v0[3], f32 v1[3], f32 v2[3])
+{
+    f32 v01[3];
+    f32 v12[3];
+    f32 v20[3];
+    u32 i;
+
+    if (depth == 0) {
+        DumpTriangle(v0, v1, v2);
+        return;
+    }
+
+    for (i = 0; i < 3; i++) {
+        v01[i] = v0[i] + v1[i];
+        v12[i] = v1[i] + v2[i];
+        v20[i] = v2[i] + v0[i];
+    }
+    normalize(v01);
+    normalize(v12);
+    normalize(v20);
+    Subdivide(depth - 1, v0, v01, v20);
+    Subdivide(depth - 1, v1, v12, v01);
+    Subdivide(depth - 1, v2, v20, v12);
+    Subdivide(depth - 1, v01, v12, v20);
+}
+
 // unsure what these are for, but they're padding out .data?
 static u8 unusedBytes[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x0b, 
@@ -153,7 +146,7 @@ void GXDrawSphere1(u8 subdivisions)
     i = 19;
     do {
         u8 ii = i;
-        Subdivide(subdivisions, &SpherePoints[SphereIndices[ii][0]], &SpherePoints[SphereIndices[ii][1]], &SpherePoints[SphereIndices[ii][2]]);
+        Subdivide(subdivisions, (f32*)&SpherePoints[SphereIndices[ii][0]], (f32*)&SpherePoints[SphereIndices[ii][1]], (f32*)&SpherePoints[SphereIndices[ii][2]]);
         i--;
     } while(i >= 0);
     GXSetVtxDescv(lbl_802E6910);
