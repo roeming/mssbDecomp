@@ -347,7 +347,7 @@ config.libs = [
             Object(Matching, "Dolphin/os/OSTime.c"),
             Object(Matching, "Dolphin/os/__ppc_eabi_init.cpp"),
         ],
-        extra_cflags=["-str noreadonly"]
+        extra_cflags=["-str noreadonly", "-sym on"]
     ),
     DolphinLib(
         "db",
@@ -461,7 +461,7 @@ config.libs = [
             Object(Matching, "Dolphin/gx/GXDraw.c"),
             Object(Matching, "Dolphin/gx/GXDisplayList.c"),
             Object(Matching, "Dolphin/gx/GXTransform.c"),
-            Object(NonMatching, "Dolphin/gx/GXPerf.c"),
+            Object(Matching, "Dolphin/gx/GXPerf.c"),
         ],
         extra_cflags=["-common off", "-str noreadonly", "-fp_contract off"]
     ),

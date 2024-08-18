@@ -222,9 +222,6 @@ u32 OSGetConsoleType()
 void* __OSSavedRegionStart;
 void* __OSSavedRegionEnd;
 
-extern u32 BOOT_REGION_START : 0x812FDFF0; //(*(u32 *)0x812fdff0)
-extern u32 BOOT_REGION_END : 0x812FDFEC;   //(*(u32 *)0x812fdfec)
-
 /**
  * @note Address: 0x800EB118
  * @note Size: 0x128

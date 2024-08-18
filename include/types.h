@@ -95,6 +95,7 @@ typedef u16 wchar_t;
 #define ROUND_F32_TO_U8(a) a >= 0.0f ? a + 0.5f : a - 0.5f
 
 #define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
+#define ROUND_DOWN(x, align) ((x) & -(align))
 
 // Number of bytes in a kilobyte
 #define KILOBYTE_BYTECOUNT 1024

@@ -236,6 +236,12 @@ vu32 __AIRegs[8] AT_ADDRESS(0xCC006C00);
 
 //////////////////////////////////
 
+extern volatile u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
+extern volatile u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
+extern volatile u8 BOOT_REGION_UNK AT_ADDRESS(0x800030e2);
+
+//////////////////////////////////
+
 #ifdef __cplusplus
 };
 #endif // ifdef __cplusplus
